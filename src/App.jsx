@@ -358,6 +358,14 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
       const v = {}; mine.forEach((id) => { v[id] = true; }); setVotes(v);
     }
   }, [content]);
+  // 단계 진입 시 해당 kind로 오케스트레이터를 호출해 비용 미터를 누적(kind당 1회, best-effort)
+  const aiFired = useRef(new Set());
+  useEffect(() => {
+    const kind = ["ice", "idea", "analyze", "report"][step];
+    if (!sessionId || !kind || aiFired.current.has(kind)) return;
+    aiFired.current.add(kind);
+    api.ai(kind, goal, null, sessionId).catch(() => {});
+  }, [step, sessionId]);
   const phase = PHASES[step];
   const adjD = Math.round(phase.duration * mins / 60);
   const rem = Math.max(0, adjD * 60 - elapsed);
@@ -399,7 +407,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
           {step === 0 && <IcePhase sessionId={sessionId} myProfile={myProfile} goal={goal} method={method} initialIce={content?.ice} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 1 && <IdeaPhase sessionId={sessionId} myProfile={myProfile} method={method} goal={goal} initialIdeas={content?.ideas} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 2 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} onContentSync={onContentSync} onSyncError={onSyncError} />}
-          {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} />}
+          {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} />}
         </div>
       </main>
       <footer className="bg-white border-t sticky bottom-0">
@@ -737,8 +745,10 @@ function AnalyzePhase({ votes, setVotes, method = "brain", sessionId, onContentS
 }
 
 /* ═══════ Phase 4: 리포트 ═══════ */
-function ReportPhase({ votedThemes = [], method = "brain" }) {
+function ReportPhase({ votedThemes = [], method = "brain", sessionId }) {
   const [dl, setDl] = useState(false);
+  const [meter, setMeter] = useState(null); // 오케스트레이터 비용 미터 (발표 패널)
+  useEffect(() => { if (sessionId) api.getAiMeter(sessionId).then(setMeter).catch(() => {}); }, [sessionId]);
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
@@ -748,6 +758,28 @@ function ReportPhase({ votedThemes = [], method = "brain" }) {
       <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>이 보고서는 <strong>시연용 고정 템플릿</strong>입니다. 실제 세션의 투표·아이디어로 자동 생성된 결과가 아닙니다.</span></div>
       {votedThemes.length > 0 && (
         <div className="mb-4 rounded-xl bg-neutral-900 text-white px-4 py-3"><span className="text-xs text-green-400">✅ 내가 이번 세션에서 실제로 투표한 테마</span><div className="font-semibold text-sm mt-0.5">{votedThemes.join(", ")}</div></div>
+      )}
+      {/* 발표용: 이번 세션에서 어느 모델이 뭘 했나 + 얼마 아꼈나 (오케스트레이터 미터) */}
+      {meter && meter.calls?.length > 0 && (
+        <div className="mb-5 rounded-2xl border-2 border-indigo-200 bg-indigo-50/50 p-5">
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="font-bold text-sm flex items-center gap-1.5">🧭 이 세션의 AI 분업 & 비용</h3>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-white border text-neutral-500">{meter.pricingMode === "measured" ? "실측" : "추정(목업 단가)"}</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 my-3">
+            {meter.calls.map((c, i) => (
+              <div key={i} className="flex items-center justify-between text-xs bg-white rounded-lg px-3 py-1.5 border">
+                <span className="truncate"><span className="text-neutral-500">{c.role}</span> · <strong>{c.model}</strong></span>
+                <span className={`ml-2 flex-shrink-0 px-1.5 rounded-full text-[10px] ${c.tier === "flagship" ? "bg-rose-100 text-rose-700" : c.tier === "mid" ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>{c.tier === "flagship" ? "고가" : c.tier === "mid" ? "중가" : "저가"}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 bg-neutral-900 text-white rounded-xl px-4 py-3">
+            <span className="text-2xl font-bold text-green-400">약 {meter.savedPct}% 절감</span>
+            <span className="text-xs text-neutral-300">우리 방식 ${meter.ourCost} vs 전부 고가면 ${meter.allFlagshipCost}</span>
+          </div>
+          <p className="text-[11px] text-neutral-500 mt-2">※ {meter.baselineNote}. 저가/고가 LLM을 작업에 맞게 자동 배분한 결과입니다.</p>
+        </div>
       )}
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 min-w-0 space-y-5">

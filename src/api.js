@@ -30,6 +30,8 @@ export const api = {
   setVotes: (id, memberId, themeIds) =>
     fetch(`/api/sessions/${id}/votes`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ memberId, themeIds }) }).then(j),
 
-  ai: (kind, goal, context) =>
-    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, goal, context }) }).then(j),
+  ai: (kind, goal, context, sessionId) =>
+    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, goal, context, sessionId }) }).then(j),
+
+  getAiMeter: (id) => fetch(`/api/sessions/${id}/ai-meter`).then(j),
 };
