@@ -73,6 +73,11 @@ export async function initStore() {
       console.log("[store] MongoDB 연결됨");
       return store;
     } catch (e) {
+      // 프로덕션에서 조용한 인메모리 폴백은 '저장된 줄 착각 + 재시작 시 소실' 사고 → 기동 실패
+      if (process.env.NODE_ENV === "production") {
+        console.error("[store] 프로덕션 MongoDB 연결 실패 — 폴백 금지, 종료:", e.message);
+        throw e;
+      }
       console.warn("[store] MongoDB 연결 실패 → 인메모리로 폴백:", e.message);
     }
   } else {

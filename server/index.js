@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { initStore } from "./store.js";
 import { generate, AI_KINDS } from "./ai.js";
@@ -14,16 +15,26 @@ import { generate, AI_KINDS } from "./ai.js";
       Mongo $set-only(주입 차단), 에러 래퍼, /api/ai 레이트리밋+kind 검증,
       health 정직화(프로덕션 정보 축소).
 
+   ── 추가 하드닝(6차 검수 반영): helmet 적용, 프로덕션 CORS_ORIGIN 필수화,
+      프로덕션 Mongo 폴백 금지(store.js), mins·deadlineAt 정규화.
+
    ── TODO(B) — 프론트 연동·배포 시점에 결정과 함께 구현 (지금은 자리만):
       [B1] 참가자/호스트 인증 토큰 + 뮤테이션 인가 (지금은 누구나 호출 가능)
       [B2] 쿠키/CSRF 설계 (httpOnly·Secure·SameSite)
       [B3] 동시성: get→update 대신 Mongo $push/$addToSet 또는 낙관적 락
-      [B4] helmet + CSP 전면, 요청 로깅/트레이싱
-      [B5] 프로덕션에서 Mongo 실패 시 폴백 금지(기동 실패로) */
+      [B-deploy] 리버스 프록시 뒤 배포 시 app.set("trust proxy", …) 설정 */
 
 const app = express();
+const isProd = process.env.NODE_ENV === "production";
 
-// CORS: CORS_ORIGIN(쉼표구분) 있으면 화이트리스트, 없으면 dev로 보고 요청 오리진 반영
+// 프로덕션에서 CORS_ORIGIN 미설정 시 전체 허용(fail-open) 방지 — 기동 자체를 실패시킨다
+if (isProd && !process.env.CORS_ORIGIN) {
+  console.error("[config] 프로덕션에는 CORS_ORIGIN(허용 오리진)이 반드시 필요합니다. 종료.");
+  process.exit(1);
+}
+
+app.use(helmet());
+// CORS: CORS_ORIGIN(쉼표구분) 있으면 화이트리스트, 없으면(비프로덕션) 요청 오리진 반영
 const corsOrigin = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((s) => s.trim())
   : true;
@@ -31,7 +42,6 @@ app.use(cors({ origin: corsOrigin }));
 app.use(express.json({ limit: "64kb" }));
 
 const store = await initStore(); // top-level await (ESM)
-const isProd = process.env.NODE_ENV === "production";
 
 /* async 라우트 에러를 한 곳에서 처리 (미처리 throw로 프로세스가 죽지 않도록) */
 const h = (fn) => (req, res) =>
@@ -69,7 +79,7 @@ app.post("/api/sessions", h(async (req, res) => {
   if (b.host && !host.id) return bad(res, "host.id required");
   const session = await store.create({
     goal: String(b.goal || "").slice(0, 500),
-    mins: Number(b.mins) || 60,
+    mins: Math.min(180, Math.max(5, Number(b.mins) || 60)),
     mode: b.mode === "online" ? "online" : "offline",
     method: ["brain", "scamper", "sixhats"].includes(b.method) ? b.method : "brain",
     deadlineAt: b.deadlineAt ? Number(b.deadlineAt) : null,
@@ -92,6 +102,7 @@ app.patch("/api/sessions/:id", h(async (req, res) => {
   const patch = {};
   for (const k of PATCHABLE) if (k in b) patch[k] = b[k];
   if ("phase" in patch) patch.phase = Math.min(3, Math.max(0, Number(patch.phase) || 0));
+  if ("deadlineAt" in patch) { const n = Number(patch.deadlineAt); if (Number.isFinite(n)) patch.deadlineAt = n; else delete patch.deadlineAt; }
   const s = await store.update(req.params.id, patch);
   if (!s) return res.status(404).json({ error: "session not found" });
   res.json(s);
