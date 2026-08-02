@@ -182,12 +182,14 @@ app.post("/api/ai", aiLimiter, h(async (req, res) => {
   if (b.kind && !ORCHESTRATOR_KINDS.includes(b.kind)) return bad(res, "invalid kind");
   const goal = String(b.goal || "").slice(0, 500);
   const context = typeof b.context === "string" ? b.context.slice(0, 2000) : null;
-  const sessionId = b.sessionId ? String(b.sessionId).slice(0, 64) : null;
+  // sessionId는 '실제 존재하는 세션'일 때만 미터에 누적(임의 id로 미터 오염·Map 증식 방지)
+  let sessionId = b.sessionId ? String(b.sessionId).slice(0, 64) : null;
+  if (sessionId && !(await store.get(sessionId))) sessionId = null;
   res.json(await orchestrate({ sessionId, kind: b.kind || "idea", goal, context }));
 }));
 
-/* 세션 AI 비용 미터 요약 (발표 패널: '어느 모델이 뭘 했나 + 얼마 아꼈나') */
-app.get("/api/sessions/:id/ai-meter", h(async (req, res) => {
+/* 세션 AI 비용 미터 요약 (발표 패널). 읽기 전용(조회로 미터 생성 안 함) + 레이트리밋 */
+app.get("/api/sessions/:id/ai-meter", aiLimiter, h(async (req, res) => {
   res.json(sessionMeter(String(req.params.id).slice(0, 64)));
 }));
 

@@ -8,8 +8,8 @@ export function makeMeter() {
   const calls = [];
   return {
     record(entry) {
-      const { purpose = "generate", kind, role, model, tier, usageTokens = 0, escalated = false } = entry;
-      calls.push({ purpose, kind, role, model, tier, usageTokens, escalated, estCost: estCost(tier, usageTokens) });
+      const { purpose = "generate", kind, role, model, tier, usageTokens = 0, usageTokensIn = null, usageTokensOut = null, escalated = false } = entry;
+      calls.push({ purpose, kind, role, model, tier, usageTokens, usageTokensIn, usageTokensOut, escalated, estCost: estCost(tier, usageTokens) });
     },
     summary() {
       const gen = calls.filter((c) => c.purpose === "generate");
@@ -26,8 +26,10 @@ export function makeMeter() {
         ourCost: round(ourCost),
         overheadCost: round(overheadCost),
         allFlagshipCost: round(allFlagshipCost), // 가상
+        cacheSavedCost: 0, // P2 prompt caching 절감 자리(라우팅 절감과 분리 집계)
         savedPct,
         escalateRate,
+        schemaFailRate: null, // P2에서 스키마 통과율과 함께
         baselineNote: "‘전부 고가’는 실제로 돌리지 않은 가상 비교입니다",
         pricingMode: PRICING_MODE, // "estimate-mock" → 화면에 '추정(목업)' 배지
         tierPrice: TIER_PRICE,

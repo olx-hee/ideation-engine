@@ -358,10 +358,11 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
       const v = {}; mine.forEach((id) => { v[id] = true; }); setVotes(v);
     }
   }, [content]);
-  // 단계 진입 시 해당 kind로 오케스트레이터를 호출해 비용 미터를 누적(kind당 1회, best-effort)
+  // 단계 진입 시 해당 kind로 오케스트레이터 호출 → 비용 미터 누적(서버가 kind별 멱등 처리).
+  // report는 ReportPhase가 소유(레이스 방지: 응답에 실린 미터를 그대로 사용).
   const aiFired = useRef(new Set());
   useEffect(() => {
-    const kind = ["ice", "idea", "analyze", "report"][step];
+    const kind = ["ice", "idea", "analyze"][step];
     if (!sessionId || !kind || aiFired.current.has(kind)) return;
     aiFired.current.add(kind);
     api.ai(kind, goal, null, sessionId).catch(() => {});
@@ -407,7 +408,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
           {step === 0 && <IcePhase sessionId={sessionId} myProfile={myProfile} goal={goal} method={method} initialIce={content?.ice} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 1 && <IdeaPhase sessionId={sessionId} myProfile={myProfile} method={method} goal={goal} initialIdeas={content?.ideas} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 2 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} onContentSync={onContentSync} onSyncError={onSyncError} />}
-          {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} />}
+          {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} goal={goal} />}
         </div>
       </main>
       <footer className="bg-white border-t sticky bottom-0">
@@ -745,10 +746,16 @@ function AnalyzePhase({ votes, setVotes, method = "brain", sessionId, onContentS
 }
 
 /* ═══════ Phase 4: 리포트 ═══════ */
-function ReportPhase({ votedThemes = [], method = "brain", sessionId }) {
+function ReportPhase({ votedThemes = [], method = "brain", sessionId, goal = "" }) {
   const [dl, setDl] = useState(false);
   const [meter, setMeter] = useState(null); // 오케스트레이터 비용 미터 (발표 패널)
-  useEffect(() => { if (sessionId) api.getAiMeter(sessionId).then(setMeter).catch(() => {}); }, [sessionId]);
+  // report 호출을 여기서 소유 → 응답에 실린 '전체 미터'를 그대로 사용(별도 fetch 레이스 제거)
+  useEffect(() => {
+    if (!sessionId) return;
+    api.ai("report", goal, null, sessionId)
+      .then((r) => setMeter(r.meter))
+      .catch(() => api.getAiMeter(sessionId).then(setMeter).catch(() => {}));
+  }, [sessionId]);
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
@@ -777,6 +784,7 @@ function ReportPhase({ votedThemes = [], method = "brain", sessionId }) {
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 bg-neutral-900 text-white rounded-xl px-4 py-3">
             <span className="text-2xl font-bold text-green-400">약 {meter.savedPct}% 절감</span>
             <span className="text-xs text-neutral-300">우리 방식 ${meter.ourCost} vs 전부 고가면 ${meter.allFlagshipCost}</span>
+            <span className="text-[10px] text-neutral-400 w-full">품질 지표 — 승격률 {meter.escalateRate ?? 0}% · 오버헤드 ${meter.overheadCost ?? 0} (생성 콜만 절감 계산)</span>
           </div>
           <p className="text-[11px] text-neutral-500 mt-2">※ {meter.baselineNote}. 저가/고가 LLM을 작업에 맞게 자동 배분한 결과입니다.</p>
         </div>

@@ -1,8 +1,18 @@
 /* 공급사 어댑터 — 실제 LLM 호출이 들어갈 자리(설계 §6).
-   P1은 '목업' 구현: 그럴듯한 응답 + 가짜 usage 토큰을 반환한다.
-   P2에서 이 함수 하나만 OpenRouter/공급사 실호출로 바꾸면 됨.
+   P1은 '목업' 구현: 그럴듯한 응답 + (재현 가능한) 목업 usage 토큰을 반환한다.
+   P2에서 이 함수 하나만 OpenRouter/공급사 실호출로 바꾸면 됨. */
 
-   capability 플래그(supportsJsonSchema/authStyle 등)는 실연동 때 여기 레지스트리로 추가. */
+// 모델별 capability 자리(설계 §6) — P2에서 실제 값으로 채운다. 지금은 기본 스텁.
+export const MODEL_CAPS = {
+  default: { supportsJsonSchema: false, supportsTools: false, authStyle: "bearer" },
+};
+export const capsOf = (model) => MODEL_CAPS[model] || MODEL_CAPS.default;
+
+// TODO(P2): 실연동 시 사용자 입력(goal/context)을 delimiter로 격리하고 시스템 지시와 분리한다.
+//   function buildPrompt({ system, userGoal, context }) {
+//     return [{ role: "system", content: system },
+//             { role: "user", content: `<<<USER_INPUT>>>\n${userGoal}\n<<<END>>>` }];
+//   }
 
 const MOCK_BY_KIND = {
   keyword: (m) => `[${m}] 핵심 키워드: 반복 판단·인지 부하·자동화`,
@@ -12,12 +22,19 @@ const MOCK_BY_KIND = {
   report: (m) => `[${m}] 세션 결과를 종합한 보고서 초안입니다.`,
 };
 
+// kind+model 기반 결정적 해시 → 목업 usage를 재현 가능하게(발표 재현성, §8)
+function stableOut(kind, model) {
+  const s = `${kind}|${model}`;
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return 120 + (h % 300); // 120~419
+}
+
 export async function callModel({ model, tier, kind, prompt = "" }) {
-  // 실호출처럼 약간의 지연(선택) 없이 즉시 목업 반환
   const make = MOCK_BY_KIND[kind] || ((m) => `[${m}] 응답(목업)`);
   const text = make(model);
-  // 목업 usage — 입력 길이에 대충 비례 + 랜덤. 실측은 provider usage 필드로 대체.
+  // 입력은 길이 비례(결정적), 출력은 kind+model 해시(결정적) — 실측은 provider usage로 대체
   const inTok = Math.min(2000, 40 + Math.floor(prompt.length / 3));
-  const outTok = 120 + Math.floor(Math.random() * 300);
-  return { text, model, tier, usageTokens: inTok + outTok, mock: true };
+  const outTok = stableOut(kind, model);
+  return { text, model, tier, usageTokensIn: inTok, usageTokensOut: outTok, usageTokens: inTok + outTok, mock: true };
 }
