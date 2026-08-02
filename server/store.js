@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import dns from "dns";
 
 /* ══════════════════════════════════════════════════════════════
    세션 스토어 — 하나의 async 인터페이스로 두 백엔드를 감춘다.
@@ -42,8 +43,13 @@ function createMemoryStore() {
 
 /* ---- MongoDB (MONGODB_URI 설정 시 자동 사용) ---- */
 async function createMongoStore(uri) {
+  // 일부 환경에서 시스템 DNS가 SRV(mongodb+srv) 조회를 거부(ECONNREFUSED)해 연결이 실패한다.
+  // 공개 DNS(구글·클라우드플레어)를 우선 사용하도록 지정해 회피하고, 시스템 DNS는 뒤에 둔다.
+  if (uri.startsWith("mongodb+srv")) {
+    try { dns.setServers(["8.8.8.8", "1.1.1.1", ...dns.getServers()]); } catch {}
+  }
   const mongoose = (await import("mongoose")).default;
-  await mongoose.connect(uri);
+  await mongoose.connect(uri, { serverSelectionTimeoutMS: 15000 });
   // strict:false → 세션 스키마가 자유롭게 진화해도 그대로 저장
   const schema = new mongoose.Schema({ _id: String }, { strict: false, minimize: false, _id: false });
   const Session = mongoose.models.Session || mongoose.model("Session", schema);
