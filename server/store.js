@@ -7,7 +7,8 @@ import { randomUUID } from "crypto";
    프론트·라우트는 이 인터페이스만 알면 되므로, 나중에 DB만 꽂으면 됨.
    ════════════════════════════════════════════════════════════════ */
 
-const newId = () => randomUUID().slice(0, 8);
+// 세션 id는 추측/열거를 막기 위해 전체 UUID(122bit) 사용
+const newId = () => randomUUID();
 
 /* ---- 인메모리 폴백 (서버 재시작 시 초기화됨) ---- */
 function createMemoryStore() {
@@ -55,7 +56,8 @@ async function createMongoStore(uri) {
       return clean(await Session.findById(id).lean());
     },
     async update(id, patch) {
-      return clean(await Session.findByIdAndUpdate(id, patch, { new: true }).lean());
+      // patch를 항상 $set으로 감싸 업데이트 연산자 주입($unset/$rename 등) 차단
+      return clean(await Session.findByIdAndUpdate(id, { $set: patch }, { new: true }).lean());
     },
     async all() {
       return (await Session.find().lean()).map(clean);

@@ -26,6 +26,9 @@ const MOCKS = {
   }),
 };
 
+/* 허용되는 요청 종류 (라우트에서 화이트리스트 검증에 사용) */
+export const AI_KINDS = Object.keys(MOCKS);
+
 export async function generate({ kind = "idea", goal = "", context = null } = {}) {
   const key = process.env.ANTHROPIC_API_KEY;
   const payload = (MOCKS[kind] || MOCKS.idea)(goal, context);
