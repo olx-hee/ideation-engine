@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
-import { Clock, Users, Check, ChevronRight, ChevronLeft, Lightbulb, Target, MessageSquare, BarChart3, FileText, ArrowRight, Plus, Heart, Send, Vote, Sparkles, Play, X, Home } from "lucide-react";
+import { Users, Check, ChevronRight, ChevronLeft, Lightbulb, Target, BarChart3, FileText, ArrowRight, Plus, Heart, Send, Vote, Sparkles, Play } from "lucide-react";
 
 /* ═══════════════════════════════════════════
    일관된 데이터 세트 — 모든 단계가 연결됨
    ═══════════════════════════════════════════ */
 
 const MEMBERS = [
-  { id: "sh", name: "김승희", initial: "김", color: "bg-blue-500 text-white", isHost: true },
-  { id: "jm", name: "전재민", initial: "전", color: "bg-purple-500 text-white" },
-  { id: "kb", name: "조경빈", initial: "조", color: "bg-amber-500 text-white" },
-  { id: "jg", name: "이중곤", initial: "이", color: "bg-rose-500 text-white" },
+  { id: "sh", name: "김승희", initial: "김", color: "bg-blue-500 text-white", isHost: true, skills: ["기획", "발표"], strengths: "팀 방향을 잡고 정리하는 역할" },
+  { id: "jm", name: "전재민", initial: "전", color: "bg-purple-500 text-white", skills: ["디자인", "프론트엔드"], strengths: "UI/UX와 화면 구현" },
+  { id: "kb", name: "조경빈", initial: "조", color: "bg-amber-500 text-white", skills: ["백엔드", "데이터"], strengths: "서버·DB 설계" },
+  { id: "jg", name: "이중곤", initial: "이", color: "bg-rose-500 text-white", skills: ["AI/ML", "리서치"], strengths: "모델링·자료조사" },
 ];
+
+/* 선택 가능한 역량 목록 (프로필 작성용) */
+const SKILL_OPTIONS = ["기획", "발표", "마케팅", "디자인", "UX", "프론트엔드", "백엔드", "데이터", "인프라", "AI/ML", "리서치", "논문"];
 
 const GOAL = "교내 해커톤에서 발표할 AI 기반 서비스 아이디어 도출";
 
@@ -71,6 +74,113 @@ const PHASES = [
   { key: "report", label: "결과 보고서", duration: 5, icon: "📋", color: "from-green-500 to-emerald-500", desc: "AI 요약 + 액션 아이템" },
 ];
 
+/* ═══════ [1번] 오프라인 / 온라인 모드 정의 ═══════ */
+const MODES = {
+  offline: {
+    key: "offline", label: "오프라인 모드", icon: "🏫",
+    tagline: "해커톤 · 다 같이 한 공간에서",
+    points: ["전원이 모여야 시작", "공유 타이머로 다 함께 진행", "현장의 긴장감과 즉석 반응을 살림"],
+  },
+  online: {
+    key: "online", label: "온라인 모드", icon: "🌐",
+    tagline: "팀플 · 각자 편한 시간에",
+    points: ["링크만 있으면 지금 바로 시작", "마감 시간까지 각자 참여", "늦게 온 사람에겐 AI가 지금까지의 논의를 브리핑"],
+  },
+};
+
+/* ═══════ [2번] 프로필(역량) → 아이디어 각도 배분 ═══════
+   같은 질문을 모두에게 던지면 비슷한 답이 나온다.
+   각 참여자를 '서로 다른 각도'에 세워 발산의 다양성을 구조적으로 보장한다.
+   각도는 무작위가 아니라 개인의 역량(프로필)에서 배정된다. */
+const ANGLES = {
+  biz:   { id: "biz",   label: "비즈니스 · 시장", icon: "📈", hint: "누가 돈을 내고, 왜 하필 지금인가?",       cls: "bg-amber-50 border-amber-300 text-amber-800" },
+  ux:    { id: "ux",    label: "사용자 경험",     icon: "🎨", hint: "실제 사용자가 겪는 결정적 순간의 불편은?", cls: "bg-purple-50 border-purple-300 text-purple-800" },
+  tech:  { id: "tech",  label: "기술 실현 가능성", icon: "⚙️", hint: "제한된 시간 안에 진짜로 만들 수 있는가?",  cls: "bg-blue-50 border-blue-300 text-blue-800" },
+  novel: { id: "novel", label: "기술 혁신",       icon: "🚀", hint: "기존에 없던, 우리만의 방식은 무엇인가?",   cls: "bg-rose-50 border-rose-300 text-rose-800" },
+};
+const SKILL_ANGLE = {
+  "기획": "biz", "발표": "biz", "마케팅": "biz",
+  "디자인": "ux", "UX": "ux", "프론트엔드": "ux",
+  "백엔드": "tech", "데이터": "tech", "인프라": "tech",
+  "AI/ML": "novel", "리서치": "novel", "논문": "novel",
+};
+/* 역량 → 각도 배정. 우선 매칭되는 첫 역량 기준, 없으면 biz. (개인 미리보기용) */
+function assignAngle(skills = []) {
+  for (const s of skills) if (SKILL_ANGLE[s]) return ANGLES[SKILL_ANGLE[s]];
+  return ANGLES.biz;
+}
+
+/* 팀 단위 각도 배정 — 전원이 같은 각도로 몰리지 않도록 중복을 최소화한다.
+   각자 역량에 맞는 각도를 우선 주되, 이미 쓰인 각도면 남은 각도로 분산. */
+function assignTeamAngles(people) {
+  const order = ["biz", "ux", "tech", "novel"];
+  const used = new Set();
+  return people.map(p => {
+    const prefs = [];
+    for (const s of (p.skills || [])) {
+      const k = SKILL_ANGLE[s];
+      if (k && !prefs.includes(k)) prefs.push(k);
+    }
+    if (prefs.length === 0) prefs.push("biz");
+    let chosen = prefs.find(k => !used.has(k))        // 선호 중 아직 안 쓴 것
+      || order.find(k => !used.has(k))                // 없으면 남은 각도 아무거나
+      || prefs[0];                                     // 다 찼으면 선호 재사용
+    used.add(chosen);
+    return ANGLES[chosen];
+  });
+}
+
+/* [2번] 팀 프로필 기반 주제 추천 — 지금은 규칙 기반 목업.
+   3번(백엔드)에서 이 함수를 실제 LLM 호출로 교체한다. (교체 지점 명시) */
+function mockRecommendTopics(profiles) {
+  const skills = new Set(profiles.flatMap(p => p.skills || []));
+  const has = (...ss) => ss.some(s => skills.has(s));
+  const topics = [];
+  if (has("AI/ML", "리서치")) topics.push({ title: "학습·연구 과정을 자동화하는 AI 도우미", why: "팀에 AI/ML·리서치 역량이 있어 모델 기반 서비스를 직접 구현할 수 있음" });
+  if (has("데이터", "백엔드")) topics.push({ title: "생활 데이터를 실시간 수집·분석하는 서비스", why: "백엔드·데이터 역량이 있어 수집 파이프라인 구축이 현실적" });
+  if (has("디자인", "UX", "프론트엔드")) topics.push({ title: "복잡한 과정을 단순한 UX로 바꾸는 도구", why: "디자인·프론트 역량이 강해 사용성으로 차별화 가능" });
+  if (has("기획", "발표")) topics.push({ title: "팀 협업의 비효율을 줄이는 생산성 서비스", why: "기획·발표 역량이 있어 문제 정의와 스토리텔링에 강점" });
+  while (topics.length < 3) topics.push({ title: "일상의 반복 작업을 줄여주는 자동화 서비스", why: "팀의 공통 관심에서 파생된 범용 방향" });
+  return topics.slice(0, 3);
+}
+
+/* ═══════ 아이데이션 방식(프레임워크) — 방식마다 발산 단계가 실제로 달라진다 ═══════ */
+const SCAMPER_LENSES = [
+  { key: "S", name: "대체 (Substitute)",         q: "핵심 요소 중 무엇을 다른 것으로 바꿀 수 있을까?" },
+  { key: "C", name: "결합 (Combine)",            q: "어떤 기능·서비스와 합치면 더 강해질까?" },
+  { key: "A", name: "응용 (Adapt)",              q: "다른 분야의 방식을 여기에 빌려온다면?" },
+  { key: "M", name: "수정·확대 (Modify)",         q: "무엇을 크게 키우거나 강조하면 달라질까?" },
+  { key: "P", name: "다른 용도 (Put to other use)", q: "전혀 다른 사용자·상황에 쓴다면?" },
+  { key: "E", name: "제거 (Eliminate)",          q: "무엇을 없애도 여전히 동작할까?" },
+  { key: "R", name: "반대·재배열 (Reverse)",      q: "순서나 역할을 뒤집으면 어떻게 될까?" },
+];
+const SIX_HATS = [
+  { key: "white",  name: "흰색 · 사실", icon: "⚪", cls: "bg-neutral-100 border-neutral-300 text-neutral-800", q: "지금 확실한 데이터와 사실은 무엇인가?" },
+  { key: "red",    name: "빨강 · 감정", icon: "🔴", cls: "bg-rose-50 border-rose-300 text-rose-800",           q: "직관적으로 어떤 느낌이 드는가? (근거 없어도 OK)" },
+  { key: "black",  name: "검정 · 위험", icon: "⚫", cls: "bg-neutral-200 border-neutral-500 text-neutral-900",  q: "무엇이 잘못될 수 있는가? 약점은?" },
+  { key: "yellow", name: "노랑 · 이점", icon: "🟡", cls: "bg-amber-50 border-amber-300 text-amber-800",         q: "이게 잘 되면 어떤 가치가 생기는가?" },
+  { key: "green",  name: "초록 · 창의", icon: "🟢", cls: "bg-green-50 border-green-300 text-green-800",          q: "완전히 새로운 대안은 없을까?" },
+  { key: "blue",   name: "파랑 · 정리", icon: "🔵", cls: "bg-blue-50 border-blue-300 text-blue-800",            q: "지금까지 나온 것을 어떻게 정리·결론지을까?" },
+];
+const METHOD_META = {
+  brain:   { id: "brain",   name: "자유 브레인스토밍",   phaseLabel: "자유 발산",     desc: "제한 없이 아이디어를 쏟아냅니다. 각자 배정된 각도에서 시작하세요.", reason: "다양한 방향을 넓게 탐색할 때" },
+  scamper: { id: "scamper", name: "SCAMPER",            phaseLabel: "SCAMPER 변형",  desc: "7가지 렌즈로 대상을 하나씩 비틀어 아이디어를 만듭니다.",            reason: "기존 대상을 개선·변형할 때" },
+  sixhats: { id: "sixhats", name: "Six Thinking Hats",  phaseLabel: "6색 모자 검토", desc: "한 번에 하나의 모자를 쓰고, 같은 관점에서 함께 생각합니다.",         reason: "여러 관점을 균형 있게 검토·결정할 때" },
+};
+
+/* 가짜 퍼센트 대신, 목표 텍스트와 모드에서 실제로 계산하는 방식 추천 점수 */
+function recommendMethods(goal = "", mode = "offline") {
+  const g = goal || "";
+  const score = { brain: 2, scamper: 2, sixhats: 2 };
+  if (/새로운|신규|발산|탐색|해커톤|창업|아이디어|처음/.test(g)) score.brain += 2;
+  if (/개선|기존|업그레이드|고도화|변형|리뉴얼|바꾸|개편/.test(g)) score.scamper += 2;
+  if (/결정|선택|검토|평가|리스크|위험|의사결정|합의|우선순위/.test(g)) score.sixhats += 2;
+  if (mode === "offline") score.brain += 1;
+  if (mode === "online") score.sixhats += 1;
+  const top = Object.entries(score).sort((a, b) => b[1] - a[1])[0][0];
+  return { score, top };
+}
+
 /* ═══════ 공통 컴포넌트 ═══════ */
 function Badge({ children, variant = "default" }) {
   const s = { default: "bg-neutral-100 text-neutral-600", primary: "bg-neutral-900 text-white", success: "bg-green-100 text-green-700", warning: "bg-amber-100 text-amber-700", info: "bg-blue-100 text-blue-700" };
@@ -79,8 +189,8 @@ function Badge({ children, variant = "default" }) {
 
 function getMember(id) { return MEMBERS.find(m => m.id === id) || { name: "알 수 없음", initial: "?", color: "bg-neutral-300" }; }
 
-function MemberAvatar({ memberId, size = "sm" }) {
-  const m = getMember(memberId);
+function MemberAvatar({ memberId, member, size = "sm" }) {
+  const m = member || getMember(memberId);
   const sz = size === "sm" ? "w-7 h-7 text-xs" : "w-9 h-9 text-sm";
   return <div className={`${sz} rounded-full ${m.color} flex items-center justify-center font-semibold flex-shrink-0`}>{m.initial}</div>;
 }
@@ -97,17 +207,22 @@ function AiCard({ msg }) {
 }
 
 /* ═══════ 세션 생성 ═══════ */
-function CreateView({ onStart }) {
-  const [goal, setGoal] = useState(GOAL);
+function CreateView({ myProfile, onStart }) {
+  const [goal, setGoal] = useState("");
   const [method, setMethod] = useState(null);
   const [showRec, setShowRec] = useState(false);
   const [mins, setMins] = useState(60);
+  const [mode, setMode] = useState("offline");
+  const [topics, setTopics] = useState(null);
 
-  const FW = [
-    { id: "brain", icon: <Lightbulb size={18} />, name: "자유 브레인스토밍", match: 95, desc: "제한 없이 아이디어를 쏟아내는 방식. 해커톤 초반 발산에 최적.", reason: "다양한 방향 탐색이 필요한 해커톤에 가장 효과적" },
-    { id: "scamper", icon: <Target size={18} />, name: "SCAMPER", match: 82, desc: "기존 아이디어를 7가지 관점으로 변형·발전시키는 체계적 방법.", reason: "기존 서비스 개선 방향이라면 구조화된 접근이 유리" },
-    { id: "sixhats", icon: <Users size={18} />, name: "Six Thinking Hats", match: 78, desc: "6가지 사고 모자로 다각도 검토. 역할 분리로 균등 참여 유도.", reason: "팀원 간 참여 균형이 중요할 때 적합" },
-  ];
+  const team = [...MEMBERS, myProfile].filter(Boolean);
+  const recommend = () => setTopics(mockRecommendTopics(team));
+
+  const rec = recommendMethods(goal, mode);
+  const ICONS = { brain: <Lightbulb size={18} />, scamper: <Target size={18} />, sixhats: <Users size={18} /> };
+  const FW = ["brain", "scamper", "sixhats"]
+    .map(id => ({ ...METHOD_META[id], icon: ICONS[id] }))
+    .sort((a, b) => rec.score[b.id] - rec.score[a.id]);
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
@@ -118,27 +233,56 @@ function CreateView({ onStart }) {
       </header>
       <main className="flex-1 max-w-2xl mx-auto px-6 py-10 w-full">
         <h1 className="text-3xl font-bold tracking-tight mb-1">세션 만들기</h1>
-        <p className="text-neutral-500 mb-8">목표를 입력하면 AI가 최적의 방식을 추천합니다</p>
+        <p className="text-neutral-500 mb-8">진행 방식을 고르고 목표를 정하면 세션이 만들어집니다</p>
+
+        {/* [1번] 모드 선택 */}
+        <div className="mb-6">
+          <label className="text-sm font-medium text-neutral-600 mb-2 block">진행 방식</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {Object.values(MODES).map(md => (
+              <button key={md.key} onClick={() => setMode(md.key)} className={`text-left bg-white rounded-2xl border-2 p-5 transition-all hover:shadow-md ${mode === md.key ? "border-neutral-900 shadow-md" : "border-transparent"}`}>
+                <div className="text-2xl mb-1">{md.icon}</div>
+                <div className="font-bold flex items-center gap-2">{md.label}{mode === md.key && <Check size={15} className="text-green-600" />}</div>
+                <div className="text-xs text-neutral-500 mb-3">{md.tagline}</div>
+                <ul className="space-y-1">{md.points.map(p => <li key={p} className="text-xs text-neutral-600 flex items-start gap-1"><span className="text-neutral-400">·</span> {p}</li>)}</ul>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* [2번] 세션 목표 + 팀 프로필 기반 주제 추천 */}
         <div className="bg-white rounded-2xl border p-6 mb-6">
           <label className="text-sm font-medium text-neutral-600 mb-2 block">세션 목표</label>
-          <textarea value={goal} onChange={e => setGoal(e.target.value)} className="w-full border rounded-xl p-4 text-sm resize-none h-24 outline-none focus:ring-2 focus:ring-neutral-900 transition" />
-          {!showRec && <button onClick={() => setShowRec(true)} disabled={!goal.trim()} className="w-full mt-3 py-3 bg-neutral-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition disabled:opacity-40"><Sparkles size={16} /> AI 추천 받기</button>}
+          <textarea value={goal} onChange={e => setGoal(e.target.value)} placeholder="목표를 직접 입력하거나, 아래에서 AI 추천을 받아보세요" className="w-full border rounded-xl p-4 text-sm resize-none h-24 outline-none focus:ring-2 focus:ring-neutral-900 transition" />
+          <button onClick={recommend} className="w-full mt-3 py-2.5 border border-purple-200 bg-purple-50 text-purple-700 rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:bg-purple-100 transition"><Sparkles size={15} /> 팀 프로필 기반 주제 추천받기 <Badge variant="info">AI · 데모</Badge></button>
+          {topics && (
+            <div className="mt-3 space-y-2 anim-up">
+              <p className="text-xs text-neutral-400">팀 역량({[...new Set(team.flatMap(p => p.skills || []))].join(", ")})을 분석해 추천했습니다. 클릭하면 목표로 설정됩니다.</p>
+              {topics.map((t, i) => (
+                <button key={i} onClick={() => setGoal(t.title)} className={`w-full text-left rounded-xl border-2 p-3 transition ${goal === t.title ? "border-purple-400 bg-purple-50" : "border-neutral-100 hover:border-neutral-300"}`}>
+                  <div className="text-sm font-semibold">{t.title}</div>
+                  <div className="text-xs text-neutral-500 mt-0.5">💡 {t.why}</div>
+                </button>
+              ))}
+            </div>
+          )}
+          {!showRec && <button onClick={() => setShowRec(true)} disabled={!goal.trim()} className="w-full mt-3 py-3 bg-neutral-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition disabled:opacity-40"><ArrowRight size={16} /> 다음: 방식·시간 정하기</button>}
         </div>
         {showRec && (
           <div className="space-y-4 anim-up">
-            <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 text-sm text-purple-800"><strong>🤖 AI 분석:</strong> "{goal}" — 다양한 방향 탐색이 중요한 주제입니다.</div>
+            <div className="bg-purple-50 border border-purple-100 rounded-xl p-4 text-sm text-purple-800"><strong>🤖 방식 추천:</strong> 목표 "{goal.slice(0, 24)}{goal.length > 24 ? "…" : ""}"와 {MODES[mode].label}를 고려하면 <strong>{METHOD_META[rec.top].name}</strong>이 가장 잘 맞습니다. (직접 골라도 됩니다)</div>
             {FW.map(f => (
               <button key={f.id} onClick={() => setMethod(f.id)} className={`w-full text-left bg-white rounded-xl border-2 p-5 transition-all hover:shadow-md ${method === f.id ? "border-neutral-900 shadow-md" : "border-transparent"}`}>
                 <div className="flex items-start gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${method === f.id ? "bg-neutral-900 text-white" : "bg-neutral-100"}`}>{f.icon}</div>
-                  <div className="flex-1"><div className="flex items-center gap-2 mb-1"><span className="font-semibold">{f.name}</span><Badge variant={f.match >= 90 ? "success" : "default"}>적합도 {f.match}%</Badge></div><p className="text-sm text-neutral-500">{f.desc}</p><p className="text-xs text-neutral-400 mt-1">💡 {f.reason}</p></div>
+                  <div className="flex-1"><div className="flex items-center gap-2 mb-1"><span className="font-semibold">{f.name}</span>{f.id === rec.top && <Badge variant="success">추천</Badge>}</div><p className="text-sm text-neutral-500">{f.desc}</p><p className="text-xs text-neutral-400 mt-1">💡 {f.reason}</p></div>
                 </div>
               </button>
             ))}
             <div className="bg-white rounded-xl border p-5">
               <label className="text-sm font-medium mb-3 block">세션 시간</label>
               <div className="flex gap-2 mb-2">{[30, 60, 90].map(t => <button key={t} onClick={() => setMins(t)} className={`flex-1 py-3 rounded-xl text-sm font-medium transition ${mins === t ? "bg-neutral-900 text-white" : "border hover:bg-neutral-50"}`}>{t}분</button>)}</div>
-              <p className="text-xs text-neutral-400">📊 설문 62명 중 40.3%가 60분 선호</p>
+              <p className="text-xs text-neutral-400">📊 예시: 설문 62명 중 40.3%가 60분 선호 (시연용)</p>
             </div>
             <div className="bg-white rounded-xl border p-5">
               <div className="text-sm font-medium mb-3">⏱ AI 추천 시간 배분 ({mins}분)</div>
@@ -154,7 +298,7 @@ function CreateView({ onStart }) {
                 );
               })}
             </div>
-            <button onClick={() => onStart(goal, mins)} disabled={!method} className="w-full py-3.5 bg-neutral-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition disabled:opacity-40"><ArrowRight size={16} /> 세션 생성 및 팀원 초대</button>
+            <button onClick={() => onStart(goal, mins, mode, method)} disabled={!method} className="w-full py-3.5 bg-neutral-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition disabled:opacity-40"><ArrowRight size={16} /> {MODES[mode].label}로 세션 생성 및 팀원 초대</button>
           </div>
         )}
       </main>
@@ -164,9 +308,14 @@ function CreateView({ onStart }) {
 }
 
 /* ═══════ 세션 메인 ═══════ */
-function SessionView({ goal, mins }) {
+function SessionView({ goal, mins, mode = "offline", method = "brain", myProfile, onExit }) {
+  const isOnline = mode === "online";
   const [step, setStep] = useState(0);
   const [elapsed, setElapsed] = useState(0);
+  const [votes, setVotes] = useState({}); // 투표 상태를 세션에 두어 보고서까지 연결
+  // 온라인 마감: 세션 생성 시각 기준 +2일로 실제 계산 (하드코딩된 요일 제거)
+  const [deadline] = useState(() => { const d = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); return `${d.getMonth() + 1}/${d.getDate()} 23:59`; });
+  const votedThemes = THEMES.filter(t => votes[t.id]).map(t => t.name);
   useEffect(() => { const id = setInterval(() => setElapsed(e => e + 1), 1000); return () => clearInterval(id); }, []);
   const next = () => { setStep(s => Math.min(3, s + 1)); setElapsed(0); };
   const prev = () => { setStep(s => Math.max(0, s - 1)); setElapsed(0); };
@@ -180,7 +329,7 @@ function SessionView({ goal, mins }) {
     <div className="min-h-screen bg-neutral-50 flex flex-col">
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0 flex-shrink-0"><span className="font-bold text-sm">IdeationEngine</span><span className="text-neutral-300">|</span><span className="text-xs text-neutral-500 max-w-[200px] truncate">{goal}</span></div>
+          <div className="flex items-center gap-3 min-w-0 flex-shrink-0"><span className="font-bold text-sm">IdeationEngine</span><span className="text-neutral-300">|</span><span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-500 flex-shrink-0">{MODES[mode].icon} {MODES[mode].label}</span><span className="text-xs text-neutral-500 max-w-[160px] truncate hidden md:inline">{goal}</span>{isOnline && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 flex-shrink-0">⏳ 마감 {deadline}</span>}</div>
           <div className="flex items-center gap-0.5 bg-neutral-100 rounded-xl p-0.5 flex-shrink-0">
             {PHASES.map((p, i) => (
               <div key={i} className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${i === step ? "bg-white shadow text-neutral-900" : i < step ? "text-green-600" : "text-neutral-400"}`}>
@@ -199,6 +348,7 @@ function SessionView({ goal, mins }) {
       </header>
       <div className="bg-white border-b">
         <div className="max-w-6xl mx-auto px-6 py-1.5">
+          <div className="text-[10px] text-neutral-400 mb-1 text-center">{isOnline ? "🧑‍💻 각자 자기 속도로 진행 — 이 타이머는 나만의 페이스 가이드입니다" : "👥 모두 같은 타이머로 함께 진행 중"}</div>
           <div className="flex items-center h-2.5 rounded-full overflow-hidden bg-neutral-100">
             {PHASES.map((p, i) => <div key={i} className={`h-full bg-gradient-to-r ${p.color} transition-opacity ${i === step ? "opacity-100" : i < step ? "opacity-30" : "opacity-10"}`} style={{ width: `${(Math.round(p.duration * mins / 60) / mins) * 100}%` }} />)}
           </div>
@@ -206,10 +356,10 @@ function SessionView({ goal, mins }) {
       </div>
       <main className="flex-1 py-6">
         <div className="max-w-6xl mx-auto px-6">
-          {step === 0 && <IcePhase />}
-          {step === 1 && <IdeaPhase />}
-          {step === 2 && <AnalyzePhase />}
-          {step === 3 && <ReportPhase />}
+          {step === 0 && <IcePhase myProfile={myProfile} goal={goal} />}
+          {step === 1 && <IdeaPhase myProfile={myProfile} method={method} goal={goal} />}
+          {step === 2 && <AnalyzePhase votes={votes} setVotes={setVotes} />}
+          {step === 3 && <ReportPhase votedThemes={votedThemes} />}
         </div>
       </main>
       <footer className="bg-white border-t sticky bottom-0">
@@ -217,7 +367,7 @@ function SessionView({ goal, mins }) {
           <button onClick={prev} disabled={step === 0} className="px-4 py-2 border rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-neutral-50 transition disabled:opacity-30"><ChevronLeft size={14} /> 이전</button>
           <div className="text-sm font-medium text-neutral-500">{phase.icon} {phase.label} · {adjD}분 배정</div>
           {step < 3 ? <button onClick={next} className="px-5 py-2 bg-neutral-900 text-white rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-neutral-800 transition">다음 <ChevronRight size={14} /></button>
-            : <button className="px-5 py-2 bg-green-600 text-white rounded-xl text-sm font-medium flex items-center gap-1"><Check size={14} /> 완료</button>}
+            : <button onClick={onExit} className="px-5 py-2 bg-green-600 text-white rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-green-700 transition"><Check size={14} /> 완료 — 새 세션</button>}
         </div>
       </footer>
     </div>
@@ -225,15 +375,16 @@ function SessionView({ goal, mins }) {
 }
 
 /* ═══════ Phase 1: 아이스브레이킹 ═══════ */
-function IcePhase() {
+function IcePhase({ myProfile, goal }) {
   const [answers, setAnswers] = useState(ICE_ANSWERS.map(a => ({ ...a, member: getMember(a.memberId) })));
   const [input, setInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showAi, setShowAi] = useState(false);
+  const meName = myProfile?.name || "나";
 
   const handleSubmit = () => {
     if (!input.trim()) return;
-    setAnswers(prev => [{ memberId: "user", member: { name: "나 (시연자)", initial: "나", color: "bg-emerald-500 text-white" }, text: input, likes: 0 }, ...prev]);
+    setAnswers(prev => [{ memberId: "user", member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" }, text: input, likes: 0 }, ...prev]);
     setInput(""); setSubmitted(true);
     setTimeout(() => setShowAi(true), 800);
   };
@@ -243,7 +394,7 @@ function IcePhase() {
       <div className="flex-1 min-w-0">
         <div className="mb-5"><Badge variant="info">💬 PHASE 1 · 10분</Badge><h2 className="text-xl font-bold mt-1">아이스브레이킹</h2><p className="text-sm text-neutral-500">세션 목표와 연결된 워밍업 질문입니다. 이 답변들이 다음 아이디어 발산의 출발점이 됩니다.</p></div>
         <div className="bg-neutral-900 text-white rounded-2xl p-6 mb-5">
-          <div className="text-xs text-neutral-400 mb-2 flex items-center gap-1"><Sparkles size={11} /> 세션 목표 "{GOAL.slice(0, 20)}..."에 맞춰 AI가 질문을 생성했습니다</div>
+          <div className="text-xs text-neutral-400 mb-2 flex items-center gap-1"><Sparkles size={11} /> 세션 목표 "{(goal || "이 세션의 목표").slice(0, 24)}{(goal || "").length > 24 ? "…" : ""}"에 맞춰 AI가 질문을 생성했습니다</div>
           <h3 className="text-2xl font-bold leading-snug">최근 일주일간 경험한 가장 큰 '불편함'은 무엇인가요?</h3>
           <p className="text-sm text-neutral-400 mt-2">💡 여기서 나온 불편함이 → 아이디어의 씨앗이 됩니다</p>
         </div>
@@ -256,7 +407,7 @@ function IcePhase() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {answers.map((a, i) => (
             <div key={i} className="bg-white border rounded-xl p-4 hover:shadow-md transition anim-up">
-              <div className="flex items-center gap-2 mb-2"><MemberAvatar memberId={a.memberId} /><span className="text-sm font-medium">{a.member.name}</span></div>
+              <div className="flex items-center gap-2 mb-2"><MemberAvatar memberId={a.memberId} member={a.member} /><span className="text-sm font-medium">{a.member.name}</span></div>
               <p className="text-sm text-neutral-700 leading-relaxed mb-2">{a.text}</p>
               <button className="text-xs text-neutral-400 hover:text-pink-500 transition flex items-center gap-1"><Heart size={11} /> {a.likes}</button>
             </div>
@@ -281,15 +432,32 @@ function IcePhase() {
   );
 }
 
-/* ═══════ Phase 2: 아이디어 발산 ═══════ */
-function IdeaPhase() {
+/* ═══════ Phase 2: 아이디어 발산 — 방식(method)에 따라 완전히 다른 화면 ═══════ */
+function IdeaPhase({ myProfile, method = "brain", goal }) {
+  if (method === "scamper") return <IdeaScamper goal={goal} />;
+  if (method === "sixhats") return <IdeaSixHats goal={goal} />;
+  return <IdeaBrainstorm myProfile={myProfile} />;
+}
+
+/* 방식 A: 자유 브레인스토밍 (각도 배분 + 자유 입력) */
+function IdeaBrainstorm({ myProfile }) {
   const [ideas, setIdeas] = useState(IDEAS.map(i => ({ ...i, member: getMember(i.memberId) })));
   const [input, setInput] = useState("");
   const [aiMsgCount, setAiMsgCount] = useState(0); // 제출할 때마다 AI 메시지 추가
+  const meName = myProfile?.name || "나";
+
+  // [2번] 팀 단위 각도 배정 — 전원이 같은 각도로 몰리지 않게 분산
+  const people = [
+    ...MEMBERS.map(m => ({ id: m.id, name: m.name, initial: m.initial, color: m.color, skills: m.skills, isMe: false })),
+    ...(myProfile ? [{ id: "user", name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white", skills: myProfile.skills, isMe: true }] : []),
+  ];
+  const teamAngles = assignTeamAngles(people);
+  const roster = people.map((p, i) => ({ ...p, angle: teamAngles[i] }));
+  const myAngle = roster.find(r => r.isMe)?.angle || null;
 
   const handleSubmit = () => {
     if (!input.trim()) return;
-    setIdeas(prev => [{ id: Date.now(), memberId: "user", member: { name: "나 (시연자)", initial: "나", color: "bg-emerald-500 text-white" }, title: input, tags: ["NEW"], likes: 0, fromIce: "시연자가 직접 제안" }, ...prev]);
+    setIdeas(prev => [{ id: Date.now(), memberId: "user", member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" }, title: input, tags: ["NEW"], likes: 0, fromIce: `${meName} 제안` }, ...prev]);
     setInput("");
     setAiMsgCount(c => Math.min(c + 1, AI_MSGS_IDEA.length));
   };
@@ -297,9 +465,25 @@ function IdeaPhase() {
   return (
     <div>
       <div className="mb-5"><Badge variant="warning">💡 PHASE 2 · 20분</Badge><h2 className="text-xl font-bold mt-1">아이디어 발산</h2><p className="text-sm text-neutral-500">아이스브레이킹에서 나온 불편함을 기반으로 자유롭게 아이디어를 제안하세요.</p></div>
-      <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-4 text-xs text-blue-700 flex items-start gap-2"><Sparkles size={12} className="mt-0.5 flex-shrink-0" /> <span>아이스브레이킹에서 4명 모두 <strong>'정보가 있는데 접근이 안 되는'</strong> 구조의 불편함을 공유했습니다. 이 공통 패턴을 해결하는 AI 서비스를 자유롭게 상상해보세요.</span></div>
+      {/* [2번] 프로필 기반 각도 배분 패널 — '문제 정의를 못박는 지시' 대신 '각자 다른 문을 열어줌' */}
+      <div className="bg-white border rounded-xl p-4 mb-4">
+        <div className="flex items-center gap-2 mb-1"><Sparkles size={14} className="text-purple-600" /><span className="font-semibold text-sm">AI가 프로필을 보고 각자에게 다른 각도를 배정했어요</span></div>
+        <p className="text-xs text-neutral-400 mb-3">같은 목표라도 서로 다른 각도에서 출발하면 아이디어가 겹치지 않습니다. 각자 <strong>자기 각도</strong>에서 먼저 생각해보세요.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+          {roster.map(r => (
+            <div key={r.id} className={`rounded-xl border-2 p-3 ${r.angle.cls} ${r.isMe ? "ring-2 ring-neutral-900 border-transparent" : "border-transparent"}`}>
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <div className={`w-6 h-6 rounded-full ${r.color} flex items-center justify-center text-[10px] font-semibold`}>{r.initial}</div>
+                <span className="text-xs font-medium">{r.name}{r.isMe && " (나)"}</span>
+              </div>
+              <div className="text-sm font-bold flex items-center gap-1">{r.angle.icon} {r.angle.label}</div>
+              <p className="text-[11px] mt-1 opacity-80 leading-snug">{r.angle.hint}</p>
+            </div>
+          ))}
+        </div>
+      </div>
       <div className="bg-white rounded-xl border p-3 flex gap-2 mb-5">
-        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && handleSubmit()} placeholder="새 아이디어를 입력하세요... (제출하면 AI가 실시간 분석합니다)" className="flex-1 outline-none text-sm px-2" />
+        <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && handleSubmit()} placeholder={myAngle ? `내 각도(${myAngle.label})에서 아이디어를 입력하세요...` : "새 아이디어를 입력하세요..."} className="flex-1 outline-none text-sm px-2" />
         <button onClick={handleSubmit} className="px-5 py-2 bg-neutral-900 text-white rounded-lg text-sm font-medium hover:bg-neutral-800 transition flex items-center gap-1"><Send size={13} /> 제출</button>
       </div>
       <div className="flex flex-col lg:flex-row gap-6">
@@ -307,7 +491,7 @@ function IdeaPhase() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {ideas.map(idea => (
               <div key={idea.id} className="bg-white border rounded-xl p-4 hover:shadow-lg transition group anim-up">
-                <div className="flex items-center gap-2 mb-2"><MemberAvatar memberId={idea.memberId} /><span className="text-sm font-medium">{idea.member.name}</span></div>
+                <div className="flex items-center gap-2 mb-2"><MemberAvatar memberId={idea.memberId} member={idea.member} /><span className="text-sm font-medium">{idea.member.name}</span></div>
                 <h3 className="text-sm font-semibold leading-relaxed mb-1 group-hover:text-blue-600 transition">{idea.title}</h3>
                 {idea.fromIce && <p className="text-[10px] text-neutral-400 mb-2 italic">← {idea.fromIce}</p>}
                 <div className="flex flex-wrap gap-1 mb-2">{idea.tags.map(t => <Badge key={t}>{t}</Badge>)}</div>
@@ -336,23 +520,130 @@ function IdeaPhase() {
   );
 }
 
-/* ═══════ Phase 3: 분석 + 투표 ═══════ */
-function AnalyzePhase() {
-  const [votes, setVotes] = useState({});
-  const [remaining, setRemaining] = useState(3);
-  const handleVote = (id) => {
-    if (votes[id]) { setVotes({ ...votes, [id]: false }); setRemaining(r => r + 1); }
-    else if (remaining > 0) { setVotes({ ...votes, [id]: true }); setRemaining(r => r - 1); }
+/* 방식 B: SCAMPER — 7개 렌즈로 대상을 변형 */
+function IdeaScamper({ goal }) {
+  const [active, setActive] = useState("S");
+  const [byLens, setByLens] = useState({
+    S: [{ who: "전재민", text: "사람이 직접 하던 분류를 AI 모델로 대체" }],
+    C: [{ who: "조경빈", text: "캘린더 알림과 결합해 자동 리마인드" }],
+    A: [], M: [], P: [], E: [], R: [],
+  });
+  const [input, setInput] = useState("");
+  const lens = SCAMPER_LENSES.find(l => l.key === active);
+  const add = () => {
+    if (!input.trim()) return;
+    setByLens(prev => ({ ...prev, [active]: [{ who: "나", text: input.trim() }, ...prev[active]] }));
+    setInput("");
+  };
+  const filled = SCAMPER_LENSES.filter(l => byLens[l.key].length > 0).length;
+
+  return (
+    <div>
+      <div className="mb-4"><Badge variant="warning">💡 PHASE 2 · SCAMPER</Badge><h2 className="text-xl font-bold mt-1">SCAMPER 변형</h2><p className="text-sm text-neutral-500">변형 대상: <strong>{goal || "세션 목표"}</strong> — 7개 렌즈를 하나씩 적용해 아이디어를 만듭니다.</p></div>
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        {SCAMPER_LENSES.map(l => (
+          <button key={l.key} onClick={() => setActive(l.key)} className={`px-3 py-2 rounded-xl text-sm font-bold border-2 transition flex items-center gap-1.5 ${active === l.key ? "border-neutral-900 bg-neutral-900 text-white" : "border-transparent bg-white hover:bg-neutral-50"}`}>
+            {l.key}
+            {byLens[l.key].length > 0 && <span className={`text-[10px] px-1.5 rounded-full font-normal ${active === l.key ? "bg-white/20" : "bg-neutral-100"}`}>{byLens[l.key].length}</span>}
+          </button>
+        ))}
+        <div className="ml-auto text-xs text-neutral-400">진행 {filled}/7 렌즈</div>
+      </div>
+      <div className="bg-white border rounded-2xl p-5 mb-4">
+        <div className="text-lg font-bold">{lens.name}</div>
+        <p className="text-sm text-neutral-500 mt-0.5 mb-3">💡 {lens.q}</p>
+        <div className="flex gap-2 mb-4">
+          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && add()} placeholder={`'${goal || "목표"}'에 이 렌즈를 적용한 아이디어...`} className="flex-1 border rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-neutral-900" />
+          <button onClick={add} className="px-5 py-2 bg-neutral-900 text-white rounded-xl text-sm font-medium hover:bg-neutral-800 flex items-center gap-1"><Send size={13} /> 추가</button>
+        </div>
+        <div className="space-y-2">
+          {byLens[active].length === 0 && <p className="text-xs text-neutral-400 italic">아직 이 렌즈로 나온 아이디어가 없어요. 위 질문에 답해보세요.</p>}
+          {byLens[active].map((it, i) => (
+            <div key={i} className="flex items-center gap-2 bg-neutral-50 rounded-xl px-3 py-2 anim-up">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold ${it.who === "나" ? "bg-emerald-500 text-white" : "bg-neutral-300"}`}>{it.who.charAt(0)}</div>
+              <span className="text-sm flex-1">{it.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <style>{`.anim-up{animation:fadeUp .4s ease-out}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+
+/* 방식 C: Six Thinking Hats — 한 번에 한 모자, 순차 검토 */
+function IdeaSixHats({ goal }) {
+  const [idx, setIdx] = useState(0);
+  const hat = SIX_HATS[idx];
+  const [byHat, setByHat] = useState({
+    white: [{ who: "조경빈", text: "비슷한 서비스가 이미 3개, 전부 유료 전환율이 낮음" }],
+    red: [{ who: "전재민", text: "왠지 '또 AI야?' 소리 들을 것 같아 걱정" }],
+    black: [], yellow: [], green: [], blue: [],
+  });
+  const [input, setInput] = useState("");
+  const add = () => {
+    if (!input.trim()) return;
+    setByHat(prev => ({ ...prev, [hat.key]: [{ who: "나", text: input.trim() }, ...(prev[hat.key] || [])] }));
+    setInput("");
   };
 
   return (
     <div>
-      <div className="mb-5"><Badge variant="success">📊 PHASE 3 · 15분</Badge><h2 className="text-xl font-bold mt-1">AI 분석 및 그룹화 완료</h2><p className="text-sm text-neutral-500">이전 단계에서 제출된 아이디어를 AI가 의미 기반으로 4개 테마로 분류했습니다.</p></div>
+      <div className="mb-4"><Badge variant="warning">💡 PHASE 2 · Six Thinking Hats</Badge><h2 className="text-xl font-bold mt-1">6색 모자 검토</h2><p className="text-sm text-neutral-500">검토 대상: <strong>{goal || "세션 목표"}</strong> — 지금은 <strong>모두 같은 모자</strong>를 쓰고 그 관점에서만 생각합니다.</p></div>
+      <div className="flex items-center gap-1 mb-4">
+        {SIX_HATS.map((h, i) => (
+          <button key={h.key} onClick={() => setIdx(i)} className={`flex-1 py-2 rounded-xl text-xs font-medium border-2 transition ${i === idx ? "border-neutral-900" : "border-transparent"} ${h.cls}`}>
+            <div className="text-base">{h.icon}</div>
+            <div className="hidden sm:block mt-0.5">{h.name}</div>
+          </button>
+        ))}
+      </div>
+      <div className={`border-2 rounded-2xl p-5 mb-4 ${hat.cls}`}>
+        <div className="text-lg font-bold flex items-center gap-2">{hat.icon} {hat.name}</div>
+        <p className="text-sm mt-0.5 mb-3 opacity-80">💡 {hat.q}</p>
+        <div className="flex gap-2 mb-4">
+          <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && add()} placeholder="이 모자의 관점에서 한마디..." className="flex-1 border rounded-xl px-3 py-2 text-sm outline-none bg-white/70 focus:ring-2 focus:ring-neutral-900" />
+          <button onClick={add} className="px-5 py-2 bg-neutral-900 text-white rounded-xl text-sm font-medium hover:bg-neutral-800 flex items-center gap-1"><Send size={13} /> 추가</button>
+        </div>
+        <div className="space-y-2">
+          {(byHat[hat.key] || []).length === 0 && <p className="text-xs opacity-70 italic">아직 이 모자로 나온 의견이 없어요.</p>}
+          {(byHat[hat.key] || []).map((it, i) => (
+            <div key={i} className="flex items-center gap-2 bg-white/70 rounded-xl px-3 py-2 anim-up">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold ${it.who === "나" ? "bg-emerald-500 text-white" : "bg-neutral-300"}`}>{it.who.charAt(0)}</div>
+              <span className="text-sm flex-1 text-neutral-800">{it.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex justify-between">
+        <button disabled={idx === 0} onClick={() => setIdx(i => Math.max(0, i - 1))} className="px-4 py-2 border rounded-xl text-sm font-medium disabled:opacity-30 flex items-center gap-1"><ChevronLeft size={14} /> 이전 모자</button>
+        {idx < SIX_HATS.length - 1
+          ? <button onClick={() => setIdx(i => Math.min(SIX_HATS.length - 1, i + 1))} className="px-4 py-2 bg-neutral-900 text-white rounded-xl text-sm font-medium flex items-center gap-1">다음 모자 <ChevronRight size={14} /></button>
+          : <span className="text-sm text-green-600 font-medium self-center flex items-center gap-1"><Check size={14} /> 6색 모자 검토 완료</span>}
+      </div>
+      <style>{`.anim-up{animation:fadeUp .4s ease-out}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+
+/* ═══════ Phase 3: 분석 + 투표 ═══════ */
+function AnalyzePhase({ votes, setVotes }) {
+  const used = Object.values(votes).filter(Boolean).length;
+  const remaining = 3 - used;
+  const handleVote = (id) => {
+    if (votes[id]) setVotes({ ...votes, [id]: false });
+    else if (remaining > 0) setVotes({ ...votes, [id]: true });
+  };
+
+  return (
+    <div>
+      <div className="mb-3"><Badge variant="success">📊 PHASE 3 · 15분</Badge><h2 className="text-xl font-bold mt-1">AI 분석 및 그룹화 완료</h2><p className="text-sm text-neutral-500">이전 단계에서 제출된 아이디어를 AI가 의미 기반으로 4개 테마로 분류했습니다.</p></div>
+      <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>아래 분석 문구·신뢰도·테마 수치는 <strong>시연용 샘플</strong>입니다. 실제 제출 아이디어에서 생성된 값이 아니며, 투표만 실제로 반영됩니다.</span></div>
       <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl p-6 text-white mb-5">
         <div className="text-xs text-green-400 tracking-wider mb-2">AI INSIGHT SUMMARY</div>
         <p className="text-lg font-semibold mb-1">"팀원 4명의 아이디어가 하나의 공통 구조를 공유합니다: '반복적으로 발생하는 판단을 AI에 위임하여 인지 부하를 줄인다.'"</p>
         <p className="text-sm text-neutral-400">회의 진행, 학습 정리, 공간 탐색, 식재료 관리 — 영역은 다르지만 해결 구조가 동일합니다.</p>
-        <div className="flex items-center gap-2 mt-2"><span className="text-xs text-neutral-500">분석 신뢰도</span><span className="text-xl font-bold text-green-400">94.2%</span></div>
+        <div className="flex items-center gap-2 mt-2"><span className="text-xs text-neutral-500">분석 신뢰도</span><span className="text-xl font-bold text-green-400">94.2%</span><span className="text-[10px] text-neutral-500">· 시연용 예시값</span></div>
       </div>
       <div className="mb-4 flex items-center gap-2 text-sm text-neutral-500">남은 투표권: <div className="flex gap-1">{[0, 1, 2].map(i => <div key={i} className={`w-5 h-5 rounded-full border-2 transition ${i < remaining ? "border-neutral-900 bg-neutral-900" : "border-neutral-300"}`} />)}</div></div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -374,22 +665,26 @@ function AnalyzePhase() {
 }
 
 /* ═══════ Phase 4: 리포트 ═══════ */
-function ReportPhase() {
+function ReportPhase({ votedThemes = [] }) {
   const [dl, setDl] = useState(false);
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-3">
         <div><Badge variant="primary">📋 FINAL · 5분</Badge><h2 className="text-xl font-bold mt-1">최종 아이데이션 결과 보고서</h2></div>
-        <button onClick={() => setDl(true)} className={`px-4 py-2 rounded-xl text-sm font-medium transition ${dl ? "bg-green-500 text-white" : "bg-neutral-900 text-white hover:bg-neutral-800"}`}>{dl ? "✓ 완료" : "↓ PDF 다운로드"}</button>
+        <button onClick={() => setDl(true)} className="px-4 py-2 rounded-xl text-sm font-medium border bg-neutral-100 text-neutral-500 hover:bg-neutral-200 transition">{dl ? "🚧 PDF 내보내기는 준비 중입니다" : "↓ PDF 다운로드 (준비 중)"}</button>
       </div>
+      <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>이 보고서는 <strong>시연용 고정 템플릿</strong>입니다. 실제 세션의 투표·아이디어로 자동 생성된 결과가 아닙니다.</span></div>
+      {votedThemes.length > 0 && (
+        <div className="mb-4 rounded-xl bg-neutral-900 text-white px-4 py-3"><span className="text-xs text-green-400">✅ 내가 이번 세션에서 실제로 투표한 테마</span><div className="font-semibold text-sm mt-0.5">{votedThemes.join(", ")}</div></div>
+      )}
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 min-w-0 space-y-5">
           <div className="bg-white rounded-2xl border p-6">
-            <div className="flex justify-between mb-3"><h3 className="font-semibold flex items-center gap-2"><Target size={15} /> 선정된 최종 아이디어</h3><Badge variant="success">Score: {REPORT.score}/100</Badge></div>
+            <div className="flex justify-between mb-3"><h3 className="font-semibold flex items-center gap-2"><Target size={15} /> 선정된 최종 아이디어</h3><div className="flex items-center gap-1"><Badge variant="success">Score: {REPORT.score}/100</Badge><span className="text-[10px] text-neutral-400">시연용</span></div></div>
             <div className="bg-neutral-50 rounded-xl p-5 mb-4">
               <h4 className="text-lg font-bold mb-2">{REPORT.title}</h4>
               <p className="text-sm text-neutral-600 leading-relaxed">{REPORT.desc}</p>
-            <p className="text-xs text-neutral-400 mt-2 italic">← 투표 1위 "AI 커뮤니케이션 도구" 테마에서 도출 ← 김승희의 아이디어에서 파생 ← 아이스브레이킹의 "팀플 눈치" 불편함에서 시작</p>
+            <p className="text-xs text-neutral-400 mt-2 italic">시연 시나리오: "AI 커뮤니케이션 도구" 테마 → 김승희의 아이디어 → 아이스브레이킹의 "팀플 눈치" 불편함으로 이어지는 흐름 예시</p>
             </div>
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div><div className="text-xs text-neutral-500 font-medium mb-1">핵심 가치</div>{REPORT.coreValues.map(v => <div key={v} className="text-neutral-600 text-xs mb-0.5">• {v}</div>)}</div>
@@ -410,7 +705,7 @@ function ReportPhase() {
             ))}
           </div>
           <div className="bg-green-50 border border-green-100 rounded-xl p-4 text-sm">
-            <div className="font-semibold text-green-800 mb-1">🔄 데이터 흐름 요약</div>
+            <div className="font-semibold text-green-800 mb-1">🔄 데이터 흐름 요약 <span className="text-[10px] font-normal text-green-600">(시연 시나리오)</span></div>
             <p className="text-xs text-green-700 leading-relaxed">아이스브레이킹("팀플 눈치 보기, 카페 헛걸음, 식재료 낭비, 필기 정리 스트레스") → 4개 아이디어(퍼실리테이터 봇, 카페 정보 앱, 식재료 관리 앱, 학습 도우미) → AI가 공통 구조 감지("반복 판단의 AI 위임") → 테마 1위("AI 커뮤니케이션 도구", 38%) → 최종 선정("AI 커뮤니케이션 퍼실리테이터", 94점). 5개 단계가 인과관계로 연결됩니다.</p>
           </div>
         </div>
@@ -424,8 +719,8 @@ function ReportPhase() {
             </div>
           </div>
           <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-            <div className="font-semibold text-amber-800 text-sm mb-1">📊 설문 데이터 근거</div>
-            <p className="text-xs text-amber-700 leading-relaxed">이 보고서는 설문 62명 중 54.8%가 1위로 선택한 "결과 자동 요약" 기능으로 생성되었습니다. 세션 데이터를 AI가 분석하여 핵심 가치, 타겟, 리스크까지 자동 구성합니다.</p>
+            <div className="font-semibold text-amber-800 text-sm mb-1">📊 설문 데이터 근거 <span className="text-[10px] font-normal">(시연용 예시 수치)</span></div>
+            <p className="text-xs text-amber-700 leading-relaxed">예시: 설문 62명 중 54.8%가 1위로 선택한 "결과 자동 요약" 기능. 실서비스에서는 실제 세션 데이터를 AI가 분석해 핵심 가치·타겟·리스크를 자동 구성합니다.</p>
           </div>
         </div>
       </div>
@@ -434,8 +729,10 @@ function ReportPhase() {
 }
 
 /* ═══════ 대기실 (로비) ═══════ */
-function LobbyView({ goal, mins, onSessionStart }) {
+function LobbyView({ goal, mins, mode = "offline", method = "brain", onSessionStart }) {
   const link = "https://ideationengine.app/s/aB3x9Y";
+  const md = MODES[mode];
+  const isOnline = mode === "online";
   const [copied, setCopied] = useState(false);
   const [joined, setJoined] = useState([MEMBERS[0]]); // 방장만 처음에
 
@@ -448,7 +745,8 @@ function LobbyView({ goal, mins, onSessionStart }) {
   }, []);
 
   const allJoined = joined.length === MEMBERS.length;
-  const METHODS = { brain: "자유 브레인스토밍", scamper: "SCAMPER", sixhats: "Six Thinking Hats" };
+  const canStart = isOnline || allJoined; // 온라인: 전원 대기 없이 바로 시작
+  const methodName = (METHOD_META[method] || METHOD_META.brain).name;
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
@@ -461,9 +759,10 @@ function LobbyView({ goal, mins, onSessionStart }) {
       </header>
       <main className="flex-1 max-w-3xl mx-auto px-6 py-10 w-full">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-neutral-900 text-white flex items-center justify-center"><Users size={24} /></div>
-          <h1 className="text-2xl font-bold mb-1">팀원을 기다리고 있어요</h1>
-          <p className="text-neutral-500 text-sm">아래 링크를 공유해서 팀원을 초대하세요</p>
+          <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-neutral-900 text-white flex items-center justify-center text-2xl">{md.icon}</div>
+          <div className="flex items-center justify-center gap-2 mb-1"><Badge variant="primary">{md.label}</Badge></div>
+          <h1 className="text-2xl font-bold mb-1">{isOnline ? "링크를 공유하세요" : "팀원을 기다리고 있어요"}</h1>
+          <p className="text-neutral-500 text-sm">{isOnline ? "팀원은 마감 시간까지 각자 편할 때 참여하면 됩니다. 지금 바로 시작할 수 있어요." : "전원이 입장하면 다 함께 세션을 시작합니다."}</p>
         </div>
 
         {/* 링크 공유 */}
@@ -496,7 +795,7 @@ function LobbyView({ goal, mins, onSessionStart }) {
           </div>
           <div className="bg-white rounded-xl border p-4">
             <div className="text-[10px] text-neutral-400 mb-0.5">방식 · 시간</div>
-            <div className="text-sm font-medium">자유 브레인스토밍 · {mins}분</div>
+            <div className="text-sm font-medium">{methodName} · {mins}분</div>
           </div>
         </div>
 
@@ -527,25 +826,97 @@ function LobbyView({ goal, mins, onSessionStart }) {
         </div>
 
         {/* 시작 버튼 */}
-        <button onClick={onSessionStart} disabled={!allJoined} className={`w-full py-4 rounded-2xl font-medium text-base flex items-center justify-center gap-2 transition-all ${allJoined ? "bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-[1.01] active:scale-[0.99]" : "bg-neutral-200 text-neutral-400 cursor-not-allowed"}`}>
-          {allJoined ? <><Play size={18} /> 전원 입장 완료 — 세션 시작하기</> : <><div className="w-4 h-4 border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" /> 팀원 입장 대기 중...</>}
+        <button onClick={onSessionStart} disabled={!canStart} className={`w-full py-4 rounded-2xl font-medium text-base flex items-center justify-center gap-2 transition-all ${canStart ? "bg-neutral-900 text-white hover:bg-neutral-800 hover:scale-[1.01] active:scale-[0.99]" : "bg-neutral-200 text-neutral-400 cursor-not-allowed"}`}>
+          {isOnline
+            ? <><Play size={18} /> 지금 세션 시작하기 {!allJoined && <span className="text-xs font-normal opacity-70">(나머지는 나중에 참여)</span>}</>
+            : (allJoined ? <><Play size={18} /> 전원 입장 완료 — 세션 시작하기</> : <><div className="w-4 h-4 border-2 border-neutral-400 border-t-transparent rounded-full animate-spin" /> 팀원 입장 대기 중...</>)}
         </button>
+        {isOnline && <p className="text-center text-xs text-neutral-400 mt-3">⏳ 이 세션은 <strong>마감 시간까지</strong> 열려 있습니다. 참여자는 링크로 각자 입장합니다.</p>}
       </main>
       <style>{`.anim-up{animation:fadeUp .4s ease-out}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
     </div>
   );
 }
 
-/* ═══════ App ═══════ */
-export default function App() {
-  const [view, setView] = useState("create");
-  const [data, setData] = useState({ goal: "", mins: 60 });
+/* ═══════ [2번] 프로필 작성 ═══════ */
+function ProfileView({ onDone }) {
+  const [name, setName] = useState("");
+  const [skills, setSkills] = useState([]);
+  const [strengths, setStrengths] = useState("");
+  const toggle = (s) => setSkills(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
+  const angle = skills.length ? assignAngle(skills) : null;
+  const valid = name.trim() && skills.length > 0;
 
+  return (
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
+      <header className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center">
+          <span className="font-bold tracking-tight">IdeationEngine</span>
+        </div>
+      </header>
+      <main className="flex-1 max-w-2xl mx-auto px-6 py-10 w-full">
+        <h1 className="text-3xl font-bold tracking-tight mb-1">프로필 만들기</h1>
+        <p className="text-neutral-500 mb-8">내가 뭘 할 수 있는지 알려주면, AI가 세션에서 나에게 <strong>다른 사람과 겹치지 않는 역할</strong>을 배정합니다.</p>
+
+        <div className="bg-white rounded-2xl border p-6 mb-5">
+          <label className="text-sm font-medium text-neutral-600 mb-2 block">닉네임</label>
+          <input value={name} onChange={e => setName(e.target.value)} placeholder="세션에서 표시될 이름" className="w-full border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-neutral-900 transition" />
+        </div>
+
+        <div className="bg-white rounded-2xl border p-6 mb-5">
+          <label className="text-sm font-medium text-neutral-600 mb-1 block">내가 할 수 있는 것 <span className="text-neutral-400 font-normal">(여러 개 선택)</span></label>
+          <p className="text-xs text-neutral-400 mb-3">선택한 역량에 따라 아이디어 발산 단계에서 접근 각도가 달라집니다.</p>
+          <div className="flex flex-wrap gap-2">
+            {SKILL_OPTIONS.map(s => (
+              <button key={s} onClick={() => toggle(s)} className={`px-3 py-1.5 rounded-full text-sm font-medium border transition ${skills.includes(s) ? "bg-neutral-900 text-white border-neutral-900" : "bg-white text-neutral-600 hover:bg-neutral-50"}`}>{s}</button>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border p-6 mb-5">
+          <label className="text-sm font-medium text-neutral-600 mb-2 block">한 줄 강점 <span className="text-neutral-400 font-normal">(선택)</span></label>
+          <input value={strengths} onChange={e => setStrengths(e.target.value)} placeholder="예: 발표 자료를 빠르게 잘 만들어요" className="w-full border rounded-xl p-3 text-sm outline-none focus:ring-2 focus:ring-neutral-900 transition" />
+        </div>
+
+        {angle && (
+          <div className={`rounded-2xl border-2 p-5 mb-5 anim-up ${angle.cls}`}>
+            <div className="text-xs font-medium mb-1 opacity-70">AI가 배정할 나의 발산 각도</div>
+            <div className="text-lg font-bold flex items-center gap-2">{angle.icon} {angle.label}</div>
+            <p className="text-sm mt-1 opacity-80">💡 {angle.hint}</p>
+          </div>
+        )}
+
+        <button onClick={() => onDone({ name: name.trim(), skills, strengths: strengths.trim(), angle })} disabled={!valid} className="w-full py-3.5 bg-neutral-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition disabled:opacity-40"><ArrowRight size={16} /> 프로필 저장하고 시작</button>
+      </main>
+      <style>{`.anim-up{animation:fadeUp .4s ease-out}@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+
+/* ═══════ App ═══════ */
+const DEFAULT_DATA = { goal: "", mins: 60, mode: "offline", method: "brain" };
+const loadJSON = (key, fallback) => { try { return JSON.parse(sessionStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+
+export default function App() {
+  const [view, setView] = useState(() => sessionStorage.getItem("ie_view") || "profile");
+  const [myProfile, setMyProfile] = useState(() => loadJSON("ie_profile", null));
+  const [data, setData] = useState(() => loadJSON("ie_data", DEFAULT_DATA));
+
+  // 새로고침해도 세션·프로필이 유지되도록 sessionStorage에 스냅샷 저장
+  useEffect(() => { sessionStorage.setItem("ie_view", view); }, [view]);
+  useEffect(() => { sessionStorage.setItem("ie_profile", JSON.stringify(myProfile)); }, [myProfile]);
+  useEffect(() => { sessionStorage.setItem("ie_data", JSON.stringify(data)); }, [data]);
+
+  const exitToNew = () => { setData(DEFAULT_DATA); setView("create"); };
+
+  if (view === "profile") {
+    return <ProfileView onDone={(p) => { setMyProfile(p); setView("create"); }} />;
+  }
   if (view === "create") {
-    return <CreateView onStart={(g, m) => { setData({ goal: g, mins: m }); setView("lobby"); }} />;
+    return <CreateView myProfile={myProfile} onStart={(g, m, mode, method) => { setData({ goal: g, mins: m, mode, method }); setView("lobby"); }} />;
   }
   if (view === "lobby") {
-    return <LobbyView goal={data.goal} mins={data.mins} onSessionStart={() => setView("session")} />;
+    return <LobbyView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
   }
-  return <SessionView goal={data.goal} mins={data.mins} />;
+  return <SessionView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} myProfile={myProfile} onExit={exitToNew} />;
 }
