@@ -168,9 +168,9 @@ const METHOD_META = {
 /* 선택한 방식이 발산(Phase 2)뿐 아니라 아이스브레이킹·분석·보고서에도 일관되게 반영되도록,
    단계별 안내 문구를 방식별로 둔다. */
 const METHOD_PHASE_HINT = {
-  brain:   { ice: "곧 자유 브레인스토밍으로 발산합니다 — 워밍업의 불편함을 아이디어의 씨앗으로.", analyze: "자유 발산으로 나온 아이디어를 의미 기반으로 묶었습니다." },
-  scamper: { ice: "곧 SCAMPER 7렌즈로 발산합니다 — 대상을 하나씩 비틀 준비를 하세요.",        analyze: "SCAMPER 렌즈(대체·결합·응용…)로 나온 변형 아이디어를 테마로 묶었습니다." },
-  sixhats: { ice: "곧 Six Thinking Hats로 검토합니다 — 한 번에 한 관점씩 함께 봅니다.",        analyze: "6색 모자 관점에서 나온 의견을 테마로 묶었습니다." },
+  brain:   { ice: "곧 자유 브레인스토밍으로 발산합니다 — 워밍업의 불편함을 아이디어의 씨앗으로.", analyze: "자유 발산으로 나온 아이디어를 의미 기반으로 묶었습니다.",        report: "자유 브레인스토밍으로 모인 아이디어를 종합했습니다." },
+  scamper: { ice: "곧 SCAMPER 7렌즈로 발산합니다 — 대상을 하나씩 비틀 준비를 하세요.",        analyze: "SCAMPER 렌즈(대체·결합·응용…)로 나온 변형 아이디어를 테마로 묶었습니다.", report: "SCAMPER 렌즈별 변형을 종합했습니다." },
+  sixhats: { ice: "곧 Six Thinking Hats로 검토합니다 — 한 번에 한 관점씩 함께 봅니다.",        analyze: "6색 모자 관점에서 나온 의견을 테마로 묶었습니다.",              report: "6색 모자 검토 결과를 종합했습니다." },
 };
 const methodHint = (method, phase) => (METHOD_PHASE_HINT[method] || METHOD_PHASE_HINT.brain)[phase];
 const methodName = (method) => (METHOD_META[method] || METHOD_META.brain).name;
@@ -685,7 +685,7 @@ function ReportPhase({ votedThemes = [], method = "brain" }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <div><Badge variant="primary">📋 FINAL · 5분</Badge><h2 className="text-xl font-bold mt-1">최종 아이데이션 결과 보고서</h2></div>
+        <div><Badge variant="primary">📋 FINAL · 5분</Badge><h2 className="text-xl font-bold mt-1">최종 아이데이션 결과 보고서</h2><p className="text-sm text-neutral-500 mt-0.5">🧭 {methodHint(method, "report")} (<strong>{methodName(method)}</strong>)</p></div>
         <button onClick={() => setDl(true)} className="px-4 py-2 rounded-xl text-sm font-medium border bg-neutral-100 text-neutral-500 hover:bg-neutral-200 transition">{dl ? "🚧 PDF 내보내기는 준비 중입니다" : "↓ PDF 다운로드 (준비 중)"}</button>
       </div>
       <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>이 보고서는 <strong>시연용 고정 템플릿</strong>입니다. 실제 세션의 투표·아이디어로 자동 생성된 결과가 아닙니다.</span></div>
