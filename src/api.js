@@ -21,6 +21,9 @@ export const api = {
   join: (id, member) =>
     fetch(`/api/sessions/${id}/join`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(member) }).then(j),
 
+  addIce: (id, entry) =>
+    fetch(`/api/sessions/${id}/ice`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(entry) }).then(j),
+
   addIdea: (id, idea) =>
     fetch(`/api/sessions/${id}/ideas`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(idea) }).then(j),
 

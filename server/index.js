@@ -118,6 +118,22 @@ app.post("/api/sessions/:id/join", h(async (req, res) => {
   res.json(await store.update(req.params.id, { members })); // TODO(B3): 동시성
 }));
 
+/* 아이스브레이킹 답변 제출 — id/likes는 서버가 확정 */
+app.post("/api/sessions/:id/ice", h(async (req, res) => {
+  const s = await store.get(req.params.id);
+  if (!s) return res.status(404).json({ error: "session not found" });
+  const b = req.body || {};
+  if (!b.memberId || !b.text) return bad(res, "memberId and text required");
+  const entry = {
+    id: Date.now(),
+    memberId: String(b.memberId).slice(0, 64),
+    name: String(b.name || "").slice(0, 40),
+    text: String(b.text).slice(0, 500),
+    likes: 0,
+  };
+  res.json(await store.update(req.params.id, { ice: [entry, ...(s.ice || [])] })); // TODO(B3)
+}));
+
 /* 아이디어 제출 — id/likes는 서버가 확정(클라이언트 값 무시) */
 app.post("/api/sessions/:id/ideas", h(async (req, res) => {
   const s = await store.get(req.params.id);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Users, Check, ChevronRight, ChevronLeft, Lightbulb, Target, BarChart3, FileText, ArrowRight, Plus, Heart, Send, Vote, Sparkles, Play } from "lucide-react";
 import { api } from "./api.js";
 
@@ -316,7 +316,7 @@ function CreateView({ myProfile, onStart }) {
 }
 
 /* ═══════ 세션 메인 ═══════ */
-function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain", deadlineAt, serverPhase, myProfile, onExit }) {
+function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain", deadlineAt, serverPhase, content, myProfile, onExit }) {
   const isOnline = mode === "online";
   // step 복원: 로컬 스냅샷(ie_step)과 서버 phase 중 더 진행된 쪽을 채택(단일 유저 전진 규칙), 0~3 클램프
   const [step, setStep] = useState(() => {
@@ -343,11 +343,21 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
   };
   const next = () => goToStep(step + 1);
   const prev = () => goToStep(step - 1);
-  // 서버 phase가 (비동기 GET으로) 로컬보다 앞서 도착하면 반영 — 다른 기기/스토리지 초기화 대비.
-  // serverPhase==step이 되면 조건이 거짓이라 반복되지 않는다(전진 규칙, 서버발 반영이라 재PATCH 안 함).
+  // 서버 phase가 (비동기 GET으로) 로컬보다 앞서 도착하면 '최초 1회'만 반영한다.
+  // (ref 가드가 없으면 사용자가 '이전'으로 돌아갈 때마다 서버 phase로 튕겨 뒤로 못 감)
+  const phaseReconciled = useRef(false);
   useEffect(() => {
-    if (Number.isInteger(serverPhase) && serverPhase > step) { setStep(Math.min(3, serverPhase)); setPhaseStart(Date.now()); setElapsed(0); }
-  }, [serverPhase, step]);
+    if (!Number.isInteger(serverPhase) || phaseReconciled.current) return;
+    phaseReconciled.current = true;
+    if (serverPhase > step) { setStep(Math.min(3, serverPhase)); setPhaseStart(Date.now()); setElapsed(0); }
+  }, [serverPhase]);
+  // 서버에 영속된 내 투표를 복원(로컬 투표가 아직 없을 때만 → 진행 중 투표를 덮지 않음)
+  useEffect(() => {
+    const mine = content?.votes?.user;
+    if (Array.isArray(mine) && mine.length && Object.keys(votes).length === 0) {
+      const v = {}; mine.forEach((id) => { v[id] = true; }); setVotes(v);
+    }
+  }, [content]);
   const phase = PHASES[step];
   const adjD = Math.round(phase.duration * mins / 60);
   const rem = Math.max(0, adjD * 60 - elapsed);
@@ -385,9 +395,9 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
       </div>
       <main className="flex-1 py-6">
         <div className="max-w-6xl mx-auto px-6">
-          {step === 0 && <IcePhase myProfile={myProfile} goal={goal} method={method} />}
-          {step === 1 && <IdeaPhase myProfile={myProfile} method={method} goal={goal} />}
-          {step === 2 && <AnalyzePhase votes={votes} setVotes={setVotes} method={method} />}
+          {step === 0 && <IcePhase sessionId={sessionId} myProfile={myProfile} goal={goal} method={method} initialIce={content?.ice} />}
+          {step === 1 && <IdeaPhase sessionId={sessionId} myProfile={myProfile} method={method} goal={goal} initialIdeas={content?.ideas} />}
+          {step === 2 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} />}
           {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} />}
         </div>
       </main>
@@ -404,16 +414,28 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
 }
 
 /* ═══════ Phase 1: 아이스브레이킹 ═══════ */
-function IcePhase({ myProfile, goal, method = "brain" }) {
-  const [answers, setAnswers] = useState(ICE_ANSWERS.map(a => ({ ...a, member: getMember(a.memberId) })));
+function IcePhase({ myProfile, goal, method = "brain", sessionId, initialIce }) {
+  const [answers, setAnswers] = useState(() => ICE_ANSWERS.map(a => ({ ...a, member: getMember(a.memberId) })));
   const [input, setInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [showAi, setShowAi] = useState(false);
   const meName = myProfile?.name || "나";
 
+  // 서버에 영속된 내 답변을 데모 팀원 목업과 병합 (id 기준 중복 방지)
+  useEffect(() => {
+    if (!initialIce?.length) return;
+    setAnswers(prev => {
+      const have = new Set(prev.map(a => a.id).filter(Boolean));
+      const add = initialIce.filter(e => !have.has(e.id)).map(e => ({ ...e, member: { name: e.name || meName, initial: (e.name || meName).charAt(0), color: "bg-emerald-500 text-white" } }));
+      return [...add, ...prev];
+    });
+  }, [initialIce]);
+
   const handleSubmit = () => {
     if (!input.trim()) return;
-    setAnswers(prev => [{ memberId: "user", member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" }, text: input, likes: 0 }, ...prev]);
+    const text = input;
+    setAnswers(prev => [{ id: Date.now(), memberId: "user", member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" }, text, likes: 0 }, ...prev]);
+    if (sessionId) api.addIce(sessionId, { memberId: "user", name: meName, text }).catch(() => {}); // 서버 영속(best-effort)
     setInput(""); setSubmitted(true);
     setTimeout(() => setShowAi(true), 800);
   };
@@ -463,18 +485,28 @@ function IcePhase({ myProfile, goal, method = "brain" }) {
 }
 
 /* ═══════ Phase 2: 아이디어 발산 — 방식(method)에 따라 완전히 다른 화면 ═══════ */
-function IdeaPhase({ myProfile, method = "brain", goal }) {
+function IdeaPhase({ myProfile, method = "brain", goal, sessionId, initialIdeas }) {
   if (method === "scamper") return <IdeaScamper goal={goal} />;
   if (method === "sixhats") return <IdeaSixHats goal={goal} />;
-  return <IdeaBrainstorm myProfile={myProfile} />;
+  return <IdeaBrainstorm myProfile={myProfile} sessionId={sessionId} initialIdeas={initialIdeas} />;
 }
 
 /* 방식 A: 자유 브레인스토밍 (각도 배분 + 자유 입력) */
-function IdeaBrainstorm({ myProfile }) {
-  const [ideas, setIdeas] = useState(IDEAS.map(i => ({ ...i, member: getMember(i.memberId) })));
+function IdeaBrainstorm({ myProfile, sessionId, initialIdeas }) {
+  const [ideas, setIdeas] = useState(() => IDEAS.map(i => ({ ...i, member: getMember(i.memberId) })));
   const [input, setInput] = useState("");
   const [aiMsgCount, setAiMsgCount] = useState(0); // 제출할 때마다 AI 메시지 추가
   const meName = myProfile?.name || "나";
+
+  // 서버에 영속된 내 아이디어를 데모 목업과 병합 (id 기준 중복 방지)
+  useEffect(() => {
+    if (!initialIdeas?.length) return;
+    setIdeas(prev => {
+      const have = new Set(prev.map(i => i.id));
+      const add = initialIdeas.filter(x => !have.has(x.id)).map(x => ({ ...x, tags: x.tags || ["NEW"], fromIce: x.fromIce || `${meName} 제안`, member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" } }));
+      return [...add, ...prev];
+    });
+  }, [initialIdeas]);
 
   // [2번] 팀 단위 각도 배정 — 전원이 같은 각도로 몰리지 않게 분산
   const people = [
@@ -487,7 +519,9 @@ function IdeaBrainstorm({ myProfile }) {
 
   const handleSubmit = () => {
     if (!input.trim()) return;
-    setIdeas(prev => [{ id: Date.now(), memberId: "user", member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" }, title: input, tags: ["NEW"], likes: 0, fromIce: `${meName} 제안` }, ...prev]);
+    const title = input;
+    setIdeas(prev => [{ id: Date.now(), memberId: "user", member: { name: meName, initial: meName.charAt(0), color: "bg-emerald-500 text-white" }, title, tags: ["NEW"], likes: 0, fromIce: `${meName} 제안` }, ...prev]);
+    if (sessionId) api.addIdea(sessionId, { memberId: "user", title, tags: ["NEW"] }).catch(() => {}); // 서버 영속(best-effort)
     setInput("");
     setAiMsgCount(c => Math.min(c + 1, AI_MSGS_IDEA.length));
   };
@@ -657,12 +691,16 @@ function IdeaSixHats({ goal }) {
 }
 
 /* ═══════ Phase 3: 분석 + 투표 ═══════ */
-function AnalyzePhase({ votes, setVotes, method = "brain" }) {
+function AnalyzePhase({ votes, setVotes, method = "brain", sessionId }) {
   const used = Object.values(votes).filter(Boolean).length;
   const remaining = 3 - used;
   const handleVote = (id) => {
-    if (votes[id]) setVotes({ ...votes, [id]: false });
-    else if (remaining > 0) setVotes({ ...votes, [id]: true });
+    let next;
+    if (votes[id]) next = { ...votes, [id]: false };
+    else if (remaining > 0) next = { ...votes, [id]: true };
+    else return;
+    setVotes(next);
+    if (sessionId) { const themeIds = Object.keys(next).filter((k) => next[k]).map(Number); api.setVotes(sessionId, "user", themeIds).catch(() => {}); } // 서버 영속(best-effort)
   };
 
   return (
@@ -937,6 +975,8 @@ export default function App() {
   const [myProfile, setMyProfile] = useState(() => loadJSON("ie_profile", null));
   const [data, setData] = useState(() => loadJSON("ie_data", DEFAULT_DATA));
   const [sessionId, setSessionId] = useState(() => sessionStorage.getItem("ie_sid") || null);
+  // 서버에 영속된 콘텐츠(내 제출물). 데모 팀원 목업과 병합해 표시한다.
+  const [content, setContent] = useState({ ice: [], ideas: [], votes: {} });
 
   // 새로고침해도 세션·프로필이 유지되도록 sessionStorage에 스냅샷 저장
   useEffect(() => { sessionStorage.setItem("ie_view", view); }, [view]);
@@ -951,20 +991,24 @@ export default function App() {
     if (!sessionId) return;
     let active = true;
     api.getSession(sessionId)
-      .then((s) => { if (active) setData((d) => ({ ...d, goal: s.goal, mins: s.mins, mode: s.mode, method: s.method, deadlineAt: s.deadlineAt, phase: s.phase })); })
+      .then((s) => { if (!active) return;
+        setData((d) => ({ ...d, goal: s.goal, mins: s.mins, mode: s.mode, method: s.method, deadlineAt: s.deadlineAt, phase: s.phase }));
+        setContent({ ice: s.ice || [], ideas: s.ideas || [], votes: s.votes || {} });
+      })
       .catch(() => {});
     return () => { active = false; };
   }, [sessionId]);
 
   // 새 세션 시작/종료 시 이전 세션 진행도(단계·투표) 스냅샷 제거
   const clearProgress = () => { sessionStorage.removeItem("ie_step"); sessionStorage.removeItem("ie_votes"); sessionStorage.removeItem("ie_phaseStart"); };
-  const exitToNew = () => { setData(DEFAULT_DATA); setSessionId(null); clearProgress(); setView("create"); };
+  const exitToNew = () => { setData(DEFAULT_DATA); setSessionId(null); setContent({ ice: [], ideas: [], votes: {} }); clearProgress(); setView("create"); };
 
   // 세션 생성: 서버에 등록해 실제 id를 확보한다. 서버가 없으면 로컬 전용으로 계속 진행.
   const startSession = async (g, m, mode, method) => {
     const localData = { goal: g, mins: m, mode, method, deadlineAt: Date.now() + 2 * 24 * 60 * 60 * 1000, phase: 0 };
     setData(localData);
     setSessionId(null);
+    setContent({ ice: [], ideas: [], votes: {} });
     clearProgress();
     setView("lobby");
     try {
@@ -985,5 +1029,5 @@ export default function App() {
   if (view === "lobby") {
     return <LobbyView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
   }
-  return <SessionView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} serverPhase={data.phase} myProfile={myProfile} onExit={exitToNew} />;
+  return <SessionView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} serverPhase={data.phase} content={content} myProfile={myProfile} onExit={exitToNew} />;
 }
