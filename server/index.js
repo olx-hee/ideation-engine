@@ -108,8 +108,14 @@ app.patch("/api/sessions/:id", h(async (req, res) => {
   res.json(s);
 }));
 
+/* 콘텐츠 뮤테이션 공통 가드 (B1 인증 전 응급): 레이트리밋 + 세션당 항목 상한.
+   cid: 클라이언트가 보낸 상관 id를 그대로 entry id로 보존 → 낙관적 로컬 항목과 중복 방지 */
+const contentLimiter = rateLimit({ windowMs: 60_000, max: 60, standardHeaders: true, legacyHeaders: false });
+const MAX_ENTRIES = 300;
+const useCid = (b) => (Number.isFinite(Number(b?.cid)) ? Number(b.cid) : Date.now());
+
 /* 팀원 입장 — isHost는 정규화에서 제거됨(클라이언트가 못 붙임). TODO(B1): 서버 발급 memberId */
-app.post("/api/sessions/:id/join", h(async (req, res) => {
+app.post("/api/sessions/:id/join", contentLimiter, h(async (req, res) => {
   const s = await store.get(req.params.id);
   if (!s) return res.status(404).json({ error: "session not found" });
   const member = cleanMember(req.body);
@@ -118,14 +124,15 @@ app.post("/api/sessions/:id/join", h(async (req, res) => {
   res.json(await store.update(req.params.id, { members })); // TODO(B3): 동시성
 }));
 
-/* 아이스브레이킹 답변 제출 — id/likes는 서버가 확정 */
-app.post("/api/sessions/:id/ice", h(async (req, res) => {
+/* 아이스브레이킹 답변 제출 — id는 cid 보존, likes는 서버가 확정 */
+app.post("/api/sessions/:id/ice", contentLimiter, h(async (req, res) => {
   const s = await store.get(req.params.id);
   if (!s) return res.status(404).json({ error: "session not found" });
   const b = req.body || {};
   if (!b.memberId || !b.text) return bad(res, "memberId and text required");
+  if ((s.ice || []).length >= MAX_ENTRIES) return res.status(429).json({ error: "too many entries" });
   const entry = {
-    id: Date.now(),
+    id: useCid(b),
     memberId: String(b.memberId).slice(0, 64),
     name: String(b.name || "").slice(0, 40),
     text: String(b.text).slice(0, 500),
@@ -134,15 +141,17 @@ app.post("/api/sessions/:id/ice", h(async (req, res) => {
   res.json(await store.update(req.params.id, { ice: [entry, ...(s.ice || [])] })); // TODO(B3)
 }));
 
-/* 아이디어 제출 — id/likes는 서버가 확정(클라이언트 값 무시) */
-app.post("/api/sessions/:id/ideas", h(async (req, res) => {
+/* 아이디어 제출 — id는 cid 보존, likes는 서버가 확정 */
+app.post("/api/sessions/:id/ideas", contentLimiter, h(async (req, res) => {
   const s = await store.get(req.params.id);
   if (!s) return res.status(404).json({ error: "session not found" });
   const b = req.body || {};
   if (!b.memberId || !b.title) return bad(res, "memberId and title required");
+  if ((s.ideas || []).length >= MAX_ENTRIES) return res.status(429).json({ error: "too many entries" });
   const idea = {
-    id: Date.now(),
+    id: useCid(b),
     memberId: String(b.memberId).slice(0, 64),
+    name: String(b.name || "").slice(0, 40),
     title: String(b.title).slice(0, 300),
     tags: Array.isArray(b.tags) ? b.tags.slice(0, 8).map((t) => String(t).slice(0, 20)) : [],
     likes: 0,
@@ -151,7 +160,7 @@ app.post("/api/sessions/:id/ideas", h(async (req, res) => {
 }));
 
 /* 투표 — themeIds는 숫자 배열, 인당 최대 3개로 상한. TODO(B1): memberId 신원 바인딩 */
-app.post("/api/sessions/:id/votes", h(async (req, res) => {
+app.post("/api/sessions/:id/votes", contentLimiter, h(async (req, res) => {
   const s = await store.get(req.params.id);
   if (!s) return res.status(404).json({ error: "session not found" });
   const b = req.body || {};
