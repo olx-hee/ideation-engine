@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "server": "node server/index.js",
+    "db:ping": "node server/db-ping.js",
     "dev:all": "concurrently -k -n web,api -c cyan,magenta \"npm:dev\" \"npm:server\"",
     "build": "vite build",
     "preview": "vite preview"

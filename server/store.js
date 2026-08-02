@@ -31,6 +31,9 @@ function createMemoryStore() {
       sessions.set(id, next);
       return next;
     },
+    async delete(id) {
+      return sessions.delete(id);
+    },
     async all() {
       return [...sessions.values()];
     },
@@ -58,6 +61,10 @@ async function createMongoStore(uri) {
     async update(id, patch) {
       // patch를 항상 $set으로 감싸 업데이트 연산자 주입($unset/$rename 등) 차단
       return clean(await Session.findByIdAndUpdate(id, { $set: patch }, { new: true }).lean());
+    },
+    async delete(id) {
+      const r = await Session.findByIdAndDelete(id);
+      return !!r;
     },
     async all() {
       return (await Session.find().lean()).map(clean);
