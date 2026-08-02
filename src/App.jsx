@@ -165,6 +165,15 @@ const METHOD_META = {
   scamper: { id: "scamper", name: "SCAMPER",            phaseLabel: "SCAMPER 변형",  desc: "7가지 렌즈로 대상을 하나씩 비틀어 아이디어를 만듭니다.",            reason: "기존 대상을 개선·변형할 때" },
   sixhats: { id: "sixhats", name: "Six Thinking Hats",  phaseLabel: "6색 모자 검토", desc: "한 번에 하나의 모자를 쓰고, 같은 관점에서 함께 생각합니다.",         reason: "여러 관점을 균형 있게 검토·결정할 때" },
 };
+/* 선택한 방식이 발산(Phase 2)뿐 아니라 아이스브레이킹·분석·보고서에도 일관되게 반영되도록,
+   단계별 안내 문구를 방식별로 둔다. */
+const METHOD_PHASE_HINT = {
+  brain:   { ice: "곧 자유 브레인스토밍으로 발산합니다 — 워밍업의 불편함을 아이디어의 씨앗으로.", analyze: "자유 발산으로 나온 아이디어를 의미 기반으로 묶었습니다." },
+  scamper: { ice: "곧 SCAMPER 7렌즈로 발산합니다 — 대상을 하나씩 비틀 준비를 하세요.",        analyze: "SCAMPER 렌즈(대체·결합·응용…)로 나온 변형 아이디어를 테마로 묶었습니다." },
+  sixhats: { ice: "곧 Six Thinking Hats로 검토합니다 — 한 번에 한 관점씩 함께 봅니다.",        analyze: "6색 모자 관점에서 나온 의견을 테마로 묶었습니다." },
+};
+const methodHint = (method, phase) => (METHOD_PHASE_HINT[method] || METHOD_PHASE_HINT.brain)[phase];
+const methodName = (method) => (METHOD_META[method] || METHOD_META.brain).name;
 
 /* 가짜 퍼센트 대신, 목표 텍스트와 모드에서 실제로 계산하는 방식 추천 점수 */
 function recommendMethods(goal = "", mode = "offline") {
@@ -334,7 +343,7 @@ function SessionView({ goal, mins, mode = "offline", method = "brain", deadlineA
     <div className="min-h-screen bg-neutral-50 flex flex-col">
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0 flex-shrink-0"><span className="font-bold text-sm">IdeationEngine</span><span className="text-neutral-300">|</span><span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-500 flex-shrink-0">{MODES[mode].icon} {MODES[mode].label}</span><span className="text-xs text-neutral-500 max-w-[160px] truncate hidden md:inline">{goal}</span>{isOnline && deadline && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 flex-shrink-0">⏳ 마감 {deadline}</span>}</div>
+          <div className="flex items-center gap-3 min-w-0 flex-shrink-0"><span className="font-bold text-sm">IdeationEngine</span><span className="text-neutral-300">|</span><span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-500 flex-shrink-0">{MODES[mode].icon} {MODES[mode].label}</span><span className="text-[10px] px-1.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 flex-shrink-0">🧭 {(METHOD_META[method] || METHOD_META.brain).name}</span><span className="text-xs text-neutral-500 max-w-[140px] truncate hidden md:inline">{goal}</span>{isOnline && deadline && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 flex-shrink-0">⏳ 마감 {deadline}</span>}</div>
           <div className="flex items-center gap-0.5 bg-neutral-100 rounded-xl p-0.5 flex-shrink-0">
             {PHASES.map((p, i) => (
               <div key={i} className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${i === step ? "bg-white shadow text-neutral-900" : i < step ? "text-green-600" : "text-neutral-400"}`}>
@@ -361,10 +370,10 @@ function SessionView({ goal, mins, mode = "offline", method = "brain", deadlineA
       </div>
       <main className="flex-1 py-6">
         <div className="max-w-6xl mx-auto px-6">
-          {step === 0 && <IcePhase myProfile={myProfile} goal={goal} />}
+          {step === 0 && <IcePhase myProfile={myProfile} goal={goal} method={method} />}
           {step === 1 && <IdeaPhase myProfile={myProfile} method={method} goal={goal} />}
-          {step === 2 && <AnalyzePhase votes={votes} setVotes={setVotes} />}
-          {step === 3 && <ReportPhase votedThemes={votedThemes} />}
+          {step === 2 && <AnalyzePhase votes={votes} setVotes={setVotes} method={method} />}
+          {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} />}
         </div>
       </main>
       <footer className="bg-white border-t sticky bottom-0">
@@ -380,7 +389,7 @@ function SessionView({ goal, mins, mode = "offline", method = "brain", deadlineA
 }
 
 /* ═══════ Phase 1: 아이스브레이킹 ═══════ */
-function IcePhase({ myProfile, goal }) {
+function IcePhase({ myProfile, goal, method = "brain" }) {
   const [answers, setAnswers] = useState(ICE_ANSWERS.map(a => ({ ...a, member: getMember(a.memberId) })));
   const [input, setInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -397,7 +406,8 @@ function IcePhase({ myProfile, goal }) {
   return (
     <div className="flex flex-col lg:flex-row gap-6">
       <div className="flex-1 min-w-0">
-        <div className="mb-5"><Badge variant="info">💬 PHASE 1 · 10분</Badge><h2 className="text-xl font-bold mt-1">아이스브레이킹</h2><p className="text-sm text-neutral-500">세션 목표와 연결된 워밍업 질문입니다. 이 답변들이 다음 아이디어 발산의 출발점이 됩니다.</p></div>
+        <div className="mb-3"><Badge variant="info">💬 PHASE 1 · 10분</Badge><h2 className="text-xl font-bold mt-1">아이스브레이킹</h2><p className="text-sm text-neutral-500">세션 목표와 연결된 워밍업 질문입니다. 이 답변들이 다음 아이디어 발산의 출발점이 됩니다.</p></div>
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5"><span>🧭 이 세션 방식: <strong>{methodName(method)}</strong></span><span className="opacity-70">· {methodHint(method, "ice")}</span></div>
         <div className="bg-neutral-900 text-white rounded-2xl p-6 mb-5">
           <div className="text-xs text-neutral-400 mb-2 flex items-center gap-1"><Sparkles size={11} /> 세션 목표 "{(goal || "이 세션의 목표").slice(0, 24)}{(goal || "").length > 24 ? "…" : ""}"에 맞춰 AI가 질문을 생성했습니다</div>
           <h3 className="text-2xl font-bold leading-snug">최근 일주일간 경험한 가장 큰 '불편함'은 무엇인가요?</h3>
@@ -632,7 +642,7 @@ function IdeaSixHats({ goal }) {
 }
 
 /* ═══════ Phase 3: 분석 + 투표 ═══════ */
-function AnalyzePhase({ votes, setVotes }) {
+function AnalyzePhase({ votes, setVotes, method = "brain" }) {
   const used = Object.values(votes).filter(Boolean).length;
   const remaining = 3 - used;
   const handleVote = (id) => {
@@ -642,7 +652,7 @@ function AnalyzePhase({ votes, setVotes }) {
 
   return (
     <div>
-      <div className="mb-3"><Badge variant="success">📊 PHASE 3 · 15분</Badge><h2 className="text-xl font-bold mt-1">AI 분석 및 그룹화 완료</h2><p className="text-sm text-neutral-500">이전 단계에서 제출된 아이디어를 AI가 의미 기반으로 4개 테마로 분류했습니다.</p></div>
+      <div className="mb-3"><Badge variant="success">📊 PHASE 3 · 15분</Badge><h2 className="text-xl font-bold mt-1">AI 분석 및 그룹화 완료</h2><p className="text-sm text-neutral-500">{methodHint(method, "analyze")} (<strong>{methodName(method)}</strong> 방식)</p></div>
       <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>아래 분석 문구·신뢰도·테마 수치는 <strong>시연용 샘플</strong>입니다. 실제 제출 아이디어에서 생성된 값이 아니며, 투표만 실제로 반영됩니다.</span></div>
       <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl p-6 text-white mb-5">
         <div className="text-xs text-green-400 tracking-wider mb-2">AI INSIGHT SUMMARY</div>
@@ -670,7 +680,7 @@ function AnalyzePhase({ votes, setVotes }) {
 }
 
 /* ═══════ Phase 4: 리포트 ═══════ */
-function ReportPhase({ votedThemes = [] }) {
+function ReportPhase({ votedThemes = [], method = "brain" }) {
   const [dl, setDl] = useState(false);
   return (
     <div>
@@ -717,7 +727,7 @@ function ReportPhase({ votedThemes = [] }) {
         <div className="w-full lg:w-72 xl:w-80 flex-shrink-0 space-y-4">
           <div className="bg-neutral-900 text-white rounded-2xl p-5">
             <h3 className="font-semibold mb-3 flex items-center gap-2"><BarChart3 size={14} /> 세션 요약</h3>
-            {[["총 소요 시간", "60분"], ["참여자 수", `${MEMBERS.length + 1}명`], ["제출된 아이디어", "5+α개"], ["도출된 테마", "4개"]].map(([k, v]) => <div key={k} className="flex justify-between text-sm py-1"><span className="text-neutral-400">{k}</span><span className="font-bold">{v}</span></div>)}
+            {[["진행 방식", methodName(method)], ["총 소요 시간", "60분"], ["참여자 수", `${MEMBERS.length + 1}명`], ["제출된 아이디어", "5+α개"], ["도출된 테마", "4개"]].map(([k, v]) => <div key={k} className="flex justify-between text-sm py-1"><span className="text-neutral-400">{k}</span><span className="font-bold">{v}</span></div>)}
             <div className="mt-3 pt-3 border-t border-neutral-700">
               <div className="text-xs text-neutral-400 mb-1">핵심 키워드</div>
               <div className="flex flex-wrap gap-1">{["AI 자동화", "퍼실리테이션", "익명성", "실시간"].map(k => <span key={k} className="text-[10px] px-2 py-0.5 bg-neutral-800 rounded-full">{k}</span>)}</div>
