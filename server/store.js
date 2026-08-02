@@ -1,0 +1,80 @@
+import { randomUUID } from "crypto";
+
+/* ══════════════════════════════════════════════════════════════
+   세션 스토어 — 하나의 async 인터페이스로 두 백엔드를 감춘다.
+   · MONGODB_URI 있음 → MongoDB(Mongoose)
+   · 없음            → 인메모리 Map (키·DB 없이 지금 바로 실행/테스트용)
+   프론트·라우트는 이 인터페이스만 알면 되므로, 나중에 DB만 꽂으면 됨.
+   ════════════════════════════════════════════════════════════════ */
+
+const newId = () => randomUUID().slice(0, 8);
+
+/* ---- 인메모리 폴백 (서버 재시작 시 초기화됨) ---- */
+function createMemoryStore() {
+  const sessions = new Map();
+  return {
+    kind: "memory",
+    async create(data) {
+      const id = data.id || newId();
+      const s = { ...data, id, createdAt: Date.now() };
+      sessions.set(id, s);
+      return s;
+    },
+    async get(id) {
+      return sessions.get(id) || null;
+    },
+    async update(id, patch) {
+      const s = sessions.get(id);
+      if (!s) return null;
+      const next = { ...s, ...patch };
+      sessions.set(id, next);
+      return next;
+    },
+    async all() {
+      return [...sessions.values()];
+    },
+  };
+}
+
+/* ---- MongoDB (MONGODB_URI 설정 시 자동 사용) ---- */
+async function createMongoStore(uri) {
+  const mongoose = (await import("mongoose")).default;
+  await mongoose.connect(uri);
+  // strict:false → 세션 스키마가 자유롭게 진화해도 그대로 저장
+  const schema = new mongoose.Schema({ _id: String }, { strict: false, minimize: false, _id: false });
+  const Session = mongoose.models.Session || mongoose.model("Session", schema);
+  const clean = (doc) => { if (!doc) return null; const o = { ...doc, id: doc._id }; delete o._id; delete o.__v; return o; };
+  return {
+    kind: "mongodb",
+    async create(data) {
+      const id = data.id || newId();
+      const doc = await Session.create({ ...data, _id: id, createdAt: Date.now() });
+      return clean(doc.toObject());
+    },
+    async get(id) {
+      return clean(await Session.findById(id).lean());
+    },
+    async update(id, patch) {
+      return clean(await Session.findByIdAndUpdate(id, patch, { new: true }).lean());
+    },
+    async all() {
+      return (await Session.find().lean()).map(clean);
+    },
+  };
+}
+
+export async function initStore() {
+  const uri = process.env.MONGODB_URI;
+  if (uri) {
+    try {
+      const store = await createMongoStore(uri);
+      console.log("[store] MongoDB 연결됨");
+      return store;
+    } catch (e) {
+      console.warn("[store] MongoDB 연결 실패 → 인메모리로 폴백:", e.message);
+    }
+  } else {
+    console.log("[store] MONGODB_URI 없음 → 인메모리 스토어 사용 (재시작 시 초기화)");
+  }
+  return createMemoryStore();
+}
