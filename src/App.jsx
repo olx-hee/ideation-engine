@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Users, Check, ChevronRight, ChevronLeft, Lightbulb, Target, BarChart3, FileText, ArrowRight, Plus, Heart, Send, Vote, Sparkles, Play } from "lucide-react";
+import { api } from "./api.js";
 
 /* ═══════════════════════════════════════════
    일관된 데이터 세트 — 모든 단계가 연결됨
@@ -315,7 +316,7 @@ function CreateView({ myProfile, onStart }) {
 }
 
 /* ═══════ 세션 메인 ═══════ */
-function SessionView({ goal, mins, mode = "offline", method = "brain", deadlineAt, myProfile, onExit }) {
+function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain", deadlineAt, myProfile, onExit }) {
   const isOnline = mode === "online";
   // 새로고침해도 단계·투표가 유지되도록 sessionStorage에서 복원 (step은 0~3으로 클램프해 phase undefined 크래시 방지)
   const [step, setStep] = useState(() => { const v = parseInt(sessionStorage.getItem("ie_step"), 10); return Number.isInteger(v) ? Math.min(3, Math.max(0, v)) : 0; });
@@ -330,9 +331,13 @@ function SessionView({ goal, mins, mode = "offline", method = "brain", deadlineA
   const deadline = deadlineAt ? (() => { const d = new Date(deadlineAt); return Number.isNaN(d.getTime()) ? "" : `${d.getMonth() + 1}/${d.getDate()} 23:59`; })() : "";
   const votedThemes = THEMES.filter(t => votes[t.id]).map(t => t.name);
   useEffect(() => { const id = setInterval(() => setElapsed(Math.max(0, Math.floor((Date.now() - phaseStart) / 1000))), 1000); return () => clearInterval(id); }, [phaseStart]);
-  const goToPhase = (updater) => { setStep(updater); setPhaseStart(Date.now()); setElapsed(0); };
-  const next = () => goToPhase(s => Math.min(3, s + 1));
-  const prev = () => goToPhase(s => Math.max(0, s - 1));
+  const goToStep = (n) => {
+    const clamped = Math.min(3, Math.max(0, n));
+    setStep(clamped); setPhaseStart(Date.now()); setElapsed(0);
+    if (sessionId) api.patchSession(sessionId, { phase: clamped }).catch(() => {}); // 서버에 단계 저장(best-effort)
+  };
+  const next = () => goToStep(step + 1);
+  const prev = () => goToStep(step - 1);
   const phase = PHASES[step];
   const adjD = Math.round(phase.duration * mins / 60);
   const rem = Math.max(0, adjD * 60 - elapsed);
@@ -744,8 +749,9 @@ function ReportPhase({ votedThemes = [], method = "brain" }) {
 }
 
 /* ═══════ 대기실 (로비) ═══════ */
-function LobbyView({ goal, mins, mode = "offline", method = "brain", onSessionStart }) {
-  const link = "https://ideationengine.app/s/aB3x9Y";
+function LobbyView({ sessionId, goal, mins, mode = "offline", method = "brain", onSessionStart }) {
+  // 서버에서 발급된 실제 세션 id를 초대 링크에 사용 (서버 미연결 시 데모 표기)
+  const link = sessionId ? `https://ideationengine.app/s/${sessionId}` : "https://ideationengine.app/s/(서버 연결 대기)";
   const md = MODES[mode];
   const isOnline = mode === "online";
   const [copied, setCopied] = useState(false);
@@ -917,25 +923,49 @@ export default function App() {
   const [view, setView] = useState(() => sessionStorage.getItem("ie_view") || "profile");
   const [myProfile, setMyProfile] = useState(() => loadJSON("ie_profile", null));
   const [data, setData] = useState(() => loadJSON("ie_data", DEFAULT_DATA));
+  const [sessionId, setSessionId] = useState(() => sessionStorage.getItem("ie_sid") || null);
 
   // 새로고침해도 세션·프로필이 유지되도록 sessionStorage에 스냅샷 저장
   useEffect(() => { sessionStorage.setItem("ie_view", view); }, [view]);
   useEffect(() => { sessionStorage.setItem("ie_profile", JSON.stringify(myProfile)); }, [myProfile]);
   useEffect(() => { sessionStorage.setItem("ie_data", JSON.stringify(data)); }, [data]);
+  useEffect(() => { if (sessionId) sessionStorage.setItem("ie_sid", sessionId); else sessionStorage.removeItem("ie_sid"); }, [sessionId]);
+
+  // 서버가 source of truth: 세션 id가 있으면 로드 시 서버에서 세션 필드를 복원한다.
+  // (서버 다운/미존재 시엔 조용히 로컬 스냅샷을 유지 — best-effort)
+  useEffect(() => {
+    if (!sessionId) return;
+    api.getSession(sessionId)
+      .then((s) => setData((d) => ({ ...d, goal: s.goal, mins: s.mins, mode: s.mode, method: s.method, deadlineAt: s.deadlineAt })))
+      .catch(() => {});
+  }, [sessionId]);
 
   // 새 세션 시작/종료 시 이전 세션 진행도(단계·투표) 스냅샷 제거
   const clearProgress = () => { sessionStorage.removeItem("ie_step"); sessionStorage.removeItem("ie_votes"); sessionStorage.removeItem("ie_phaseStart"); };
-  const exitToNew = () => { setData(DEFAULT_DATA); clearProgress(); setView("create"); };
+  const exitToNew = () => { setData(DEFAULT_DATA); setSessionId(null); clearProgress(); setView("create"); };
+
+  // 세션 생성: 서버에 등록해 실제 id를 확보한다. 서버가 없으면 로컬 전용으로 계속 진행.
+  const startSession = async (g, m, mode, method) => {
+    const localData = { goal: g, mins: m, mode, method, deadlineAt: Date.now() + 2 * 24 * 60 * 60 * 1000 };
+    setData(localData);
+    setSessionId(null);
+    clearProgress();
+    setView("lobby");
+    try {
+      const host = myProfile ? { id: "user", name: myProfile.name, initial: (myProfile.name || "나").charAt(0), skills: myProfile.skills } : null;
+      const s = await api.createSession({ ...localData, host });
+      setSessionId(s.id);
+    } catch { /* 서버 미가동: 로컬 전용 폴백 */ }
+  };
 
   if (view === "profile") {
     return <ProfileView onDone={(p) => { setMyProfile(p); setView("create"); }} />;
   }
   if (view === "create") {
-    // 마감 시각을 '세션 생성 시점'에 확정해 data에 저장 (이후 재계산·리프레시로 밀리지 않음)
-    return <CreateView myProfile={myProfile} onStart={(g, m, mode, method) => { setData({ goal: g, mins: m, mode, method, deadlineAt: Date.now() + 2 * 24 * 60 * 60 * 1000 }); clearProgress(); setView("lobby"); }} />;
+    return <CreateView myProfile={myProfile} onStart={startSession} />;
   }
   if (view === "lobby") {
-    return <LobbyView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
+    return <LobbyView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
   }
-  return <SessionView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} myProfile={myProfile} onExit={exitToNew} />;
+  return <SessionView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} myProfile={myProfile} onExit={exitToNew} />;
 }
