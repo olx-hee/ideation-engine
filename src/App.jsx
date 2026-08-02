@@ -316,10 +316,15 @@ function CreateView({ myProfile, onStart }) {
 }
 
 /* ═══════ 세션 메인 ═══════ */
-function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain", deadlineAt, myProfile, onExit }) {
+function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain", deadlineAt, serverPhase, myProfile, onExit }) {
   const isOnline = mode === "online";
-  // 새로고침해도 단계·투표가 유지되도록 sessionStorage에서 복원 (step은 0~3으로 클램프해 phase undefined 크래시 방지)
-  const [step, setStep] = useState(() => { const v = parseInt(sessionStorage.getItem("ie_step"), 10); return Number.isInteger(v) ? Math.min(3, Math.max(0, v)) : 0; });
+  // step 복원: 로컬 스냅샷(ie_step)과 서버 phase 중 더 진행된 쪽을 채택(단일 유저 전진 규칙), 0~3 클램프
+  const [step, setStep] = useState(() => {
+    const local = parseInt(sessionStorage.getItem("ie_step"), 10);
+    const l = Number.isInteger(local) ? local : 0;
+    const sp = Number.isInteger(serverPhase) ? serverPhase : 0;
+    return Math.min(3, Math.max(0, Math.max(l, sp)));
+  });
   const [votes, setVotes] = useState(() => { try { return JSON.parse(sessionStorage.getItem("ie_votes")) || {}; } catch { return {}; } });
   // 현재 단계의 시작 시각을 저장 → 새로고침해도 남은 시간이 0으로 리셋되지 않고 이어짐
   const [phaseStart, setPhaseStart] = useState(() => { const v = parseInt(sessionStorage.getItem("ie_phaseStart"), 10); return Number.isInteger(v) ? v : Date.now(); });
@@ -338,6 +343,11 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
   };
   const next = () => goToStep(step + 1);
   const prev = () => goToStep(step - 1);
+  // 서버 phase가 (비동기 GET으로) 로컬보다 앞서 도착하면 반영 — 다른 기기/스토리지 초기화 대비.
+  // serverPhase==step이 되면 조건이 거짓이라 반복되지 않는다(전진 규칙, 서버발 반영이라 재PATCH 안 함).
+  useEffect(() => {
+    if (Number.isInteger(serverPhase) && serverPhase > step) { setStep(Math.min(3, serverPhase)); setPhaseStart(Date.now()); setElapsed(0); }
+  }, [serverPhase, step]);
   const phase = PHASES[step];
   const adjD = Math.round(phase.duration * mins / 60);
   const rem = Math.max(0, adjD * 60 - elapsed);
@@ -806,6 +816,9 @@ function LobbyView({ sessionId, goal, mins, mode = "offline", method = "brain", 
           <div className="text-xs text-neutral-500 bg-neutral-50 rounded-xl px-3 py-2 flex items-center gap-2">
             <span className="text-neutral-400">ⓘ</span> 링크를 통해 접속하면 닉네임만 입력하고 바로 참여할 수 있습니다
           </div>
+          <div className="text-[11px] text-amber-700 bg-amber-50 border border-amber-100 rounded-xl px-3 py-2 mt-2 flex items-start gap-2">
+            <span>🔒</span><span>데모: 이 링크를 아는 사람은 세션을 열람할 수 있어요. 참가자 인증은 준비 중이라, 지금은 <strong>비밀 링크로 취급</strong>해 주세요.</span>
+          </div>
         </div>
 
         {/* 세션 정보 */}
@@ -931,13 +944,16 @@ export default function App() {
   useEffect(() => { sessionStorage.setItem("ie_data", JSON.stringify(data)); }, [data]);
   useEffect(() => { if (sessionId) sessionStorage.setItem("ie_sid", sessionId); else sessionStorage.removeItem("ie_sid"); }, [sessionId]);
 
-  // 서버가 source of truth: 세션 id가 있으면 로드 시 서버에서 세션 필드를 복원한다.
-  // (서버 다운/미존재 시엔 조용히 로컬 스냅샷을 유지 — best-effort)
+  // 서버 영속: 세션 id가 있으면 로드 시 서버에서 세션 필드(메타 + phase)를 복원한다.
+  // (서버 다운/미존재 시엔 조용히 로컬 스냅샷 유지 — best-effort)
+  // active 플래그로 stale 응답을 무시 → 세션 전환 시 옛 GET이 새 data를 덮는 레이스 방지
   useEffect(() => {
     if (!sessionId) return;
+    let active = true;
     api.getSession(sessionId)
-      .then((s) => setData((d) => ({ ...d, goal: s.goal, mins: s.mins, mode: s.mode, method: s.method, deadlineAt: s.deadlineAt })))
+      .then((s) => { if (active) setData((d) => ({ ...d, goal: s.goal, mins: s.mins, mode: s.mode, method: s.method, deadlineAt: s.deadlineAt, phase: s.phase })); })
       .catch(() => {});
+    return () => { active = false; };
   }, [sessionId]);
 
   // 새 세션 시작/종료 시 이전 세션 진행도(단계·투표) 스냅샷 제거
@@ -946,7 +962,7 @@ export default function App() {
 
   // 세션 생성: 서버에 등록해 실제 id를 확보한다. 서버가 없으면 로컬 전용으로 계속 진행.
   const startSession = async (g, m, mode, method) => {
-    const localData = { goal: g, mins: m, mode, method, deadlineAt: Date.now() + 2 * 24 * 60 * 60 * 1000 };
+    const localData = { goal: g, mins: m, mode, method, deadlineAt: Date.now() + 2 * 24 * 60 * 60 * 1000, phase: 0 };
     setData(localData);
     setSessionId(null);
     clearProgress();
@@ -954,6 +970,8 @@ export default function App() {
     try {
       const host = myProfile ? { id: "user", name: myProfile.name, initial: (myProfile.name || "나").charAt(0), skills: myProfile.skills } : null;
       const s = await api.createSession({ ...localData, host });
+      // 생성 응답(서버 정규화값)으로 바로 data를 맞춰 GET 왕복 전 깜빡임을 없앤다
+      setData((d) => ({ ...d, goal: s.goal, mins: s.mins, mode: s.mode, method: s.method, deadlineAt: s.deadlineAt, phase: s.phase }));
       setSessionId(s.id);
     } catch { /* 서버 미가동: 로컬 전용 폴백 */ }
   };
@@ -967,5 +985,5 @@ export default function App() {
   if (view === "lobby") {
     return <LobbyView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
   }
-  return <SessionView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} myProfile={myProfile} onExit={exitToNew} />;
+  return <SessionView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} serverPhase={data.phase} myProfile={myProfile} onExit={exitToNew} />;
 }

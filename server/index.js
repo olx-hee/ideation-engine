@@ -82,7 +82,7 @@ app.post("/api/sessions", h(async (req, res) => {
     mins: Math.min(180, Math.max(5, Number(b.mins) || 60)),
     mode: b.mode === "online" ? "online" : "offline",
     method: ["brain", "scamper", "sixhats"].includes(b.method) ? b.method : "brain",
-    deadlineAt: b.deadlineAt ? Number(b.deadlineAt) : null,
+    deadlineAt: Number.isFinite(Number(b.deadlineAt)) ? Number(b.deadlineAt) : null,
     phase: 0, members: host ? [host] : [], ice: [], ideas: [], votes: {},
   });
   res.status(201).json(session);
