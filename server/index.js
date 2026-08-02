@@ -4,7 +4,8 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { initStore } from "./store.js";
-import { generate, AI_KINDS } from "./ai.js";
+import { orchestrate, sessionMeter, planStub } from "./orchestrator/index.js";
+import { ORCHESTRATOR_KINDS } from "./orchestrator/registry.js";
 
 /* IdeationEngine 백엔드 (스캐폴드)
    - 키·DB 없이도 실행됨 (인메모리 + AI 목업)
@@ -172,14 +173,27 @@ app.post("/api/sessions/:id/votes", contentLimiter, h(async (req, res) => {
   res.json(await store.update(req.params.id, { votes })); // TODO(B3)
 }));
 
-/* AI 프록시 — 레이트리밋 + kind 화이트리스트 + context 크기 제한.
+/* AI 오케스트레이터 프록시 — 레이트리밋 + kind 화이트리스트 + 크기 제한.
+   kind에 따라 티어/모델을 정해 호출하고, 비용 미터를 세션에 누적한다(P1: 목업).
    TODO(B1): 세션 멤버만 호출하도록 인가, 일일 쿼터 */
-const aiLimiter = rateLimit({ windowMs: 60_000, max: 20, standardHeaders: true, legacyHeaders: false });
+const aiLimiter = rateLimit({ windowMs: 60_000, max: 60, standardHeaders: true, legacyHeaders: false });
 app.post("/api/ai", aiLimiter, h(async (req, res) => {
   const b = req.body || {};
-  if (b.kind && !AI_KINDS.includes(b.kind)) return bad(res, "invalid kind");
+  if (b.kind && !ORCHESTRATOR_KINDS.includes(b.kind)) return bad(res, "invalid kind");
+  const goal = String(b.goal || "").slice(0, 500);
   const context = typeof b.context === "string" ? b.context.slice(0, 2000) : null;
-  res.json(await generate({ kind: b.kind, goal: String(b.goal || "").slice(0, 500), context }));
+  const sessionId = b.sessionId ? String(b.sessionId).slice(0, 64) : null;
+  res.json(await orchestrate({ sessionId, kind: b.kind || "idea", goal, context }));
+}));
+
+/* 세션 AI 비용 미터 요약 (발표 패널: '어느 모델이 뭘 했나 + 얼마 아꼈나') */
+app.get("/api/sessions/:id/ai-meter", h(async (req, res) => {
+  res.json(sessionMeter(String(req.params.id).slice(0, 64)));
+}));
+
+/* [B/P4 스텁] 임의 요청 분해 미리보기 (엔진 미구현 — 고정 목업) */
+app.post("/api/ai/plan", aiLimiter, h(async (req, res) => {
+  res.json(planStub(String((req.body || {}).request || "").slice(0, 500)));
 }));
 
 /* JSON 파싱 등 미들웨어 에러를 400으로 통일 (스택 비노출) */
