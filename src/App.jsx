@@ -15,8 +15,6 @@ const MEMBERS = [
 /* 선택 가능한 역량 목록 (프로필 작성용) */
 const SKILL_OPTIONS = ["기획", "발표", "마케팅", "디자인", "UX", "프론트엔드", "백엔드", "데이터", "인프라", "AI/ML", "리서치", "논문"];
 
-const GOAL = "교내 해커톤에서 발표할 AI 기반 서비스 아이디어 도출";
-
 /* 아이스브레이킹 답변 → 이 불편함이 아이디어의 씨앗이 됨 */
 const ICE_ANSWERS = [
   { memberId: "sh", text: "팀플 첫 미팅에서 서로 눈치만 보다가 시간이 다 갔어요. 결국 제일 외향적인 한 사람이 다 정했고, 나머지는 그냥 따라갔습니다.", likes: 7 },
@@ -58,7 +56,7 @@ const REPORT = {
   score: 94,
   coreValues: ["제로 세팅 (링크 하나로 참여)", "AI 자동 진행 (퍼실리테이터 대체)", "익명 입력 (심리적 안전감)"],
   targets: ["팀플 과목 수강 대학생 (초면 불안)", "해커톤 참가자 (시간 부족)", "기업 워크샵 TF팀 (구조 필요)"],
-  risks: ["기존 도구(Miro) 대비 차별성 인지", "AI 개입 수준에 대한 거부감 (33.9%)", "결과물 품질 신뢰도 확보 (40.3%)"],
+  risks: ["기존 도구(Miro) 대비 차별성 인지", "AI 개입 수준에 대한 거부감", "결과물 품질 신뢰도 확보"],
   actions: [
     { task: "MVP 핵심 기능 정의 및 우선순위 도출", who: "김승희", date: "6. 20." },
     { task: "대학생 5명 대상 사용성 테스트 설계 및 진행", who: "전재민", date: "6. 22." },
@@ -308,17 +306,24 @@ function CreateView({ myProfile, onStart }) {
 }
 
 /* ═══════ 세션 메인 ═══════ */
-function SessionView({ goal, mins, mode = "offline", method = "brain", myProfile, onExit }) {
+function SessionView({ goal, mins, mode = "offline", method = "brain", deadlineAt, myProfile, onExit }) {
   const isOnline = mode === "online";
-  const [step, setStep] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
-  const [votes, setVotes] = useState({}); // 투표 상태를 세션에 두어 보고서까지 연결
-  // 온라인 마감: 세션 생성 시각 기준 +2일로 실제 계산 (하드코딩된 요일 제거)
-  const [deadline] = useState(() => { const d = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); return `${d.getMonth() + 1}/${d.getDate()} 23:59`; });
+  // 새로고침해도 단계·투표가 유지되도록 sessionStorage에서 복원 (step은 0~3으로 클램프해 phase undefined 크래시 방지)
+  const [step, setStep] = useState(() => { const v = parseInt(sessionStorage.getItem("ie_step"), 10); return Number.isInteger(v) ? Math.min(3, Math.max(0, v)) : 0; });
+  const [votes, setVotes] = useState(() => { try { return JSON.parse(sessionStorage.getItem("ie_votes")) || {}; } catch { return {}; } });
+  // 현재 단계의 시작 시각을 저장 → 새로고침해도 남은 시간이 0으로 리셋되지 않고 이어짐
+  const [phaseStart, setPhaseStart] = useState(() => { const v = parseInt(sessionStorage.getItem("ie_phaseStart"), 10); return Number.isInteger(v) ? v : Date.now(); });
+  const [elapsed, setElapsed] = useState(() => Math.max(0, Math.floor((Date.now() - phaseStart) / 1000)));
+  useEffect(() => { sessionStorage.setItem("ie_step", String(step)); }, [step]);
+  useEffect(() => { sessionStorage.setItem("ie_votes", JSON.stringify(votes)); }, [votes]);
+  useEffect(() => { sessionStorage.setItem("ie_phaseStart", String(phaseStart)); }, [phaseStart]);
+  // 온라인 마감: 생성 시점에 확정된 deadlineAt을 표시만 (여기서 재계산하지 않음)
+  const deadline = deadlineAt ? (() => { const d = new Date(deadlineAt); return Number.isNaN(d.getTime()) ? "" : `${d.getMonth() + 1}/${d.getDate()} 23:59`; })() : "";
   const votedThemes = THEMES.filter(t => votes[t.id]).map(t => t.name);
-  useEffect(() => { const id = setInterval(() => setElapsed(e => e + 1), 1000); return () => clearInterval(id); }, []);
-  const next = () => { setStep(s => Math.min(3, s + 1)); setElapsed(0); };
-  const prev = () => { setStep(s => Math.max(0, s - 1)); setElapsed(0); };
+  useEffect(() => { const id = setInterval(() => setElapsed(Math.max(0, Math.floor((Date.now() - phaseStart) / 1000))), 1000); return () => clearInterval(id); }, [phaseStart]);
+  const goToPhase = (updater) => { setStep(updater); setPhaseStart(Date.now()); setElapsed(0); };
+  const next = () => goToPhase(s => Math.min(3, s + 1));
+  const prev = () => goToPhase(s => Math.max(0, s - 1));
   const phase = PHASES[step];
   const adjD = Math.round(phase.duration * mins / 60);
   const rem = Math.max(0, adjD * 60 - elapsed);
@@ -329,7 +334,7 @@ function SessionView({ goal, mins, mode = "offline", method = "brain", myProfile
     <div className="min-h-screen bg-neutral-50 flex flex-col">
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3 min-w-0 flex-shrink-0"><span className="font-bold text-sm">IdeationEngine</span><span className="text-neutral-300">|</span><span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-500 flex-shrink-0">{MODES[mode].icon} {MODES[mode].label}</span><span className="text-xs text-neutral-500 max-w-[160px] truncate hidden md:inline">{goal}</span>{isOnline && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 flex-shrink-0">⏳ 마감 {deadline}</span>}</div>
+          <div className="flex items-center gap-3 min-w-0 flex-shrink-0"><span className="font-bold text-sm">IdeationEngine</span><span className="text-neutral-300">|</span><span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 text-neutral-500 flex-shrink-0">{MODES[mode].icon} {MODES[mode].label}</span><span className="text-xs text-neutral-500 max-w-[160px] truncate hidden md:inline">{goal}</span>{isOnline && deadline && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-50 text-amber-700 flex-shrink-0">⏳ 마감 {deadline}</span>}</div>
           <div className="flex items-center gap-0.5 bg-neutral-100 rounded-xl p-0.5 flex-shrink-0">
             {PHASES.map((p, i) => (
               <div key={i} className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition ${i === step ? "bg-white shadow text-neutral-900" : i < step ? "text-green-600" : "text-neutral-400"}`}>
@@ -680,7 +685,7 @@ function ReportPhase({ votedThemes = [] }) {
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1 min-w-0 space-y-5">
           <div className="bg-white rounded-2xl border p-6">
-            <div className="flex justify-between mb-3"><h3 className="font-semibold flex items-center gap-2"><Target size={15} /> 선정된 최종 아이디어</h3><div className="flex items-center gap-1"><Badge variant="success">Score: {REPORT.score}/100</Badge><span className="text-[10px] text-neutral-400">시연용</span></div></div>
+            <div className="flex justify-between mb-3"><h3 className="font-semibold flex items-center gap-2"><Target size={15} /> 선정된 최종 아이디어 <span className="text-xs font-normal text-neutral-400">(시연 예시 · 실제 투표 결과 아님)</span></h3><div className="flex items-center gap-1"><Badge variant="success">Score: {REPORT.score}/100</Badge><span className="text-[10px] text-neutral-400">시연용</span></div></div>
             <div className="bg-neutral-50 rounded-xl p-5 mb-4">
               <h4 className="text-lg font-bold mb-2">{REPORT.title}</h4>
               <p className="text-sm text-neutral-600 leading-relaxed">{REPORT.desc}</p>
@@ -880,9 +885,10 @@ function ProfileView({ onDone }) {
 
         {angle && (
           <div className={`rounded-2xl border-2 p-5 mb-5 anim-up ${angle.cls}`}>
-            <div className="text-xs font-medium mb-1 opacity-70">AI가 배정할 나의 발산 각도</div>
+            <div className="text-xs font-medium mb-1 opacity-70">AI가 배정할 나의 발산 각도 (예상)</div>
             <div className="text-lg font-bold flex items-center gap-2">{angle.icon} {angle.label}</div>
             <p className="text-sm mt-1 opacity-80">💡 {angle.hint}</p>
+            <p className="text-[11px] mt-2 opacity-60">※ 팀 구성에 따라 세션에서 다른 각도로 조정될 수 있어요 (각도가 겹치지 않도록 분산)</p>
           </div>
         )}
 
@@ -907,16 +913,19 @@ export default function App() {
   useEffect(() => { sessionStorage.setItem("ie_profile", JSON.stringify(myProfile)); }, [myProfile]);
   useEffect(() => { sessionStorage.setItem("ie_data", JSON.stringify(data)); }, [data]);
 
-  const exitToNew = () => { setData(DEFAULT_DATA); setView("create"); };
+  // 새 세션 시작/종료 시 이전 세션 진행도(단계·투표) 스냅샷 제거
+  const clearProgress = () => { sessionStorage.removeItem("ie_step"); sessionStorage.removeItem("ie_votes"); sessionStorage.removeItem("ie_phaseStart"); };
+  const exitToNew = () => { setData(DEFAULT_DATA); clearProgress(); setView("create"); };
 
   if (view === "profile") {
     return <ProfileView onDone={(p) => { setMyProfile(p); setView("create"); }} />;
   }
   if (view === "create") {
-    return <CreateView myProfile={myProfile} onStart={(g, m, mode, method) => { setData({ goal: g, mins: m, mode, method }); setView("lobby"); }} />;
+    // 마감 시각을 '세션 생성 시점'에 확정해 data에 저장 (이후 재계산·리프레시로 밀리지 않음)
+    return <CreateView myProfile={myProfile} onStart={(g, m, mode, method) => { setData({ goal: g, mins: m, mode, method, deadlineAt: Date.now() + 2 * 24 * 60 * 60 * 1000 }); clearProgress(); setView("lobby"); }} />;
   }
   if (view === "lobby") {
     return <LobbyView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
   }
-  return <SessionView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} myProfile={myProfile} onExit={exitToNew} />;
+  return <SessionView goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} myProfile={myProfile} onExit={exitToNew} />;
 }
