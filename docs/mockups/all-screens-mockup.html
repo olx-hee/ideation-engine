@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IdeationEngine — 전체 화면 목업 (디자이너용)</title>
+<style>
+  :root{
+    --n50:#fafafa;--n100:#f5f5f5;--n200:#e5e5e5;--n300:#d4d4d4;--n400:#a3a3a3;--n500:#737373;--n600:#525252;--n700:#404040;--n800:#262626;--n900:#171717;--white:#fff;
+    --em:#10b981;--em600:#059669;--green50:#f0fdf4;--green600:#16a34a;--green700:#15803d;
+    --blue:#3b82f6;--blue50:#eff6ff;--blue600:#2563eb;--blue700:#1d4ed8;--blue800:#1e40af;
+    --indigo50:#eef2ff;--indigo600:#4f46e5;--indigo700:#4338ca;
+    --amber:#f59e0b;--amber50:#fffbeb;--amber700:#b45309;--amber800:#92400e;
+    --purple:#a855f7;--purple50:#faf5ff;--purple600:#9333ea;--purple700:#7e22ce;--purple800:#6b21a8;
+    --rose:#f43f5e;--rose50:#fff1f2;--rose700:#be123c;--rose800:#9f1239;
+    --sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+    --mono:ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:#e9eaec;color:var(--n900);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .canvas{max-width:1180px;margin:0 auto;padding:36px 20px 80px}
+  .doc-h{margin-bottom:8px;font-size:26px;font-weight:800}
+  .doc-sub{color:var(--n600);margin-bottom:6px}
+  .doc-note{background:#fff;border:1px dashed var(--n300);border-radius:10px;padding:10px 14px;font-size:12.5px;color:var(--n600);margin:14px 0 30px}
+  .doc-note b{color:var(--n900)}
+  .flowmap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--n500);margin-bottom:30px}
+  .flowmap span.s{background:#fff;border:1px solid var(--n200);border-radius:999px;padding:4px 11px;font-weight:600;color:var(--n700)}
+  .flowmap span.new{border-color:var(--em);color:var(--em600);background:var(--green50)}
+  .frame{margin:0 0 40px}
+  .frame-label{display:flex;align-items:center;gap:9px;margin:0 0 10px;font-family:var(--mono);font-size:12px;color:var(--n500)}
+  .frame-label .no{background:var(--n900);color:#fff;border-radius:6px;padding:2px 8px;font-weight:700}
+  .frame-label .new{background:var(--em);color:#fff;border-radius:999px;padding:2px 9px;font-weight:700;font-family:var(--sans);font-size:11px}
+  .screen{background:var(--n50);border:1px solid var(--n300);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+  /* app bits */
+  .appbar{background:#fff;border-bottom:1px solid var(--n200);height:54px;display:flex;align-items:center;padding:0 24px;gap:12px;font-weight:800;letter-spacing:-.01em}
+  .appbar .divider{color:var(--n300)}
+  .appbar .muted{font-weight:400;color:var(--n500);font-size:13px}
+  .pad{padding:34px 30px}
+  .pad-narrow{max-width:640px;margin:0 auto;padding:34px 30px}
+  h1.big{font-size:28px;font-weight:800;letter-spacing:-.01em;margin-bottom:4px}
+  .lead{color:var(--n500);margin-bottom:24px}
+  .lbl{font-size:13px;font-weight:600;color:var(--n600);margin-bottom:8px;display:block}
+  .card{background:#fff;border:1px solid var(--n200);border-radius:16px;padding:22px}
+  .card+.card{margin-top:18px}
+  .input{width:100%;border:1px solid var(--n200);border-radius:12px;padding:11px 13px;font:inherit;font-size:13px;color:var(--n700)}
+  .textarea{min-height:80px}
+  .btn{border:0;border-radius:12px;padding:11px 18px;font:inherit;font-weight:600;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .btn-dark{background:var(--n900);color:#fff}
+  .btn-green{background:var(--green600);color:#fff}
+  .btn-ghost{background:#fff;border:1px solid var(--n200);color:var(--n700)}
+  .btn-full{width:100%;justify-content:center}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;font-size:11px;font-weight:600;background:var(--n100);color:var(--n600)}
+  .badge.primary{background:var(--n900);color:#fff}.badge.success{background:#dcfce7;color:var(--green700)}.badge.warn{background:#fef3c7;color:var(--amber800)}.badge.info{background:#dbeafe;color:var(--blue700)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .row{display:flex;gap:12px}
+  .av{width:34px;height:34px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+  .av.blue{background:var(--blue)}.av.purple{background:var(--purple)}.av.amber{background:var(--amber)}.av.rose{background:var(--rose)}.av.em{background:var(--em)}.av.sm{width:26px;height:26px;font-size:11px}
+  .chip{font-size:11px;background:var(--n100);border:1px solid var(--n200);color:var(--n600);padding:2px 8px;border-radius:6px;font-family:var(--mono)}
+  .skillchip{font-size:13px;border:1px solid var(--n200);border-radius:999px;padding:6px 13px;color:var(--n600);background:#fff}
+  .skillchip.on{background:var(--n900);color:#fff;border-color:var(--n900)}
+  .dark{background:var(--n900);color:#fff;border-radius:16px;padding:22px}
+  .muted{color:var(--n500)}.tiny{font-size:11px}.small{font-size:12.5px}
+  .sidebar{width:300px;flex-shrink:0}
+  .sec-title{font-weight:700;font-size:15px;display:flex;align-items:center;gap:7px}
+  /* angle cards */
+  .angle{border:2px solid transparent;border-radius:12px;padding:12px}
+  .angle.biz{background:#fffbeb;border-color:#fcd34d;color:var(--amber800)}
+  .angle.ux{background:#faf5ff;border-color:#d8b4fe;color:var(--purple800)}
+  .angle.tech{background:#eff6ff;border-color:#93c5fd;color:var(--blue800)}
+  .angle.novel{background:#fff1f2;border-color:#fda4af;color:var(--rose800)}
+  .angle.me{box-shadow:0 0 0 2px var(--n900)}
+  /* stepper */
+  .stepper{display:flex;gap:2px;background:var(--n100);border-radius:12px;padding:3px}
+  .stp{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:9px;font-size:12px;font-weight:600;color:var(--n400)}
+  .stp.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);color:var(--n900)}
+  .stp.done{color:var(--green600)}
+  .timer{display:flex;align-items:center;gap:8px;border:1px solid var(--n200);background:#fff;border-radius:12px;padding:6px 12px;font-family:var(--mono);font-weight:700}
+  .progbar{height:9px;border-radius:999px;background:var(--n100);display:flex;overflow:hidden}
+  .progbar i{height:100%}
+  .foot{background:#fff;border-top:1px solid var(--n200);padding:12px 24px;display:flex;justify-content:space-between;align-items:center}
+  /* concept cards (NEW) */
+  .lens{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:var(--mono);padding:2px 9px;border-radius:999px;width:fit-content}
+  .L1{background:var(--green50);color:var(--em600)}.L2{background:var(--rose50);color:var(--rose700)}.L3{background:var(--blue50);color:var(--blue700)}.L4{background:var(--purple50);color:var(--purple700)}
+  .cc{background:#fff;border:1px solid var(--n200);border-radius:15px;padding:15px 16px;display:flex;flex-direction:column;position:relative}
+  .cc.lead{border-color:var(--em);box-shadow:0 0 0 2px var(--green50)}
+  .cc .ledtag{position:absolute;top:-9px;right:12px;background:var(--em);color:#fff;font-size:10.5px;font-weight:700;font-family:var(--mono);padding:2px 9px;border-radius:999px}
+  .cc .ct{font-size:16px;font-weight:750;margin:9px 0 5px}
+  .cc .cs{font-size:12.5px;color:var(--n600);flex:1}
+  .cc .src{display:flex;flex-wrap:wrap;gap:5px;margin:11px 0 12px}
+  .cc .voterow{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--n200);padding-top:10px;margin-top:auto}
+  .vbtn{font:inherit;font-size:12.5px;font-weight:600;background:var(--n50);border:1px solid var(--n200);color:var(--n900);border-radius:8px;padding:5px 12px}
+  .vc b{color:var(--em600);font-size:15px;font-family:var(--mono)}
+  .dissent{margin-top:20px;border-top:1px solid var(--n200);padding-top:14px}
+  .drow{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--n200);border-radius:9px;padding:8px 12px;font-size:12.5px;color:var(--n600);margin-bottom:7px}
+  .final{margin-top:20px;background:#fff;border:2px solid var(--em);border-radius:15px;padding:18px}
+  .meterbox{border:2px solid #c7d2fe;background:#eef2ff80;border-radius:16px;padding:18px;margin-bottom:20px}
+  .callrow{display:flex;justify-content:space-between;align-items:center;font-size:12px;background:#fff;border:1px solid var(--n200);border-radius:8px;padding:5px 11px}
+  .tierpill{font-size:10px;padding:1px 7px;border-radius:999px}.t-low{background:#d1fae5;color:var(--em600)}.t-flag{background:#ffe4e6;color:var(--rose700)}
+  @media(max-width:820px){.grid4{grid-template-columns:1fr 1fr}.sidebar{width:100%}.row{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="canvas">
+  <h1 class="doc-h">IdeationEngine · 전체 화면 목업</h1>
+  <p class="doc-sub">디자이너용 — Figma로 가져와 자유롭게 리디자인하세요. 각 프레임 = 앱의 한 화면입니다.</p>
+  <div class="doc-note"><b>새 방향 반영:</b> 기존 "AI가 아이디어를 하나로 자동 종합해 테마를 정해주던" 화면(⑥)을 <b>"AI가 여러 갈래 컨셉 후보만 제시 → 팀이 투표로 선택 → 안 뽑힌 안은 '다른 길'로 보존"</b> 으로 교체했습니다. 나머지 화면은 현재 앱과 동일합니다.</div>
+  <div class="flowmap">
+    <span class="s">① 프로필</span>›<span class="s">② 세션 만들기</span>›<span class="s">③ 대기실</span>›<span class="s">④ 아이스브레이킹</span>›<span class="s">⑤ 아이디어 발산</span>›<span class="new" style="border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600">⑥ 컨셉 종합·선택 (신규)</span>›<span class="s">⑦ 결과 보고서</span>
+    <span style="width:100%;height:4px"></span><span class="s">발산 변형:</span><span class="s">⑤-b SCAMPER</span><span class="s">⑤-c 6색 모자</span>
+  </div>
+
+  <!-- ① PROFILE -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">01</span> 프로필 만들기 (첫 진입)</div>
+    <div class="screen">
+      <div class="appbar">IdeationEngine</div>
+      <div class="pad-narrow">
+        <h1 class="big">프로필 만들기</h1>
+        <p class="lead">내가 뭘 할 수 있는지 알려주면, AI가 세션에서 나에게 <b>다른 사람과 겹치지 않는 역할</b>을 배정합니다.</p>
+        <div class="card"><label class="lbl">닉네임</label><input class="input" placeholder="세션에서 표시될 이름" value="나"></div>
+        <div class="card"><label class="lbl">내가 할 수 있는 것 <span class="muted" style="font-weight:400">(여러 개 선택)</span></label>
+          <p class="tiny muted" style="margin-bottom:12px">선택한 역량에 따라 아이디어 발산 단계에서 접근 각도가 달라집니다.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span class="skillchip on">기획</span><span class="skillchip">발표</span><span class="skillchip">마케팅</span><span class="skillchip on">디자인</span><span class="skillchip">UX</span><span class="skillchip">프론트엔드</span><span class="skillchip">백엔드</span><span class="skillchip">데이터</span><span class="skillchip">인프라</span><span class="skillchip">AI/ML</span><span class="skillchip">리서치</span><span class="skillchip">논문</span>
+          </div>
+        </div>
+        <div class="card"><label class="lbl">한 줄 강점 <span class="muted" style="font-weight:400">(선택)</span></label><input class="input" placeholder="예: 발표 자료를 빠르게 잘 만들어요"></div>
+        <div class="angle biz" style="margin-top:18px"><div class="tiny" style="opacity:.7;font-weight:600">AI가 배정할 나의 발산 각도 (예상)</div><div style="font-size:17px;font-weight:800;margin-top:3px">📈 비즈니스 · 시장</div><p class="small" style="margin-top:4px;opacity:.85">💡 누가 돈을 내고, 왜 하필 지금인가?</p></div>
+        <button class="btn btn-dark btn-full" style="margin-top:18px">→ 프로필 저장하고 시작</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② CREATE -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">02</span> 세션 만들기 (모드·목표·방식·시간)</div>
+    <div class="screen">
+      <div class="appbar">IdeationEngine</div>
+      <div class="pad-narrow" style="max-width:720px">
+        <h1 class="big">세션 만들기</h1>
+        <p class="lead">진행 방식을 고르고 목표를 정하면 세션이 만들어집니다</p>
+        <label class="lbl">진행 방식</label>
+        <div class="grid2" style="margin-bottom:22px">
+          <div class="card" style="border:2px solid var(--n900)"><div style="font-size:22px">🏫</div><div style="font-weight:800;display:flex;align-items:center;gap:6px">오프라인 모드 ✓</div><div class="tiny muted" style="margin-bottom:8px">해커톤 · 다 같이 한 공간에서</div><ul class="tiny muted" style="list-style:none;display:flex;flex-direction:column;gap:3px"><li>· 전원이 모여야 시작</li><li>· 공유 타이머로 다 함께 진행</li><li>· 현장의 긴장감과 즉석 반응</li></ul></div>
+          <div class="card" style="border:2px solid transparent"><div style="font-size:22px">🌐</div><div style="font-weight:800">온라인 모드</div><div class="tiny muted" style="margin-bottom:8px">팀플 · 각자 편한 시간에</div><ul class="tiny muted" style="list-style:none;display:flex;flex-direction:column;gap:3px"><li>· 링크만 있으면 지금 바로 시작</li><li>· 마감 시간까지 각자 참여</li><li>· 늦게 온 사람에겐 AI가 브리핑</li></ul></div>
+        </div>
+        <div class="card">
+          <label class="lbl">세션 목표</label>
+          <textarea class="input textarea" placeholder="목표를 직접 입력하거나, 아래에서 AI 추천을 받아보세요">팀 프로젝트 초반의 어색함과 비효율을 줄이는 서비스</textarea>
+          <button class="btn btn-full" style="margin-top:12px;background:var(--purple50);color:var(--purple700);border:1px solid #e9d5ff">✨ 팀 프로필 기반 주제 추천받기 <span class="badge info">AI · 데모</span></button>
+          <button class="btn btn-dark btn-full" style="margin-top:12px">→ 다음: 방식·시간 정하기</button>
+        </div>
+        <div class="card" style="background:var(--purple50);border-color:#e9d5ff;color:var(--purple800);font-size:13px"><b>🤖 방식 추천:</b> 목표와 오프라인 모드를 고려하면 <b>자유 브레인스토밍</b>이 가장 잘 맞습니다. (직접 골라도 됩니다)</div>
+        <div class="card" style="border:2px solid var(--n900)"><div class="row"><div class="av" style="background:var(--n900);border-radius:12px;width:40px;height:40px">💡</div><div><div style="font-weight:700;display:flex;gap:8px;align-items:center">자유 브레인스토밍 <span class="badge success">추천</span></div><p class="small muted">제한 없이 아이디어를 쏟아냅니다. 각자 배정된 각도에서 시작하세요.</p><p class="tiny muted" style="margin-top:3px">💡 다양한 방향을 넓게 탐색할 때</p></div></div></div>
+        <div class="card"><label class="lbl">세션 시간</label><div class="row" style="gap:8px"><button class="btn btn-ghost btn-full">30분</button><button class="btn btn-dark btn-full">60분</button><button class="btn btn-ghost btn-full">90분</button></div>
+          <div style="margin-top:14px"><div class="small" style="font-weight:600;margin-bottom:8px">⏱ AI 추천 시간 배분 (60분)</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="row" style="align-items:center;gap:10px"><span style="width:22px">💬</span><span class="small" style="width:110px">아이스브레이킹</span><div class="progbar" style="flex:1"><i style="width:17%;background:linear-gradient(90deg,#ec4899,#a855f7)"></i></div><span class="tiny muted" style="width:36px">10분</span></div>
+              <div class="row" style="align-items:center;gap:10px"><span style="width:22px">💡</span><span class="small" style="width:110px">아이디어 발산</span><div class="progbar" style="flex:1"><i style="width:33%;background:linear-gradient(90deg,#f59e0b,#f97316)"></i></div><span class="tiny muted" style="width:36px">20분</span></div>
+              <div class="row" style="align-items:center;gap:10px"><span style="width:22px">📊</span><span class="small" style="width:110px">컨셉 종합·선택</span><div class="progbar" style="flex:1"><i style="width:25%;background:linear-gradient(90deg,#3b82f6,#06b6d4)"></i></div><span class="tiny muted" style="width:36px">15분</span></div>
+              <div class="row" style="align-items:center;gap:10px"><span style="width:22px">📋</span><span class="small" style="width:110px">결과 보고서</span><div class="progbar" style="flex:1"><i style="width:8%;background:linear-gradient(90deg,#22c55e,#10b981)"></i></div><span class="tiny muted" style="width:36px">5분</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-dark btn-full" style="margin-top:16px">→ 오프라인 모드로 세션 생성 및 팀원 초대</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ LOBBY -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">03</span> 대기실 (초대 링크 · 참여자)</div>
+    <div class="screen">
+      <div class="appbar">IdeationEngine <span class="divider">/</span> <span class="muted">대기실</span></div>
+      <div class="pad-narrow" style="max-width:760px">
+        <div style="text-align:center;margin-bottom:26px">
+          <div class="av" style="width:56px;height:56px;background:var(--n900);border-radius:16px;font-size:24px;margin:0 auto 10px">🏫</div>
+          <span class="badge primary">오프라인 모드</span>
+          <h1 class="big" style="margin-top:8px">팀원을 기다리고 있어요</h1>
+          <p class="muted small">전원이 입장하면 다 함께 세션을 시작합니다.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;margin-bottom:12px">팀원 초대하기</div>
+          <div class="row" style="align-items:flex-end">
+            <div style="flex:1"><div class="tiny muted" style="margin-bottom:4px">초대 링크</div><div class="row"><input class="input" style="flex:1;font-family:var(--mono);background:var(--n50)" readonly value="https://ideationengine.app/s/8f3a21"><button class="btn btn-ghost">복사</button></div></div>
+            <div style="width:70px;height:70px;background:var(--n100);border:1px solid var(--n200);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px">▦</div>
+          </div>
+          <div class="tiny muted" style="background:var(--n50);border-radius:10px;padding:8px 11px;margin-top:10px">ⓘ 링크를 통해 접속하면 닉네임만 입력하고 바로 참여할 수 있습니다</div>
+        </div>
+        <div class="grid2" style="margin:16px 0">
+          <div class="card" style="padding:14px"><div class="tiny muted">세션 목표</div><div class="small" style="font-weight:600">팀 프로젝트 초반의 어색함·비효율 줄이기</div></div>
+          <div class="card" style="padding:14px"><div class="tiny muted">방식 · 시간</div><div class="small" style="font-weight:600">자유 브레인스토밍 · 60분</div></div>
+        </div>
+        <div class="card">
+          <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:14px"><div class="sec-title">👥 참여자</div><span class="badge">4 / 4</span></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="row" style="align-items:center;background:var(--n50);border-radius:12px;padding:9px"><div class="av blue">김</div><div style="flex:1"><div class="small" style="font-weight:600">김승희 <span class="badge primary">HOST</span></div><div class="tiny muted">방 생성</div></div><div style="width:10px;height:10px;border-radius:999px;background:var(--green600)"></div></div>
+            <div class="row" style="align-items:center;background:var(--n50);border-radius:12px;padding:9px"><div class="av purple">전</div><div style="flex:1"><div class="small" style="font-weight:600">전재민</div><div class="tiny muted">2초 전 입장</div></div><div style="width:10px;height:10px;border-radius:999px;background:var(--green600)"></div></div>
+            <div class="row" style="align-items:center;background:var(--n50);border-radius:12px;padding:9px"><div class="av amber">조</div><div style="flex:1"><div class="small" style="font-weight:600">조경빈</div><div class="tiny muted">4초 전 입장</div></div><div style="width:10px;height:10px;border-radius:999px;background:var(--green600)"></div></div>
+            <div class="row" style="align-items:center;background:var(--n50);border-radius:12px;padding:9px"><div class="av rose">이</div><div style="flex:1"><div class="small" style="font-weight:600">이중곤</div><div class="tiny muted">6초 전 입장</div></div><div style="width:10px;height:10px;border-radius:999px;background:var(--green600)"></div></div>
+          </div>
+        </div>
+        <button class="btn btn-dark btn-full" style="margin-top:18px;padding:15px">▶ 전원 입장 완료 — 세션 시작하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SESSION CHROME + ④ ICE -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">04</span> 세션 — 아이스브레이킹 (세션 공통 헤더/타이머/단계바 포함)</div>
+    <div class="screen">
+      <div class="appbar" style="justify-content:space-between">
+        <div class="row" style="align-items:center;gap:10px"><span style="font-size:14px">IdeationEngine</span><span class="chip">🏫 오프라인</span><span class="chip" style="background:var(--indigo50);color:var(--indigo600);border:0">🧭 자유 브레인스토밍</span></div>
+        <div class="stepper"><div class="stp on">💬 아이스브레이킹 <span class="tiny muted">10분</span></div><div class="stp">💡 발산 <span class="tiny muted">20분</span></div><div class="stp">📊 컨셉 <span class="tiny muted">15분</span></div><div class="stp">📋 보고 <span class="tiny muted">5분</span></div></div>
+        <div class="timer">💬 09:12 <span style="width:44px;height:6px;background:var(--n100);border-radius:999px;display:inline-block"><i style="display:block;width:80%;height:100%;background:var(--n800);border-radius:999px"></i></span></div>
+      </div>
+      <div style="background:#fff;border-bottom:1px solid var(--n200);padding:6px 24px"><div class="tiny muted" style="text-align:center;margin-bottom:4px">👥 모두 같은 타이머로 함께 진행 중</div><div class="progbar" style="height:10px"><i style="width:17%;background:linear-gradient(90deg,#ec4899,#a855f7)"></i><i style="width:33%;background:linear-gradient(90deg,#f59e0b,#f97316);opacity:.1"></i><i style="width:25%;background:linear-gradient(90deg,#3b82f6,#06b6d4);opacity:.1"></i><i style="width:8%;background:linear-gradient(90deg,#22c55e,#10b981);opacity:.1"></i></div></div>
+      <div class="pad" style="display:flex;gap:24px">
+        <div style="flex:1;min-width:0">
+          <span class="badge info">💬 PHASE 1 · 10분</span><h2 style="font-size:20px;font-weight:800;margin-top:5px">아이스브레이킹</h2><p class="small muted">세션 목표와 연결된 워밍업 질문입니다. 이 답변들이 다음 아이디어 발산의 출발점이 됩니다.</p>
+          <div class="dark" style="margin:16px 0"><div class="tiny" style="color:var(--n400);margin-bottom:6px">✨ 세션 목표에 맞춰 AI가 질문을 생성했습니다</div><h3 style="font-size:22px;font-weight:800;line-height:1.35">최근 일주일간 경험한 가장 큰 '불편함'은 무엇인가요?</h3><p class="small" style="color:var(--n400);margin-top:8px">💡 여기서 나온 불편함이 → 아이디어의 씨앗이 됩니다</p></div>
+          <div class="card row" style="padding:10px;align-items:center"><input class="input" style="border:0" placeholder="여기에 답변을 입력하세요..."><button class="btn btn-dark">➤ 제출</button></div>
+          <div class="row" style="align-items:center;gap:8px;margin:16px 0 10px"><span style="font-weight:700;font-size:13px">팀원 답변</span><span class="badge">4</span></div>
+          <div class="grid2">
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:8px"><div class="av sm blue">김</div><span class="small" style="font-weight:600">김승희</span></div><p class="small" style="color:var(--n700)">팀플 첫 미팅에서 서로 눈치만 보다가 시간이 다 갔어요. 결국 제일 외향적인 한 사람이 다 정했습니다.</p><div class="tiny muted" style="margin-top:8px">♡ 7</div></div>
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:8px"><div class="av sm purple">전</div><span class="small" style="font-weight:600">전재민</span></div><p class="small" style="color:var(--n700)">동네 카페에서 작업하려는데 콘센트 있는 자리 정보가 없어서 매번 헛걸음해요.</p><div class="tiny muted" style="margin-top:8px">♡ 4</div></div>
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:8px"><div class="av sm amber">조</div><span class="small" style="font-weight:600">조경빈</span></div><p class="small" style="color:var(--n700)">자취하면서 냉장고 식재료를 자주 버려요. 유통기한을 일일이 기억할 수가 없어요.</p><div class="tiny muted" style="margin-top:8px">♡ 5</div></div>
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:8px"><div class="av sm rose">이</div><span class="small" style="font-weight:600">이중곤</span></div><p class="small" style="color:var(--n700)">사진으로 찍어둔 필기가 폴더별 정리가 안 돼서 시험 기간에 항상 헤매요.</p><div class="tiny muted" style="margin-top:8px">♡ 6</div></div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="card" style="padding:15px"><div class="sec-title" style="margin-bottom:10px">✨ AI Assistant</div><div style="background:var(--amber50);border-left:3px solid var(--amber);border-radius:10px;padding:12px"><div class="tiny" style="font-weight:700;margin-bottom:4px">📊 패턴 분석 완료</div><p class="tiny" style="color:var(--n700)">4명의 답변에 공통점이 있어요 — 모두 '반복되는 상황인데 필요한 정보를 제때 얻지 못해서' 불편을 겪습니다.</p></div></div>
+          <div class="card" style="padding:15px;margin-top:14px"><div class="tiny muted" style="font-weight:600;margin-bottom:8px">참여 현황</div><div style="display:flex;flex-direction:column;gap:7px"><div class="row" style="align-items:center;gap:8px"><div class="av sm blue">김</div><span class="tiny" style="flex:1">김승희</span><span class="tiny" style="color:var(--green600)">제출 ✓</span></div><div class="row" style="align-items:center;gap:8px"><div class="av sm purple">전</div><span class="tiny" style="flex:1">전재민</span><span class="tiny" style="color:var(--green600)">제출 ✓</span></div><div class="row" style="align-items:center;gap:8px"><div class="av sm amber">조</div><span class="tiny" style="flex:1">조경빈</span><span class="tiny" style="color:var(--green600)">제출 ✓</span></div><div class="row" style="align-items:center;gap:8px"><div class="av sm rose">이</div><span class="tiny" style="flex:1">이중곤</span><span class="tiny" style="color:var(--green600)">제출 ✓</span></div></div></div>
+        </div>
+      </div>
+      <div class="foot"><button class="btn btn-ghost">‹ 이전</button><span class="small muted" style="font-weight:600">💬 아이스브레이킹 · 10분 배정</span><button class="btn btn-dark">다음 ›</button></div>
+    </div>
+  </div>
+
+  <!-- ⑤ IDEA (brain) -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">05</span> 세션 — 아이디어 발산 (자유 브레인스토밍 · 각도 배분)</div>
+    <div class="screen">
+      <div class="appbar" style="justify-content:space-between"><div class="row" style="align-items:center;gap:10px"><span style="font-size:14px">IdeationEngine</span><span class="chip">🏫 오프라인</span></div><div class="stepper"><div class="stp done">✓ 아이스</div><div class="stp on">💡 발산</div><div class="stp">📊 컨셉</div><div class="stp">📋 보고</div></div><div class="timer">💡 18:40</div></div>
+      <div class="pad">
+        <span class="badge warn">💡 PHASE 2 · 20분</span><h2 style="font-size:20px;font-weight:800;margin-top:5px">아이디어 발산</h2><p class="small muted">아이스브레이킹에서 나온 불편함을 기반으로 자유롭게 아이디어를 제안하세요.</p>
+        <div class="card" style="margin:14px 0"><div class="row" style="align-items:center;gap:7px;margin-bottom:3px"><span style="color:var(--purple600)">✨</span><span style="font-weight:700;font-size:13px">AI가 프로필을 보고 각자에게 다른 각도를 배정했어요</span></div><p class="tiny muted" style="margin-bottom:12px">같은 목표라도 서로 다른 각도에서 출발하면 아이디어가 겹치지 않습니다.</p>
+          <div class="grid4">
+            <div class="angle me biz"><div class="row" style="align-items:center;gap:6px;margin-bottom:5px"><div class="av sm" style="background:var(--em)">나</div><span class="tiny" style="font-weight:600">나 (나)</span></div><div style="font-weight:800;font-size:14px">📈 비즈니스 · 시장</div><p class="tiny" style="margin-top:3px;opacity:.85">누가 돈을 내고, 왜 하필 지금?</p></div>
+            <div class="angle ux"><div class="row" style="align-items:center;gap:6px;margin-bottom:5px"><div class="av sm purple">전</div><span class="tiny" style="font-weight:600">전재민</span></div><div style="font-weight:800;font-size:14px">🎨 사용자 경험</div><p class="tiny" style="margin-top:3px;opacity:.85">결정적 순간의 불편은?</p></div>
+            <div class="angle tech"><div class="row" style="align-items:center;gap:6px;margin-bottom:5px"><div class="av sm amber">조</div><span class="tiny" style="font-weight:600">조경빈</span></div><div style="font-weight:800;font-size:14px">⚙️ 기술 실현</div><p class="tiny" style="margin-top:3px;opacity:.85">진짜 만들 수 있는가?</p></div>
+            <div class="angle novel"><div class="row" style="align-items:center;gap:6px;margin-bottom:5px"><div class="av sm rose">이</div><span class="tiny" style="font-weight:600">이중곤</span></div><div style="font-weight:800;font-size:14px">🚀 기술 혁신</div><p class="tiny" style="margin-top:3px;opacity:.85">우리만의 방식은?</p></div>
+          </div>
+        </div>
+        <div class="card row" style="padding:10px;align-items:center;margin-bottom:16px"><input class="input" style="border:0" placeholder="내 각도(비즈니스·시장)에서 아이디어를 입력하세요..."><button class="btn btn-dark">➤ 제출</button></div>
+        <div class="row">
+          <div style="flex:1;min-width:0"><div class="grid2">
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><div class="av sm blue">김</div><span class="small" style="font-weight:600">김승희</span></div><h3 class="small" style="font-weight:700">AI가 팀 분위기를 읽고 자동으로 회의를 진행해주는 퍼실리테이터 봇</h3><p class="tiny muted" style="margin:6px 0"><i>← 팀플 눈치 보는 문제에서 착안</i></p><div style="display:flex;gap:4px"><span class="badge">AI</span><span class="badge">TEAM</span><span class="badge">UX</span></div><div class="tiny muted" style="margin-top:8px">♡ 6</div></div>
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><div class="av sm purple">전</div><span class="small" style="font-weight:600">전재민</span></div><h3 class="small" style="font-weight:700">동네 카페·작업공간의 실시간 좌석·콘센트·소음 정보를 공유하는 앱</h3><p class="tiny muted" style="margin:6px 0"><i>← 카페 헛걸음 문제에서 착안</i></p><div style="display:flex;gap:4px"><span class="badge">LOCAL</span><span class="badge">MAP</span></div><div class="tiny muted" style="margin-top:8px">♡ 9</div></div>
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><div class="av sm amber">조</div><span class="small" style="font-weight:600">조경빈</span></div><h3 class="small" style="font-weight:700">냉장고 식재료를 카메라로 스캔하면 유통기한을 추적하고 레시피를 추천하는 앱</h3><p class="tiny muted" style="margin:6px 0"><i>← 식재료 낭비 문제에서 착안</i></p><div style="display:flex;gap:4px"><span class="badge">FOOD</span><span class="badge">AI</span></div><div class="tiny muted" style="margin-top:8px">♡ 4</div></div>
+            <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><div class="av sm rose">이</div><span class="small" style="font-weight:600">이중곤</span></div><h3 class="small" style="font-weight:700">수업 필기 사진을 AI가 자동 분류·요약하고 시험 전 핵심 개념을 퀴즈로 출제하는 학습 도우미</h3><p class="tiny muted" style="margin:6px 0"><i>← 필기 정리 스트레스에서 착안</i></p><div style="display:flex;gap:4px"><span class="badge">EDU</span><span class="badge">OCR</span></div><div class="tiny muted" style="margin-top:8px">♡ 7</div></div>
+          </div></div>
+          <div class="sidebar">
+            <div class="card" style="padding:15px"><div class="sec-title" style="margin-bottom:8px">✨ AI Assistant</div><div style="background:var(--green50);border-left:3px solid var(--em);border-radius:10px;padding:11px;margin-bottom:8px"><div class="tiny" style="font-weight:700">📍 구조적 유사성 감지</div><p class="tiny" style="color:var(--n700);margin-top:3px">'AI 퍼실리테이터'와 'AI 학습 도우미'가 같은 패턴을 공유합니다 — 사람이 하던 판단을 AI가 대신.</p></div></div>
+            <div class="dark" style="padding:15px;margin-top:14px"><div class="tiny muted" style="margin-bottom:8px">실시간 통계</div><div class="row" style="text-align:center"><div style="flex:1"><div style="font-size:24px;font-weight:800">5</div><div class="tiny muted">제출된 아이디어</div></div><div style="flex:1"><div style="font-size:24px;font-weight:800">5</div><div class="tiny muted">참여자</div></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><button class="btn btn-ghost">‹ 이전</button><span class="small muted" style="font-weight:600">💡 아이디어 발산 · 20분 배정</span><button class="btn btn-dark">다음 ›</button></div>
+    </div>
+  </div>
+
+  <!-- ⑥ CONCEPT (NEW) -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">06</span> 세션 — 컨셉 종합·선택 <span class="new">신규 방향</span></div>
+    <div class="screen">
+      <div class="appbar" style="justify-content:space-between"><div class="row" style="align-items:center;gap:10px"><span style="font-size:14px">IdeationEngine</span><span class="chip">🏫 오프라인</span></div><div class="stepper"><div class="stp done">✓ 아이스</div><div class="stp done">✓ 발산</div><div class="stp on">📊 컨셉</div><div class="stp">📋 보고</div></div><div class="timer">📊 14:05</div></div>
+      <div class="pad">
+        <span class="badge success">📊 PHASE 3 · 15분</span><h2 style="font-size:20px;font-weight:800;margin-top:5px">어떤 방향으로 갈까요?</h2>
+        <p class="small muted">발산 단계에서 팀이 모은 아이디어를 AI가 <b>4가지 전략 렌즈</b>로 종합했습니다. 하나로 합치지 않았습니다 — 팀이 비교하고 고르세요.</p>
+        <div class="doc-note" style="margin:12px 0 18px"><b>정직 안내</b> · 라벨은 <b>전략 렌즈</b>입니다(모델 브랜드 아님). AI는 후보만 펼치고 <b>최종은 팀 투표</b>로 정합니다. 안 뽑힌 후보도 "다른 길"로 보존됩니다.</div>
+        <div class="row" style="align-items:center;gap:8px;margin-bottom:14px"><span class="small muted">남은 투표권:</span><span style="width:18px;height:18px;border-radius:999px;background:var(--n900);display:inline-block"></span><span style="width:18px;height:18px;border-radius:999px;background:var(--n900);display:inline-block"></span><span style="width:18px;height:18px;border-radius:999px;border:2px solid var(--n300);display:inline-block"></span></div>
+        <div class="grid2">
+          <div class="cc lead"><span class="ledtag">현재 1위</span><span class="lens L1">◆ 실용·저비용</span><div class="ct">익명 회의 퍼실리테이터</div><div class="cs">팀플 초반 '눈치 보기'를 익명 의견 입력 + AI 자동 진행으로 없앤다. 링크 하나로 참여, 기존 채팅·설문 API만 조합해 빠르게 MVP.</div><div class="src"><span class="tiny muted">근거</span><span class="chip">#1 퍼실리테이터 봇</span></div><div class="voterow"><button class="vbtn">👍 이 방향</button><span class="vc"><b>3</b> 표</span></div></div>
+          <div class="cc"><span class="lens L2">✦ 참신·차별화</span><div class="ct">하이퍼로컬 생활 AI</div><div class="cs">카페 좌석·콘센트와 냉장고 식재료를 '내 주변 실시간 데이터'로 묶어 동네 생활 전반을 돕는다. 기존에 없던 로컬 통합 경험.</div><div class="src"><span class="tiny muted">근거</span><span class="chip">#2 카페 정보</span><span class="chip">#3 식재료</span></div><div class="voterow"><button class="vbtn">👍 이 방향</button><span class="vc"><b>1</b> 표</span></div></div>
+          <div class="cc"><span class="lens L3">▲ 기술 실현</span><div class="ct">필기 자동정리 학습봇</div><div class="cs">필기 사진을 OCR로 인식→자동 분류·요약하고 시험 전 핵심 개념을 퀴즈로 출제. 제한 시간 안에 확실히 구현 가능한 범위.</div><div class="src"><span class="tiny muted">근거</span><span class="chip">#4 학습 도우미</span></div><div class="voterow"><button class="vbtn">👍 이 방향</button><span class="vc"><b>2</b> 표</span></div></div>
+          <div class="cc"><span class="lens L4">✸ 이질적 결합</span><div class="ct">인지부하 위임 플랫폼</div><div class="cs">4개 아이디어를 관통하는 '반복 판단의 AI 위임'을 하나의 플랫폼으로. 회의·학습·생활을 넘나드는 크로스도메인 결합.</div><div class="src"><span class="tiny muted">근거</span><span class="chip">#1</span><span class="chip">#2</span><span class="chip">#3</span><span class="chip">#4</span></div><div class="voterow"><button class="vbtn">👍 이 방향</button><span class="vc"><b>1</b> 표</span></div></div>
+        </div>
+        <div class="dissent">
+          <div class="small" style="font-weight:700;color:var(--n600);margin-bottom:9px">🗂 다른 길 <span class="tiny muted" style="font-weight:400">— 버리지 않은 이견 (최종 선택 후에도 보존)</span></div>
+          <div class="drow"><span class="tiny" style="font-family:var(--mono)">✦ 참신</span> 하이퍼로컬 생활 AI — "로컬 차별화가 진짜 승부처일 수 있다" (1표)</div>
+          <div class="drow"><span class="tiny" style="font-family:var(--mono)">✸ 이질</span> 인지부하 위임 플랫폼 — "통합 스토리가 발표엔 더 강할 수도" (1표)</div>
+        </div>
+        <div class="final">
+          <span class="tiny" style="font-weight:700;color:var(--em600);font-family:var(--mono)">최종 선택 (투표 1위) → 피치 한 장으로</span>
+          <h3 style="font-size:19px;font-weight:800;margin:6px 0 8px">익명 회의 퍼실리테이터</h3>
+          <p class="small muted">팀플·해커톤 초반의 어색함과 눈치 보기를, 익명 의견 입력과 AI 자동 진행으로 없애는 서비스.</p>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin-top:11px;font-size:13px"><span class="tiny muted" style="font-family:var(--mono);white-space:nowrap;padding-top:2px">누가·왜</span><span>초면이 불안한 팀플 대학생·해커톤 참가자. "말 못 꺼내다 시간 다 감"을 없앰.</span><span class="tiny muted" style="font-family:var(--mono);white-space:nowrap;padding-top:2px">차별점</span><span>사후 정리가 아니라 <b>진행 순간</b>에 개입 — 익명 입력 + AI 퍼실리테이션.</span><span class="tiny muted" style="font-family:var(--mono);white-space:nowrap;padding-top:2px">근거</span><span>팀 아이디어 #1 · 실용 렌즈</span></div>
+        </div>
+      </div>
+      <div class="foot"><button class="btn btn-ghost">‹ 이전</button><span class="small muted" style="font-weight:600">📊 컨셉 종합·선택 · 15분 배정</span><button class="btn btn-dark">다음 ›</button></div>
+    </div>
+  </div>
+
+  <!-- ⑦ REPORT -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">07</span> 세션 — 결과 보고서 (AI 분업·비용 패널 포함)</div>
+    <div class="screen">
+      <div class="appbar" style="justify-content:space-between"><div class="row" style="align-items:center;gap:10px"><span style="font-size:14px">IdeationEngine</span><span class="chip">🏫 오프라인</span></div><div class="stepper"><div class="stp done">✓ 아이스</div><div class="stp done">✓ 발산</div><div class="stp done">✓ 컨셉</div><div class="stp on">📋 보고</div></div><div class="timer">📋 04:30</div></div>
+      <div class="pad">
+        <div class="row" style="justify-content:space-between;align-items:flex-start"><div><span class="badge primary">📋 FINAL · 5분</span><h2 style="font-size:20px;font-weight:800;margin-top:5px">최종 아이데이션 결과 보고서</h2></div><button class="btn btn-ghost" style="color:var(--n500)">↓ PDF 다운로드 (준비 중)</button></div>
+        <div class="card" style="background:var(--n900);color:#fff;border:0;margin:16px 0"><span class="tiny" style="color:#4ade80">✅ 팀이 투표로 선택한 컨셉</span><div class="small" style="font-weight:700;margin-top:3px">익명 회의 퍼실리테이터 (실용·저비용 렌즈 · 3표)</div></div>
+        <div class="meterbox">
+          <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:3px"><h3 class="small" style="font-weight:800">🧭 이 세션의 AI 분업 & 비용</h3><span class="chip" style="background:#fff">실측</span></div>
+          <div class="grid2" style="gap:6px;margin:12px 0">
+            <div class="callrow"><span><span class="muted">키워드 추출</span> · <b>Gemini-2.5-Flash-Lite</b></span><span class="tierpill t-low">저가</span></div>
+            <div class="callrow"><span><span class="muted">아이디어 발산</span> · <b>Solar-Pro4</b></span><span class="tierpill t-low">저가</span></div>
+            <div class="callrow"><span><span class="muted">컨셉 종합 ×4렌즈</span> · <b>4모델</b></span><span class="tierpill t-low">저가</span></div>
+            <div class="callrow"><span><span class="muted">보고 정리</span> · <b>Solar-Pro4</b></span><span class="tierpill t-low">저가</span></div>
+          </div>
+          <div class="dark" style="border-radius:12px;padding:13px 16px;display:flex;flex-wrap:wrap;align-items:baseline;gap:12px"><span style="font-size:22px;font-weight:800;color:#4ade80">약 92% 절감</span><span class="tiny" style="color:var(--n300)">우리 방식 vs 전부 고가 모델</span><span class="tiny" style="color:var(--n400);width:100%">난이도·작업에 맞게 저가/강모델을 자동 배분한 결과</span></div>
+        </div>
+        <div class="row">
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:16px">
+            <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 class="sec-title">🎯 선정된 최종 컨셉</h3><span class="badge success">Score 94/100 <span class="tiny">시연용</span></span></div>
+              <div style="background:var(--n50);border-radius:12px;padding:18px"><h4 style="font-size:18px;font-weight:800;margin-bottom:6px">익명 회의 퍼실리테이터</h4><p class="small muted">팀 프로젝트 초반의 어색함과 비효율을, 익명 입력과 AI 자동 진행이 있는 구조화된 세션으로 해결하는 서비스.</p></div>
+              <div class="row" style="gap:16px;margin-top:14px"><div style="flex:1"><div class="tiny muted" style="font-weight:600;margin-bottom:4px">핵심 가치</div><div class="tiny muted">• 제로 세팅(링크 하나)<br>• AI 자동 진행<br>• 익명 입력</div></div><div style="flex:1"><div class="tiny muted" style="font-weight:600;margin-bottom:4px">타겟 유저</div><div class="tiny muted">• 팀플 대학생<br>• 해커톤 참가자<br>• 기업 워크샵 TF</div></div><div style="flex:1"><div class="tiny muted" style="font-weight:600;margin-bottom:4px">주요 리스크</div><div class="tiny muted">• Miro 대비 차별성<br>• AI 개입 거부감<br>• 결과 품질 신뢰</div></div></div>
+            </div>
+            <div class="card"><h3 class="sec-title" style="margin-bottom:10px">📄 실행 계획</h3>
+              <div style="display:flex;flex-direction:column">
+                <div class="row" style="align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--n100)"><input type="checkbox"><span class="small" style="flex:1">MVP 핵심 기능 정의 및 우선순위</span><div class="av sm blue">김</div><span class="tiny muted">김승희 · 6.20</span></div>
+                <div class="row" style="align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--n100)"><input type="checkbox"><span class="small" style="flex:1">대학생 5명 사용성 테스트</span><div class="av sm purple">전</div><span class="tiny muted">전재민 · 6.22</span></div>
+                <div class="row" style="align-items:center;gap:10px;padding:9px 0"><input type="checkbox"><span class="small" style="flex:1">와이어프레임 → Hi-fi 프로토타입</span><div class="av sm amber">조</div><span class="tiny muted">조경빈 · 6.25</span></div>
+              </div>
+            </div>
+            <div class="card" style="background:var(--green50);border-color:#bbf7d0"><div class="small" style="font-weight:700;color:var(--green700);margin-bottom:4px">🔄 데이터 흐름 요약</div><p class="tiny" style="color:var(--green700)">아이스브레이킹(불편함 4개) → 발산(아이디어 4개) → <b>컨셉 후보 4개(렌즈별)</b> → 팀 투표 1위 선택 → 최종 피치. 전 단계가 인과로 연결됩니다.</p></div>
+          </div>
+          <div class="sidebar">
+            <div class="dark"><h3 class="sec-title" style="margin-bottom:10px">📊 세션 요약</h3>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div class="row" style="justify-content:space-between"><span class="tiny muted">진행 방식</span><span class="small" style="font-weight:700">자유 브레인스토밍</span></div>
+                <div class="row" style="justify-content:space-between"><span class="tiny muted">총 소요 시간</span><span class="small" style="font-weight:700">60분</span></div>
+                <div class="row" style="justify-content:space-between"><span class="tiny muted">참여자 수</span><span class="small" style="font-weight:700">5명</span></div>
+                <div class="row" style="justify-content:space-between"><span class="tiny muted">컨셉 후보</span><span class="small" style="font-weight:700">4개</span></div>
+                <div class="row" style="justify-content:space-between"><span class="tiny muted">최종 선택</span><span class="small" style="font-weight:700">팀 투표</span></div>
+              </div>
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--n700)"><div class="tiny muted" style="margin-bottom:6px">핵심 키워드</div><div style="display:flex;flex-wrap:wrap;gap:5px"><span class="chip" style="background:var(--n800);color:#fff;border:0">AI 자동화</span><span class="chip" style="background:var(--n800);color:#fff;border:0">퍼실리테이션</span><span class="chip" style="background:var(--n800);color:#fff;border:0">익명성</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><button class="btn btn-ghost">‹ 이전</button><span class="small muted" style="font-weight:600">📋 결과 보고서 · 5분 배정</span><button class="btn btn-green">✓ 완료 — 새 세션</button></div>
+    </div>
+  </div>
+
+  <!-- ⑤-b SCAMPER -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">05-b</span> 발산 변형 — SCAMPER (7렌즈로 대상 변형)</div>
+    <div class="screen">
+      <div class="appbar">IdeationEngine <span class="chip" style="margin-left:8px">🧭 SCAMPER</span></div>
+      <div class="pad">
+        <span class="badge warn">💡 PHASE 2 · SCAMPER</span><h2 style="font-size:20px;font-weight:800;margin-top:5px">SCAMPER 변형</h2><p class="small muted">변형 대상: <b>팀 초반 비효율 줄이기</b> — 7개 렌즈를 하나씩 적용해 아이디어를 만듭니다.</p>
+        <div class="row" style="flex-wrap:wrap;gap:8px;margin:14px 0">
+          <button class="btn btn-dark" style="padding:8px 14px">S <span class="chip" style="background:#ffffff30;color:#fff;border:0">1</span></button>
+          <button class="btn btn-ghost" style="padding:8px 14px">C <span class="chip">1</span></button>
+          <button class="btn btn-ghost" style="padding:8px 14px">A</button><button class="btn btn-ghost" style="padding:8px 14px">M</button><button class="btn btn-ghost" style="padding:8px 14px">P</button><button class="btn btn-ghost" style="padding:8px 14px">E</button><button class="btn btn-ghost" style="padding:8px 14px">R</button>
+          <span class="tiny muted" style="margin-left:auto">진행 2/7 렌즈</span>
+        </div>
+        <div class="card"><div style="font-size:17px;font-weight:800">대체 (Substitute)</div><p class="small muted" style="margin:2px 0 12px">💡 핵심 요소 중 무엇을 다른 것으로 바꿀 수 있을까?</p><div class="card row" style="padding:9px;align-items:center;margin-bottom:12px"><input class="input" style="border:0" placeholder="'목표'에 이 렌즈를 적용한 아이디어..."><button class="btn btn-dark">➤ 추가</button></div><div style="background:var(--n50);border-radius:12px;padding:9px" class="row"><div class="av sm" style="background:var(--em)">나</div><span class="small" style="flex:1">사람이 직접 하던 분류를 AI 모델로 대체</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤-c SIX HATS -->
+  <div class="frame">
+    <div class="frame-label"><span class="no">05-c</span> 발산 변형 — Six Thinking Hats (한 번에 한 모자)</div>
+    <div class="screen">
+      <div class="appbar">IdeationEngine <span class="chip" style="margin-left:8px">🧭 6색 모자</span></div>
+      <div class="pad">
+        <span class="badge warn">💡 PHASE 2 · Six Thinking Hats</span><h2 style="font-size:20px;font-weight:800;margin-top:5px">6색 모자 검토</h2><p class="small muted">지금은 <b>모두 같은 모자</b>를 쓰고 그 관점에서만 생각합니다.</p>
+        <div class="row" style="gap:6px;margin:14px 0">
+          <button class="btn" style="flex:1;flex-direction:column;background:var(--n100);border:2px solid var(--n900);padding:9px"><span style="font-size:17px">⚪</span><span class="tiny">흰색·사실</span></button>
+          <button class="btn" style="flex:1;flex-direction:column;background:var(--rose50);color:var(--rose800);border:2px solid transparent;padding:9px"><span style="font-size:17px">🔴</span><span class="tiny">빨강·감정</span></button>
+          <button class="btn" style="flex:1;flex-direction:column;background:var(--n200);border:2px solid transparent;padding:9px"><span style="font-size:17px">⚫</span><span class="tiny">검정·위험</span></button>
+          <button class="btn" style="flex:1;flex-direction:column;background:var(--amber50);color:var(--amber800);border:2px solid transparent;padding:9px"><span style="font-size:17px">🟡</span><span class="tiny">노랑·이점</span></button>
+          <button class="btn" style="flex:1;flex-direction:column;background:var(--green50);color:var(--green700);border:2px solid transparent;padding:9px"><span style="font-size:17px">🟢</span><span class="tiny">초록·창의</span></button>
+          <button class="btn" style="flex:1;flex-direction:column;background:var(--blue50);color:var(--blue800);border:2px solid transparent;padding:9px"><span style="font-size:17px">🔵</span><span class="tiny">파랑·정리</span></button>
+        </div>
+        <div class="card" style="border:2px solid var(--n300);background:var(--n100)"><div style="font-size:17px;font-weight:800">⚪ 흰색 · 사실</div><p class="small muted" style="margin:2px 0 12px">💡 지금 확실한 데이터와 사실은 무엇인가?</p><div class="card row" style="padding:9px;align-items:center;margin-bottom:12px;background:#ffffffb0"><input class="input" style="border:0;background:transparent" placeholder="이 모자의 관점에서 한마디..."><button class="btn btn-dark">➤ 추가</button></div><div style="background:#ffffffb0;border-radius:12px;padding:9px" class="row"><div class="av sm amber">조</div><span class="small" style="flex:1">비슷한 서비스가 이미 3개, 전부 유료 전환율이 낮음</span></div></div>
+        <div class="row" style="justify-content:space-between;margin-top:12px"><button class="btn btn-ghost">‹ 이전 모자</button><button class="btn btn-dark">다음 모자 ›</button></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="tiny muted" style="text-align:center;margin-top:20px">※ 실제 앱(React)의 화면을 목업으로 재현한 것입니다. ⑥ 컨셉 종합·선택은 새로 정한 방향(후보 제시→팀 투표→이견 보존)이고, 나머지는 현재 앱과 동일합니다. Figma 임포트는 <b>docs/mockups/README.md</b> 참고.</p>
+</div>
+</body>
+</html>
