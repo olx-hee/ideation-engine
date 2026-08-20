@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IdeationEngine AI 설계 노트</title>
+<style>
+  :root {
+    --bg: #f4f6f7; --surface: #ffffff; --surface-2: #eef1f2;
+    --ink: #1b2127; --ink-soft: #4a545e; --ink-faint: #77828c; --line: #dde3e6;
+    --accent: #0b7a8c; --accent-soft: #e2f0f2; --cost: #b8722a; --cost-soft: #f6ebdd;
+    --good: #2f8f4e; --good-soft: #e3f1e7; --bad: #c0453c; --bad-soft: #f6e2e0;
+    --shadow: 0 1px 2px rgba(27,33,39,.05), 0 6px 20px rgba(27,33,39,.05);
+    --mono: ui-monospace, "Cascadia Code", "Consolas", "D2Coding", monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  }
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+    --bg:#14181b;--surface:#1b2126;--surface-2:#222a30;--ink:#e8edef;--ink-soft:#aeb8c0;--ink-faint:#7c868f;--line:#2c353b;
+    --accent:#2fb6c9;--accent-soft:#123037;--cost:#e0a15c;--cost-soft:#33260f;--good:#5cbd77;--good-soft:#16301f;--bad:#e0776d;--bad-soft:#331a18;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.35);}}
+  :root[data-theme="dark"]{
+    --bg:#14181b;--surface:#1b2126;--surface-2:#222a30;--ink:#e8edef;--ink-soft:#aeb8c0;--ink-faint:#7c868f;--line:#2c353b;
+    --accent:#2fb6c9;--accent-soft:#123037;--cost:#e0a15c;--cost-soft:#33260f;--good:#5cbd77;--good-soft:#16301f;--bad:#e0776d;--bad-soft:#331a18;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 26px rgba(0,0,0,.35);}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:40px 22px 80px}
+  header{border-bottom:2px solid var(--ink);padding-bottom:22px;margin-bottom:40px}
+  .kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 12px}
+  h1{font-size:clamp(30px,6vw,44px);line-height:1.12;margin:0 0 14px;letter-spacing:-.015em;text-wrap:balance}
+  .lede{font-size:18px;color:var(--ink-soft);margin:0 0 20px;max-width:62ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-family:var(--mono);font-size:12px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .chip b{color:var(--ink);font-weight:600}
+  section{margin:0 0 44px}
+  h2{font-size:13px;font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px;font-weight:600}
+  .h2-title{font-size:24px;line-height:1.25;margin:0 0 18px;letter-spacing:-.01em;text-wrap:balance}
+  p{margin:0 0 14px}strong{font-weight:650}.aw{color:var(--accent);font-weight:650}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);margin:0 0 16px}
+  .callout{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:0 12px 12px 0;padding:16px 20px;margin:0 0 18px}
+  .callout.cost{border-left-color:var(--cost);background:var(--cost-soft)}
+  .callout.good{border-left-color:var(--good);background:var(--good-soft)}
+  .callout .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .callout.cost .lbl{color:var(--cost)}.callout.good .lbl{color:var(--good)}
+  .callout p{margin:6px 0 0}
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0}
+  ol.steps>li{counter-increment:s;position:relative;padding:0 0 18px 46px}
+  ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:8px;background:var(--ink);color:var(--bg);font-family:var(--mono);font-weight:700;font-size:14px;display:grid;place-items:center}
+  ol.steps>li:not(:last-child)::after{content:"";position:absolute;left:15px;top:34px;bottom:4px;width:2px;background:var(--line)}
+  ol.steps h4{margin:4px 0 4px;font-size:16px}ol.steps p{font-size:15px;color:var(--ink-soft);margin:0}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px;background:var(--surface)}
+  thead th{text-align:left;font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  .cfg{font-weight:600}.cfg small{display:block;font-weight:400;color:var(--ink-faint);font-size:12.5px}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .row-win{background:var(--good-soft)}.row-lose td{color:var(--ink-soft)}
+  .pill{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+  .pill.win{background:var(--good-soft);color:var(--good);border:1px solid color-mix(in srgb,var(--good) 30%,transparent)}
+  .pill.out{background:var(--bad-soft);color:var(--bad);border:1px solid color-mix(in srgb,var(--bad) 30%,transparent)}
+  .pill.tie{background:var(--cost-soft);color:var(--cost);border:1px solid color-mix(in srgb,var(--cost) 30%,transparent)}
+  .pill.base{background:var(--surface-2);color:var(--ink-faint);border:1px solid var(--line)}
+  ul.clean{margin:0;padding-left:20px}ul.clean li{margin:0 0 8px}
+  .axis{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:baseline}
+  .axis .k{font-family:var(--mono);font-weight:700;color:var(--accent)}
+  .final{background:var(--ink);color:var(--bg);border-radius:14px;padding:26px 26px}
+  .final .h2-title{color:var(--bg)}.final h2{color:color-mix(in srgb,var(--bg) 60%,transparent)}
+  .final strong{color:#fff}.final .u{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+  footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint)}
+  footer .num{color:var(--ink-soft)}.note{font-size:13.5px;color:var(--ink-faint)}
+  code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);padding:1px 6px;border-radius:5px}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <p class="kicker">IdeationEngine · 설계 노트</p>
+    <h1>다중 LLM은 단일을 이기는가</h1>
+    <p class="lede">우리 프로젝트의 원래 가설 — "여러 AI를 회의시키면 하나보다 더 창의적이고 저렴하다" — 을, <strong>믿을 수 있는 자로 사전 규칙을 걸고</strong> 끝까지 검증한 기록입니다. 결론부터: <strong>이 아이디어 생성 과제에서 다중은 단일을 명확히 이기지 못했습니다.</strong> 대신 "어떻게 쓰면 대등해지는지"와 "정직하게 남는 가치"를 찾았습니다.</p>
+    <div class="meta">
+      <span class="chip"><b>2026-08-20</b></span>
+      <span class="chip">측정 <b>Vendi · 임베딩 · 실제검색 · 사람 블라인드</b></span>
+      <span class="chip">문헌 <b>10+ 논문</b></span>
+      <span class="chip">교차검수 <b>Grok</b></span>
+    </div>
+  </header>
+
+  <section>
+    <h2>0 · 질문</h2>
+    <p class="h2-title">무엇을 증명하려 했나</p>
+    <p>원래 직감은 세 가지였습니다: <strong>여러 LLM이 회의하면</strong> ① 단일의 편향(과적합)을 막아 ② 더 창의적이고 ③ 각자 조금씩 생각하니 토큰도 아낀다.</p>
+    <div class="card">
+      <p style="margin:0 0 6px"><strong>결론부터 (정직):</strong></p>
+      <ul class="clean">
+        <li><strong>③ 토큰 절약 — 반대였습니다.</strong> 회의는 왕복이 많아 토큰을 <strong>수십 배 더</strong> 씁니다. (절약은 회의가 아니라 "쉬운 일은 싼 모델" 라우팅에서 옵니다.)</li>
+        <li><strong>② 더 창의적 — 자동으로 합치면 오히려 밋밋해집니다</strong>(수렴=평균=진부). 믿을 수 있는 지표로는 그냥 섞으면 단일이 더 다양했고, 강제로 벌려놔도 <strong>겨우 대등</strong>이었습니다.</li>
+        <li><strong>① 편향 완화 — 부분적으로만 맞습니다.</strong> 여러 모델은 오히려 <strong>같은 뻔한 아이디어로 수렴</strong>하는 경향이 있었습니다.</li>
+      </ul>
+    </div>
+    <p>아래는 이 결론에 이르기까지 <strong>측정을 어떻게 신뢰할 수 있게 만들었고</strong>, 무엇이 나왔는지입니다.</p>
+  </section>
+
+  <section>
+    <h2>1 · 문제</h2>
+    <p class="h2-title">왜 기존 측정을 못 믿었나</p>
+    <p>초기 실험들은 결과를 <strong>다른 AI 심판(LLM-judge)</strong>에게 점수 매기게 했습니다. 그런데 이 자가 휘어 있었습니다 — <strong>LLM 심판은 참신함·의외성보다 "다듬어진 완성도"를 좋아합니다.</strong> 그래서 매끈하게 정리한 단일·자기수정 결과에 유리하고, <strong>날것의 창의성은 오히려 감점</strong>될 수 있습니다.</p>
+    <div class="callout cost">
+      <span class="lbl">핵심 함정</span>
+      <p>다중이 이길 법한 지점(창의성)을, 하필 <strong>그걸 잘 못 재는 자</strong>로 재고 있었다. 어떤 결과가 나와도 "흔들리는 축 위의 승리"일 뿐. → <strong>믿을 수 있는 자를 먼저 만들자.</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · 방법</h2>
+    <p class="h2-title">믿을 수 있는 자 — 4축 + 사전 규칙</p>
+    <p>한 숫자로 우기지 않기로 했습니다. 질문을 나누고, <strong>실험 전에 승패 규칙을 못 박았습니다.</strong></p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>축</th><th>무엇을 재나</th><th>승패에</th></tr></thead>
+        <tbody>
+          <tr><td class="cfg">A · 다양성</td><td>후보가 서로 얼마나 다른가 (Vendi Score·임베딩 거리, 객관)</td><td>조건</td></tr>
+          <tr><td class="cfg">B · 사람</td><td>잠복 니즈·비진부·걸맞음 (본인 블라인드 채점)</td><td class="num" style="color:var(--good)">필수</td></tr>
+          <tr><td class="cfg">C · 시장검색</td><td>시중에 이미 있나 (실제 웹 검색으로 대조)</td><td>조건</td></tr>
+          <tr class="row-lose"><td class="cfg">D · LLM 완성도</td><td>유창·구조 (옛 심판)</td><td class="num" style="color:var(--bad)">사용 금지</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top:16px">
+      <span class="lbl">사전 승패 규칙 (고정)</span>
+      <p>"다중 승리" = <strong>B(사람)에서 이기고 + A(다양성) 또는 C(시장) 중 하나 이상.</strong> D(옛 심판)만 이기면 승리로 치지 않는다. 공정 조건: S와 M의 <strong>후보 개수·길이를 동일</strong>하게(안 그러면 다중이 거저 유리).</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 · 결과</h2>
+    <p class="h2-title">축별로 재보니</p>
+
+    <p><strong>A · 다양성</strong> — "여러 모델을 그냥 섞기(naive)"는 단일보다 <strong>덜 다양</strong>했습니다. 서로 다른 모델이 그 주제의 뻔한 아이디어로 수렴했기 때문(hidden clones). 그래서 다중에게 <strong>제대로 된 기회</strong>를 줬습니다 — 각 모델에 서로 다른 발산 렌즈(극한 제약 / 역발상 / 이질적 결합)를 강제(steelman).</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>방식 (Vendi, 높을수록 다양)</th><th>단일 S</th><th>다중 M</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr class="row-lose"><td class="cfg">그냥 섞기 (naive)<small>일부 골 개수 미통제 — 참고용</small></td><td class="num">6.06</td><td class="num">4.90</td><td><span class="pill out">단일 우위</span></td></tr>
+          <tr><td class="cfg">렌즈 강제 (steelman)<small>개수 통제 · A 본실험</small></td><td class="num">5.03</td><td class="num">5.05</td><td><span class="pill tie">무승부</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:8px">강제 분산으로 격차가 거의 사라졌지만(+0.02는 오차·한 골 의존 수준, 골 단위론 단일이 4:2), <strong>다중이 A에서 명확히 이긴 건 아닙니다 — 무승부.</strong> "섞는 방식이 중요하다"는 건 실증됐고, 잘해봐야 <strong>대등</strong>입니다 — 게다가 비용은 단일 대비 ~100배(naive 기준 ~75배). <span class="note">※ naive 비교는 일부 골에서 개수가 안 맞아(M 6 vs S 9) 참고용이고, 공정하게 개수를 맞춘 <strong>steelman이 A의 본실험</strong>입니다.</span></p>
+
+    <p style="margin-top:20px"><strong>B · 사람 (본인 블라인드)</strong> — 라벨을 가린 채 6개 목표에서 고른 결과 <strong class="aw">다중 4 : 단일 2</strong>. 처음으로 다중이 앞선 축입니다. 단, 가장 <strong>약한 축</strong>입니다(평가자 n=1·본인, 다중을 밀어온 사람의 선호가 섞일 수 있음).</p>
+
+    <p style="margin-top:20px"><strong>C · 시장검색 (표본 3목표, 실제 웹검색)</strong> — 후보들이 시중에 이미 있는지 대조. 대부분 <strong>양쪽 다 포화</strong>(냉장고 레시피·에스크로 등 수십 개 존재), 오히려 다중이 "AI 식단추천·블록체인 에스크로" 같은 <strong>가장 진부한 아이디어</strong>를 포함. → <strong>이 표본에서 다중이 우위는 아님.</strong> (표본 3골이라 "단일이 앞선다"고 단정하진 않음 — 전수·steelman 후보 검색은 남은 과제.)</p>
+  </section>
+
+  <section>
+    <h2>4 · 판정</h2>
+    <p class="h2-title">사전 규칙을 적용하면</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>축</th><th>결과</th><th>다중에게</th></tr></thead>
+        <tbody>
+          <tr><td class="cfg">A 다양성</td><td>무승부 (naive는 단일 우위)</td><td><span class="pill tie">명확한 승 아님</span></td></tr>
+          <tr class="row-win"><td class="cfg">B 사람 <small>규칙상 품질 본체 · 필수 축</small></td><td>다중 4 : 2</td><td><span class="pill win">다중 우위</span></td></tr>
+          <tr><td class="cfg">C 시장 <small>표본 3골</small></td><td>표본서 다중 우위 아님</td><td><span class="pill tie">승 아님</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout cost" style="margin-top:16px">
+      <span class="lbl">규칙 적용 결과</span>
+      <p>규칙 = <strong>B이기고 + (A 또는 C).</strong> <strong>사람(B)은 다중이 이겼습니다.</strong> 다만 <strong>A는 무승부·C는 표본서 다중 우위 아님</strong> → 복합 조건을 못 채움 → <strong>"다중 승리" 선언 안 함.</strong></p>
+    </div>
+    <p><strong>정직한 최종:</strong> 사람 픽(B)은 다중이었지만, <strong>n=1·홀리스틱이라 사전 복합 조건(A 또는 C)을 혼자 지탱하지 못합니다.</strong> 이것은 "다중이 쓸모없다"가 아니라 — <strong>이 6골·이 파이프에서, 자동 다양성(A)·시장(C)으로는 단일을 명확히 넘지 못했다</strong>는 것입니다. (다중은 최선의 방식으로 A에서 단일과 대등까지는 왔습니다.)</p>
+  </section>
+
+  <section>
+    <h2>5 · 배운 것</h2>
+    <p class="h2-title">그래도 남는 세 가지</p>
+    <ol class="steps">
+      <li><h4>"어떻게 섞느냐"가 실재로 중요하다</h4><p>그냥 여러 모델을 섞으면 수렴해서 지고(4.90), 강제로 벌려놓으면 단일과 대등(5.05). 다중의 문제는 "다중"이 아니라 <strong>수렴</strong>이었다.</p></li>
+      <li><h4>토큰 절약은 라우팅에서 온다</h4><p>회의는 비싸다. 진짜 절감은 <strong>쉬운 작업은 값싼 모델(Flash-Lite)·무거운 작업은 검증된 가성비 모델(Solar)</strong>로 나누는 2단 라우팅에서 왔다(현행 대비 ~60배↓).</p></li>
+      <li><h4>다중의 정직한 자리 = 사람이 고르는 퍼실리테이션</h4><p>사람이 블라인드로도 다중을 4/6 골랐다 — 객관적으로 더 다양하진 않아도 <strong>가끔 사람 눈을 끄는 후보가 섞인다.</strong> 자동으로 합쳐 이기려 하지 말고, <strong>후보를 나란히 펼쳐 팀이 고르게</strong> 하는 것. 단 "품질이 더 높다"고 우기지 않는다.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>6 · 제품</h2>
+    <p class="h2-title">그래서 이렇게 쓴다</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>용도</th><th>방식</th><th>근거</th></tr></thead>
+        <tbody>
+          <tr><td class="cfg">가벼운 작업</td><td class="num" style="color:var(--accent)">Flash-Lite</td><td>싸고 충분 (2단 라우팅)</td></tr>
+          <tr><td class="cfg">무거운 작업 (분석·보고)</td><td class="num" style="color:var(--accent)">Solar-Pro4</td><td>품질·비용 1위 (재테스트)</td></tr>
+          <tr><td class="cfg">아이디어 · 기본</td><td class="num" style="color:var(--accent)">단일 Solar</td><td>가장 다양하고 쌈</td></tr>
+          <tr><td class="cfg">아이디어 · 품질 옵션</td><td class="num" style="color:var(--accent)">Self-Refine</td><td>같은 모델 다중 패스 (승패 지표 아님)</td></tr>
+          <tr><td class="cfg">다중 모델</td><td class="num" style="color:var(--cost)">병렬 후보 제시</td><td>사람이 고르는 용도만 (자동 합치기 ❌)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:12px">멀티LLM의 정직한 가치 = <strong>난이도 라우팅(비용) + 실측 모델 선정 + (옵션) 사람이 고를 병렬 후보</strong>. "여러 모델을 자동으로 섞어 더 좋아진다"가 아니다.</p>
+  </section>
+
+  <section>
+    <h2>7 · 한계</h2>
+    <p class="h2-title">과장하지 않기 위해</p>
+    <ul class="clean">
+      <li><strong>사람 평가 n=1(본인)</strong> — 설계자 시선·선호 편향 가능. 블라인드·사전 고정 루브릭으로 완화했으나 팀 일반화는 약함. 유일하게 다중이 이긴 축이 이 축이라, 결론은 <strong>잠정</strong>.</li>
+      <li><strong>C(시장검색)는 3목표 표본.</strong> 방향은 일관됐으나 전수 아님.</li>
+      <li>모든 결과 <strong>n=6 안팎</strong>, 특정 과제(범용 서비스 아이디어)에 한정. "언제나 다중이 진다"는 아니다 — <strong>이 설정에서</strong> 명확히 못 이겼다.</li>
+      <li><strong>"대등이 천장"으로 닫지 않는다.</strong> 아직 열린 길: ① C를 강제분산(steelman) 후보로 재검색(현재 C는 그냥-섞기 후보 기준) ② B를 6골 숫자 루브릭으로 확인 ③ <strong>사람 시드가 있는 공모전형 과제</strong>로 재측정 — 이번 벤치는 제품 코어(사람 시드 퍼실리테이션)를 아직 거의 안 쟀다.</li>
+    </ul>
+  </section>
+
+  <section class="final">
+    <h2 style="color:rgba(255,255,255,.55)">한 줄 요약</h2>
+    <p class="h2-title" style="margin-bottom:8px">"믿을 수 있는 자로 재니, 이 과제에선 다중 LLM이 최선의 방식으로도 <span class="u">단일을 명확히 넘지 못했다</span>(대등까지). 대신 다중의 정직한 자리는 '<span class="u">사람이 고를 후보를 펼치는 것</span>'이지 '자동으로 섞어 이기는 것'이 아니다."</p>
+    <p style="margin:10px 0 0;color:rgba(255,255,255,.8);font-size:15px">문제는 "다중"이 아니라 <strong>수렴</strong>이었다 — 섞는 방식이 전부를 가른다.</p>
+  </section>
+
+  <footer>
+    데이터 <span class="num">diversity-remeasure.json · steelman-diversity.json · 사용자 블라인드 채점 · C 웹검색 표본</span> · 문헌 <span class="num">NotebookLM 10+소스</span> · 검수 <span class="num">Grok 1600·1733·1855·1941</span> · 규칙: 승패 = B + (A or C), D 제외
+  </footer>
+</div>
+
+</body>
+</html>
