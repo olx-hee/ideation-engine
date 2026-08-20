@@ -107,7 +107,7 @@
   <div class="doc-note"><b>새 방향 반영:</b> 기존 "AI가 아이디어를 하나로 자동 종합해 테마를 정해주던" 화면(⑥)을 <b>"AI가 여러 갈래 컨셉 후보만 제시 → 팀이 투표로 선택 → 안 뽑힌 안은 '다른 길'로 보존"</b> 으로 교체했습니다. 나머지 화면은 현재 앱과 동일합니다.</div>
   <div class="flowmap">
     <span class="s">① 프로필</span>›<span class="s">② 세션 만들기</span>›<span class="s">③ 대기실</span>›<span class="s">④ 아이스브레이킹</span>›<span class="s">⑤ 아이디어 발산</span>›<span class="new" style="border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600">⑥ 컨셉 종합·선택 (신규)</span>›<span class="s">⑦ 결과 보고서</span>
-    <span style="width:100%;height:4px"></span><span class="s">발산 변형:</span><span class="s">⑤-b SCAMPER</span><span class="s">⑤-c 6색 모자</span>
+    <span style="width:100%;height:4px"></span><span class="s">🌐 온라인 모드:</span><span class="s">03-온라인 대기실</span><span class="s">04-온라인 세션상단</span><span class="s" style="margin-left:8px">발산 변형:</span><span class="s">⑤-b SCAMPER</span><span class="s">⑤-c 6색 모자</span>
   </div>
 
   <!-- ① PROFILE -->
@@ -149,6 +149,12 @@
           <label class="lbl">세션 목표</label>
           <textarea class="input textarea" placeholder="목표를 직접 입력하거나, 아래에서 AI 추천을 받아보세요">팀 프로젝트 초반의 어색함과 비효율을 줄이는 서비스</textarea>
           <button class="btn btn-full" style="margin-top:12px;background:var(--purple50);color:var(--purple700);border:1px solid #e9d5ff">✨ 팀 프로필 기반 주제 추천받기 <span class="badge info">AI · 데모</span></button>
+          <p class="tiny muted" style="margin:12px 0 6px">팀 역량(기획·발표·디자인·프론트·백엔드·데이터·AI/ML·리서치)을 분석해 추천했습니다. 클릭하면 목표로 설정됩니다.</p>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="border:2px solid var(--purple);background:var(--purple50);border-radius:12px;padding:11px"><div class="small" style="font-weight:700">학습·연구 과정을 자동화하는 AI 도우미</div><div class="tiny muted" style="margin-top:2px">💡 팀에 AI/ML·리서치 역량이 있어 모델 기반 서비스를 직접 구현 가능</div></div>
+            <div style="border:2px solid var(--n200);border-radius:12px;padding:11px"><div class="small" style="font-weight:700">생활 데이터를 실시간 수집·분석하는 서비스</div><div class="tiny muted" style="margin-top:2px">💡 백엔드·데이터 역량이 있어 수집 파이프라인 구축이 현실적</div></div>
+            <div style="border:2px solid var(--n200);border-radius:12px;padding:11px"><div class="small" style="font-weight:700">복잡한 과정을 단순한 UX로 바꾸는 도구</div><div class="tiny muted" style="margin-top:2px">💡 디자인·프론트 역량이 강해 사용성으로 차별화 가능</div></div>
+          </div>
           <button class="btn btn-dark btn-full" style="margin-top:12px">→ 다음: 방식·시간 정하기</button>
         </div>
         <div class="card" style="background:var(--purple50);border-color:#e9d5ff;color:var(--purple800);font-size:13px"><b>🤖 방식 추천:</b> 목표와 오프라인 모드를 고려하면 <b>자유 브레인스토밍</b>이 가장 잘 맞습니다. (직접 골라도 됩니다)</div>
@@ -334,7 +340,18 @@
                 <div class="row" style="align-items:center;gap:10px;padding:9px 0"><input type="checkbox"><span class="small" style="flex:1">와이어프레임 → Hi-fi 프로토타입</span><div class="av sm amber">조</div><span class="tiny muted">조경빈 · 6.25</span></div>
               </div>
             </div>
-            <div class="card" style="background:var(--green50);border-color:#bbf7d0"><div class="small" style="font-weight:700;color:var(--green700);margin-bottom:4px">🔄 데이터 흐름 요약</div><p class="tiny" style="color:var(--green700)">아이스브레이킹(불편함 4개) → 발산(아이디어 4개) → <b>컨셉 후보 4개(렌즈별)</b> → 팀 투표 1위 선택 → 최종 피치. 전 단계가 인과로 연결됩니다.</p></div>
+            <div class="card">
+              <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:4px"><h3 class="sec-title">🧑‍🤝‍🧑 팀원별 맞춤 실행 가이드</h3><span class="badge info">프로필 기반</span></div>
+              <p class="tiny muted" style="margin-bottom:12px">선택된 컨셉 "익명 회의 퍼실리테이터"를 각자의 역량에 맞춰 — <b>무엇을 맡고, 무엇부터 시작</b>하면 되는지 AI가 배분했습니다.</p>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <div class="row" style="align-items:flex-start;gap:10px;background:var(--n50);border-radius:12px;padding:11px"><div class="av sm blue">김</div><div style="flex:1"><div class="small" style="font-weight:700">김승희 <span class="tiny muted" style="font-weight:400">· 기획·발표</span></div><div class="tiny" style="color:var(--n700);margin-top:2px"><b>맡을 것:</b> MVP 범위·우선순위 정의 <br><b>먼저:</b> 핵심 기능 1개(익명 진행)만 못박기</div></div></div>
+                <div class="row" style="align-items:flex-start;gap:10px;background:var(--n50);border-radius:12px;padding:11px"><div class="av sm purple">전</div><div style="flex:1"><div class="small" style="font-weight:700">전재민 <span class="tiny muted" style="font-weight:400">· 디자인·프론트</span></div><div class="tiny" style="color:var(--n700);margin-top:2px"><b>맡을 것:</b> 화면 설계·프로토타입 <br><b>먼저:</b> 익명 입력 화면 와이어프레임</div></div></div>
+                <div class="row" style="align-items:flex-start;gap:10px;background:var(--n50);border-radius:12px;padding:11px"><div class="av sm amber">조</div><div style="flex:1"><div class="small" style="font-weight:700">조경빈 <span class="tiny muted" style="font-weight:400">· 백엔드·데이터</span></div><div class="tiny" style="color:var(--n700);margin-top:2px"><b>맡을 것:</b> 서버·데이터 구조 <br><b>먼저:</b> 세션·의견 테이블 스키마 설계</div></div></div>
+                <div class="row" style="align-items:flex-start;gap:10px;background:var(--n50);border-radius:12px;padding:11px"><div class="av sm rose">이</div><div style="flex:1"><div class="small" style="font-weight:700">이중곤 <span class="tiny muted" style="font-weight:400">· AI/ML·리서치</span></div><div class="tiny" style="color:var(--n700);margin-top:2px"><b>맡을 것:</b> AI 퍼실리테이터 설계 <br><b>먼저:</b> 진행 톤·개입 규칙 프롬프트 정의</div></div></div>
+                <div class="row" style="align-items:flex-start;gap:10px;background:var(--green50);border-radius:12px;padding:11px"><div class="av sm em">나</div><div style="flex:1"><div class="small" style="font-weight:700">나 <span class="tiny muted" style="font-weight:400">· 기획·디자인</span></div><div class="tiny" style="color:var(--n700);margin-top:2px"><b>맡을 것:</b> 발표·스토리라인 <br><b>먼저:</b> 심사 3축(창의·상업·보안) 슬라이드 뼈대</div></div></div>
+              </div>
+            </div>
+            <div class="card" style="background:var(--green50);border-color:#bbf7d0"><div class="small" style="font-weight:700;color:var(--green700);margin-bottom:4px">🔄 데이터 흐름 요약</div><p class="tiny" style="color:var(--green700)">프로필(각자 역량) → 아이스브레이킹(불편함) → 발산(각도별 아이디어) → <b>컨셉 후보 4개(렌즈별)</b> → 팀 투표 1위 → 팀원별 맞춤 실행. 프로필이 처음과 끝을 관통합니다.</p></div>
           </div>
           <div class="sidebar">
             <div class="dark"><h3 class="sec-title" style="margin-bottom:10px">📊 세션 요약</h3>
@@ -351,6 +368,57 @@
         </div>
       </div>
       <div class="foot"><button class="btn btn-ghost">‹ 이전</button><span class="small muted" style="font-weight:600">📋 결과 보고서 · 5분 배정</span><button class="btn btn-green">✓ 완료 — 새 세션</button></div>
+    </div>
+  </div>
+
+  <!-- ONLINE MODE SECTION -->
+  <div style="margin:6px 0 22px;border-top:2px dashed var(--n300);padding-top:24px">
+    <div style="font-size:18px;font-weight:800;margin-bottom:4px">🌐 온라인 모드 (오프라인과 다른 화면만)</div>
+    <p class="tiny muted">모드는 세션 만들기(②)에서 선택합니다. 화면 대부분은 동일하고, <b>대기실</b>과 <b>세션 타이머 안내</b>가 다릅니다. (팀플용 — 각자 편한 시간에)</p>
+  </div>
+
+  <div class="frame">
+    <div class="frame-label"><span class="no">03-온라인</span> 대기실 (온라인 모드 — 링크 공유 · 바로 시작)</div>
+    <div class="screen">
+      <div class="appbar">IdeationEngine <span class="divider">/</span> <span class="muted">대기실</span></div>
+      <div class="pad-narrow" style="max-width:760px">
+        <div style="text-align:center;margin-bottom:26px">
+          <div class="av" style="width:56px;height:56px;background:var(--n900);border-radius:16px;font-size:24px;margin:0 auto 10px">🌐</div>
+          <span class="badge primary">온라인 모드</span>
+          <h1 class="big" style="margin-top:8px">링크를 공유하세요</h1>
+          <p class="muted small">팀원은 마감 시간까지 각자 편할 때 참여하면 됩니다. 지금 바로 시작할 수 있어요.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700;font-size:13px;margin-bottom:12px">팀원 초대하기</div>
+          <div class="row" style="align-items:flex-end"><div style="flex:1"><div class="tiny muted" style="margin-bottom:4px">초대 링크</div><div class="row"><input class="input" style="flex:1;font-family:var(--mono);background:var(--n50)" readonly value="https://ideationengine.app/s/8f3a21"><button class="btn btn-ghost">복사</button></div></div><div style="width:70px;height:70px;background:var(--n100);border:1px solid var(--n200);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px">▦</div></div>
+        </div>
+        <div class="grid2" style="margin:16px 0">
+          <div class="card" style="padding:14px"><div class="tiny muted">세션 목표</div><div class="small" style="font-weight:600">팀 프로젝트 초반의 어색함·비효율 줄이기</div></div>
+          <div class="card" style="padding:14px;border-color:#fcd34d;background:var(--amber50)"><div class="tiny" style="color:var(--amber800)">⏳ 마감</div><div class="small" style="font-weight:700;color:var(--amber800)">6/22 23:59 까지 열림</div></div>
+        </div>
+        <div class="card">
+          <div class="row" style="justify-content:space-between;align-items:center;margin-bottom:14px"><div class="sec-title">👥 참여자</div><span class="badge">1 / 4 · 나머지는 나중에</span></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div class="row" style="align-items:center;background:var(--n50);border-radius:12px;padding:9px"><div class="av blue">김</div><div style="flex:1"><div class="small" style="font-weight:600">김승희 <span class="badge primary">HOST</span></div><div class="tiny muted">방 생성 · 지금 시작 가능</div></div><div style="width:10px;height:10px;border-radius:999px;background:var(--green600)"></div></div>
+            <div class="row" style="align-items:center;padding:9px;opacity:.55"><div class="av sm" style="border:2px dashed var(--n300);background:transparent;color:var(--n400)">+</div><div class="tiny muted" style="font-style:italic">전재민·조경빈·이중곤 — 링크로 각자 입장 예정</div></div>
+          </div>
+        </div>
+        <button class="btn btn-dark btn-full" style="margin-top:18px;padding:15px">▶ 지금 세션 시작하기 <span class="tiny" style="font-weight:400;opacity:.7">(나머지는 나중에 참여)</span></button>
+        <p class="tiny muted" style="text-align:center;margin-top:12px">⏳ 이 세션은 <b>마감 시간까지</b> 열려 있습니다. 참여자는 링크로 각자 입장합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-label"><span class="no">04-온라인</span> 세션 상단 (온라인 — 마감 표시 · "각자 속도" 안내)</div>
+    <div class="screen">
+      <div class="appbar" style="justify-content:space-between">
+        <div class="row" style="align-items:center;gap:10px"><span style="font-size:14px">IdeationEngine</span><span class="chip">🌐 온라인</span><span class="chip" style="background:var(--indigo50);color:var(--indigo600);border:0">🧭 자유 브레인스토밍</span><span class="chip" style="background:var(--amber50);color:var(--amber800);border:0">⏳ 마감 6/22</span></div>
+        <div class="stepper"><div class="stp on">💬 아이스 <span class="tiny muted">10분</span></div><div class="stp">💡 발산</div><div class="stp">📊 컨셉</div><div class="stp">📋 보고</div></div>
+        <div class="timer">💬 09:12</div>
+      </div>
+      <div style="background:#fff;border-bottom:1px solid var(--n200);padding:8px 24px"><div class="tiny" style="color:var(--indigo600);text-align:center;font-weight:600">🧑‍💻 각자 자기 속도로 진행 — 이 타이머는 <b>나만의 페이스 가이드</b>입니다</div></div>
+      <div class="pad" style="padding:20px 30px"><div class="card" style="background:var(--indigo50);border-color:#c7d2fe"><div class="small" style="font-weight:700;color:var(--indigo700)">온라인 모드 차이점</div><p class="tiny" style="color:var(--n600);margin-top:4px">· 전원 대기 없이 <b>바로 시작</b> · 각자 마감까지 <b>자기 속도로</b> 진행 · 늦게 온 사람에겐 AI가 <b>지금까지 논의를 브리핑</b> · 이하 아이스브레이킹~보고서 화면은 오프라인과 동일</p></div></div>
     </div>
   </div>
 
