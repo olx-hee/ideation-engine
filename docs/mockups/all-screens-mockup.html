@@ -107,7 +107,7 @@
   <div class="doc-note"><b>새 방향 반영:</b> 기존 "AI가 아이디어를 하나로 자동 종합해 테마를 정해주던" 화면(⑥)을 <b>"AI가 여러 갈래 컨셉 후보만 제시 → 팀이 투표로 선택 → 안 뽑힌 안은 '다른 길'로 보존"</b> 으로 교체했습니다. 나머지 화면은 현재 앱과 동일합니다.</div>
   <div class="flowmap">
     <span class="s">① 프로필</span>›<span class="s">② 세션 만들기</span>›<span class="s">③ 대기실</span>›<span class="s">④ 아이스브레이킹</span>›<span class="s">⑤ 아이디어 발산</span>›<span class="new" style="border:1px solid;border-radius:999px;padding:4px 11px;font-weight:600">⑥ 컨셉 종합·선택 (신규)</span>›<span class="s">⑦ 결과 보고서</span>
-    <span style="width:100%;height:4px"></span><span class="s">🌐 온라인 모드:</span><span class="s">03-온라인 대기실</span><span class="s">04-온라인 세션상단</span><span class="s" style="margin-left:8px">발산 변형:</span><span class="s">⑤-b SCAMPER</span><span class="s">⑤-c 6색 모자</span>
+    <span style="width:100%;height:4px"></span><span class="s">🌐 온라인:</span><span class="s">03-대기실</span><span class="s">04-세션상단</span><span class="s">05-늦은참여 브리핑</span><span class="s" style="margin-left:6px">발산변형:</span><span class="s">⑤-b SCAMPER</span><span class="s">⑤-c 6색모자</span><span class="s" style="margin-left:6px">상태:</span><span class="s">저장실패</span><span class="s">PDF준비중</span>
   </div>
 
   <!-- ① PROFILE -->
@@ -159,6 +159,8 @@
         </div>
         <div class="card" style="background:var(--purple50);border-color:#e9d5ff;color:var(--purple800);font-size:13px"><b>🤖 방식 추천:</b> 목표와 오프라인 모드를 고려하면 <b>자유 브레인스토밍</b>이 가장 잘 맞습니다. (직접 골라도 됩니다)</div>
         <div class="card" style="border:2px solid var(--n900)"><div class="row"><div class="av" style="background:var(--n900);border-radius:12px;width:40px;height:40px">💡</div><div><div style="font-weight:700;display:flex;gap:8px;align-items:center">자유 브레인스토밍 <span class="badge success">추천</span></div><p class="small muted">제한 없이 아이디어를 쏟아냅니다. 각자 배정된 각도에서 시작하세요.</p><p class="tiny muted" style="margin-top:3px">💡 다양한 방향을 넓게 탐색할 때</p></div></div></div>
+        <div class="card" style="border:2px solid transparent"><div class="row"><div class="av" style="background:var(--n100);color:var(--n700);border-radius:12px;width:40px;height:40px">🎯</div><div><div style="font-weight:700">SCAMPER</div><p class="small muted">7가지 렌즈로 대상을 하나씩 비틀어 아이디어를 만듭니다.</p><p class="tiny muted" style="margin-top:3px">💡 기존 대상을 개선·변형할 때</p></div></div></div>
+        <div class="card" style="border:2px solid transparent"><div class="row"><div class="av" style="background:var(--n100);color:var(--n700);border-radius:12px;width:40px;height:40px">👥</div><div><div style="font-weight:700">Six Thinking Hats</div><p class="small muted">한 번에 하나의 모자를 쓰고, 같은 관점에서 함께 생각합니다.</p><p class="tiny muted" style="margin-top:3px">💡 여러 관점을 균형 있게 검토·결정할 때</p></div></div></div>
         <div class="card"><label class="lbl">세션 시간</label><div class="row" style="gap:8px"><button class="btn btn-ghost btn-full">30분</button><button class="btn btn-dark btn-full">60분</button><button class="btn btn-ghost btn-full">90분</button></div>
           <div style="margin-top:14px"><div class="small" style="font-weight:600;margin-bottom:8px">⏱ AI 추천 시간 배분 (60분)</div>
             <div style="display:flex;flex-direction:column;gap:6px">
@@ -259,7 +261,11 @@
             <div class="angle novel"><div class="row" style="align-items:center;gap:6px;margin-bottom:5px"><div class="av sm rose">이</div><span class="tiny" style="font-weight:600">이중곤</span></div><div style="font-weight:800;font-size:14px">🚀 기술 혁신</div><p class="tiny" style="margin-top:3px;opacity:.85">우리만의 방식은?</p></div>
           </div>
         </div>
-        <div class="card row" style="padding:10px;align-items:center;margin-bottom:16px"><input class="input" style="border:0" placeholder="내 각도(비즈니스·시장)에서 아이디어를 입력하세요..."><button class="btn btn-dark">➤ 제출</button></div>
+        <div class="card row" style="padding:10px;align-items:center;margin-bottom:10px"><input class="input" style="border:0" placeholder="내 각도(비즈니스·시장)에서 아이디어를 입력하세요..."><button class="btn btn-dark">➤ 제출</button></div>
+        <div class="card row" style="padding:11px 14px;align-items:center;justify-content:space-between;margin-bottom:16px;background:var(--green50);border-color:#bbf7d0">
+          <div><div class="small" style="font-weight:700;color:var(--green700)">✨ AI 품질모드 (Self-Refine)</div><div class="tiny muted">켜면 AI가 초안 → 스스로 비평 → 수정으로 아이디어를 다듬어 제안합니다 (강모델 다중 패스)</div></div>
+          <div style="width:44px;height:24px;background:var(--em);border-radius:999px;position:relative;flex-shrink:0"><div style="position:absolute;top:2px;right:2px;width:20px;height:20px;background:#fff;border-radius:999px"></div></div>
+        </div>
         <div class="row">
           <div style="flex:1;min-width:0"><div class="grid2">
             <div class="card" style="padding:15px"><div class="row" style="align-items:center;gap:8px;margin-bottom:6px"><div class="av sm blue">김</div><span class="small" style="font-weight:600">김승희</span></div><h3 class="small" style="font-weight:700">AI가 팀 분위기를 읽고 자동으로 회의를 진행해주는 퍼실리테이터 봇</h3><p class="tiny muted" style="margin:6px 0"><i>← 팀플 눈치 보는 문제에서 착안</i></p><div style="display:flex;gap:4px"><span class="badge">AI</span><span class="badge">TEAM</span><span class="badge">UX</span></div><div class="tiny muted" style="margin-top:8px">♡ 6</div></div>
@@ -420,6 +426,46 @@
       <div style="background:#fff;border-bottom:1px solid var(--n200);padding:8px 24px"><div class="tiny" style="color:var(--indigo600);text-align:center;font-weight:600">🧑‍💻 각자 자기 속도로 진행 — 이 타이머는 <b>나만의 페이스 가이드</b>입니다</div></div>
       <div class="pad" style="padding:20px 30px"><div class="card" style="background:var(--indigo50);border-color:#c7d2fe"><div class="small" style="font-weight:700;color:var(--indigo700)">온라인 모드 차이점</div><p class="tiny" style="color:var(--n600);margin-top:4px">· 전원 대기 없이 <b>바로 시작</b> · 각자 마감까지 <b>자기 속도로</b> 진행 · 늦게 온 사람에겐 AI가 <b>지금까지 논의를 브리핑</b> · 이하 아이스브레이킹~보고서 화면은 오프라인과 동일</p></div></div>
     </div>
+  </div>
+
+  <div class="frame">
+    <div class="frame-label"><span class="no">05-온라인</span> 늦게 들어온 참여자 — AI 논의 브리핑 (온라인 전용)</div>
+    <div class="screen">
+      <div class="appbar" style="justify-content:space-between"><div class="row" style="align-items:center;gap:10px"><span style="font-size:14px">IdeationEngine</span><span class="chip">🌐 온라인</span><span class="chip" style="background:var(--amber50);color:var(--amber800);border:0">⏳ 마감 6/22</span></div><div class="stepper"><div class="stp done">✓ 아이스</div><div class="stp on">💡 발산</div><div class="stp">📊 컨셉</div><div class="stp">📋 보고</div></div><div class="timer">💡 --:--</div></div>
+      <div class="pad">
+        <div class="dark" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border:0">
+          <div class="row" style="align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:20px">🤖</span><h3 style="font-size:18px;font-weight:800">지금까지의 논의를 브리핑해 드릴게요</h3></div>
+          <p class="small" style="color:#e0e7ff">늦게 참여하셨네요! 팀이 이미 아이스브레이킹을 마치고 아이디어 발산 중입니다. 따라잡을 수 있게 핵심만 정리했어요.</p>
+          <div style="background:#ffffff1a;border-radius:12px;padding:14px;margin-top:12px;display:flex;flex-direction:column;gap:9px">
+            <div class="small"><b style="color:#c7d2fe">✅ 아이스브레이킹 요약</b> — 팀 공통 불편함: '반복되는 상황인데 필요한 정보를 제때 못 얻는다' (눈치 보는 팀플·콘센트 없는 카페·유통기한·필기 정리)</div>
+            <div class="small"><b style="color:#c7d2fe">💡 지금까지 나온 아이디어 4개</b> — 퍼실리테이터 봇 · 카페 정보 앱 · 식재료 관리 · 학습 도우미</div>
+            <div class="small"><b style="color:#c7d2fe">🧭 당신의 각도</b> — 프로필(기획·디자인) 기준 <b>비즈니스·시장</b> 각도가 배정됐어요. "누가 돈을 내고, 왜 지금인가?"에서 시작해보세요.</div>
+          </div>
+        </div>
+        <button class="btn btn-dark btn-full" style="margin-top:16px">확인하고 발산에 참여하기 →</button>
+        <p class="tiny muted" style="text-align:center;margin-top:8px">※ 온라인 모드에서 마감 시간 안에 언제 들어와도, AI가 밀린 맥락을 이렇게 채워줍니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE UI -->
+  <div style="margin:6px 0 22px;border-top:2px dashed var(--n300);padding-top:24px">
+    <div style="font-size:18px;font-weight:800;margin-bottom:4px">⚙️ 상태 UI (에러·준비중 등 부분 상태)</div>
+    <p class="tiny muted">특정 상황에서만 나타나는 UI 조각입니다. 화면 전체가 아니라 배너·버튼 상태.</p>
+  </div>
+  <div class="frame">
+    <div class="frame-label"><span class="no">상태-a</span> 제출 저장 실패 경고 배너 (네트워크·서버 문제 시)</div>
+    <div class="screen"><div class="pad" style="padding:20px 30px">
+      <div style="border-radius:12px;background:#fef2f2;border:1px solid #fecaca;padding:12px 16px;display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:#b91c1c"><span>⚠️</span><span>방금 제출이 <b>서버에 저장되지 않았어요</b>(네트워크·서버 문제). 화면엔 보이지만 새로고침 시 사라질 수 있습니다.</span></div>
+      <p class="tiny muted" style="margin-top:10px">→ 세션 화면 상단에 나타납니다. 제출은 로컬엔 남지만 서버 반영 실패를 알립니다.</p>
+    </div></div>
+  </div>
+  <div class="frame">
+    <div class="frame-label"><span class="no">상태-b</span> 보고서 — PDF 내보내기 준비중 상태</div>
+    <div class="screen"><div class="pad" style="padding:20px 30px">
+      <button class="btn" style="background:var(--n100);color:var(--n500);border:1px solid var(--n200)">🚧 PDF 내보내기는 준비 중입니다</button>
+      <p class="tiny muted" style="margin-top:10px">→ 보고서(⑦)의 "PDF 다운로드" 클릭 시 이 안내로 바뀝니다.</p>
+    </div></div>
   </div>
 
   <!-- ⑤-b SCAMPER -->
