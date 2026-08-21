@@ -30,8 +30,16 @@ export const api = {
   setVotes: (id, memberId, themeIds) =>
     fetch(`/api/sessions/${id}/votes`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ memberId, themeIds }) }).then(j),
 
-  ai: (kind, goal, context, sessionId) =>
-    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, goal, context, sessionId }) }).then(j),
+  ai: (kind, goal, context, sessionId, quality = false) =>
+    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind, goal, context, sessionId, quality }) }).then(j),
+
+  // 컨셉 후보 다중 생성(렌즈별 다른 모델, 합치기 없음) — pool=발산 아이디어 텍스트 배열
+  concepts: (goal, pool, sessionId) =>
+    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "concepts", goal, pool, sessionId }) }).then(j),
+
+  // 독립 검증(생성자와 다른 모델) — content=검증할 결과물 텍스트
+  verify: (content, sessionId) =>
+    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "verify", content, sessionId }) }).then(j),
 
   getAiMeter: (id) => fetch(`/api/sessions/${id}/ai-meter`).then(j),
 };

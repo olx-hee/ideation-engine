@@ -1,0 +1,183 @@
+{
+  "ranAt": "2026-08-18T07:46:15.192Z",
+  "task": "analyze",
+  "judges": [
+    "z-ai/glm-4.6",
+    "meta-llama/llama-3.3-70b-instruct"
+  ],
+  "goals": 3,
+  "rows": [
+    {
+      "model": "GLM-4.6",
+      "reasoning": true,
+      "overall": 4.5,
+      "costAvg": 0.005876,
+      "msAvg": 92193,
+      "reasonAvg": 7253
+    },
+    {
+      "model": "Qwen3.7-Flash",
+      "reasoning": true,
+      "overall": 5,
+      "costAvg": 0.000311,
+      "msAvg": 17555,
+      "reasonAvg": 5629
+    },
+    {
+      "model": "Trinity-Thinking",
+      "reasoning": true,
+      "overall": 4,
+      "costAvg": 0.00141,
+      "msAvg": 9368,
+      "reasonAvg": 901
+    },
+    {
+      "model": "Cogito-671B",
+      "reasoning": true,
+      "overall": 4,
+      "costAvg": 0.000598,
+      "msAvg": 3897,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Nemotron-3.5-L",
+      "reasoning": true,
+      "overall": 5,
+      "costAvg": 0.000509,
+      "msAvg": 6249,
+      "reasonAvg": 4881
+    },
+    {
+      "model": "DeepSeek-V4-Flash",
+      "reasoning": true,
+      "overall": 4.67,
+      "costAvg": 0.000395,
+      "msAvg": 30688,
+      "reasonAvg": 2676
+    },
+    {
+      "model": "Kimi-K2.5",
+      "reasoning": false,
+      "overall": 5,
+      "costAvg": 0.007179,
+      "msAvg": 70602,
+      "reasonAvg": 3180
+    },
+    {
+      "model": "MiniMax-01",
+      "reasoning": false,
+      "overall": 3.67,
+      "costAvg": 0.000754,
+      "msAvg": 22937,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Solar-Pro4",
+      "reasoning": false,
+      "overall": 4.67,
+      "costAvg": 0.000079,
+      "msAvg": 9728,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Gemini-2.5-Flash",
+      "reasoning": false,
+      "overall": 4,
+      "costAvg": 0.001734,
+      "msAvg": 5136,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Gemini-Flash-Lite",
+      "reasoning": false,
+      "overall": 4,
+      "costAvg": 0.000284,
+      "msAvg": 3367,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Grok-4.3",
+      "reasoning": false,
+      "overall": 4.67,
+      "costAvg": 0.002693,
+      "msAvg": 9136,
+      "reasonAvg": 237
+    },
+    {
+      "model": "GPT-4o-mini",
+      "reasoning": false,
+      "overall": 3,
+      "costAvg": 0.000248,
+      "msAvg": 5416,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Claude-3-Haiku",
+      "reasoning": false,
+      "overall": 3.33,
+      "costAvg": 0.000689,
+      "msAvg": 4311,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Mistral-Medium-3",
+      "reasoning": false,
+      "overall": 3.67,
+      "costAvg": 0.000836,
+      "msAvg": 7589,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Phi-4",
+      "reasoning": false,
+      "overall": 3.67,
+      "costAvg": 0.000097,
+      "msAvg": 46397,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Command-R7B",
+      "reasoning": false,
+      "overall": 3.33,
+      "costAvg": 0.000077,
+      "msAvg": 6615,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Llama-3.3-70B",
+      "reasoning": false,
+      "overall": 3.33,
+      "costAvg": 0.000177,
+      "msAvg": 23433,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Hermes-4-70B",
+      "reasoning": false,
+      "overall": 3,
+      "costAvg": 0.000121,
+      "msAvg": 5087,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Palmyra-X5",
+      "reasoning": false,
+      "overall": 4.67,
+      "costAvg": 0.004194,
+      "msAvg": 8922,
+      "reasonAvg": 0
+    },
+    {
+      "model": "Nova-Lite",
+      "reasoning": false,
+      "overall": 3.67,
+      "costAvg": 0.000219,
+      "msAvg": 3994,
+      "reasonAvg": 0
+    }
+  ],
+  "fails": {
+    "GLM-4.6": 1,
+    "Qwen3.7-Flash": 1
+  }
+}

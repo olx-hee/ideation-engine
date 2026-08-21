@@ -1,0 +1,90 @@
+{
+  "ranAt": "2026-08-14T18:16:07.139Z",
+  "judges": [
+    "z-ai/glm-4.6",
+    "meta-llama/llama-3.3-70b-instruct"
+  ],
+  "n": 10,
+  "rows": [
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "singleCost": 0.0010954,
+      "multiCost": 0.00035154999999999995,
+      "singleOverall": 3.75,
+      "multiOverall": 4.75,
+      "winner": "multi"
+    },
+    {
+      "goal": "대학생 팀 프로젝트 협업을 돕는 도구",
+      "singleCost": 0.0006954,
+      "multiCost": 0.0003193,
+      "singleOverall": 4.5,
+      "multiOverall": 4,
+      "winner": "single"
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "singleCost": 0.001301,
+      "multiCost": 0.00024852,
+      "singleOverall": 4.88,
+      "multiOverall": 3.88,
+      "winner": "single"
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "singleCost": 0.0005216,
+      "multiCost": 0.0002776,
+      "singleOverall": 4.6,
+      "multiOverall": 3.75,
+      "winner": "single"
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "singleCost": 0.000887,
+      "multiCost": 0.00031022,
+      "singleOverall": 4.88,
+      "multiOverall": 3.5,
+      "winner": "single"
+    },
+    {
+      "goal": "직장인의 사내 스터디를 활성화하는 도구",
+      "singleCost": 0.001106,
+      "multiCost": 0.00030015,
+      "singleOverall": 5,
+      "multiOverall": 4.38,
+      "winner": "single"
+    },
+    {
+      "goal": "노인의 디지털 기기 사용을 돕는 서비스",
+      "singleCost": 0.0005151,
+      "multiCost": 0.00031400000000000004,
+      "singleOverall": 3.75,
+      "multiOverall": 4.75,
+      "winner": "multi"
+    },
+    {
+      "goal": "반려동물 산책 메이트를 연결하는 앱",
+      "singleCost": 0.0005323,
+      "multiCost": 0.00032735,
+      "singleOverall": 4.25,
+      "multiOverall": 4.5,
+      "winner": "multi"
+    },
+    {
+      "goal": "지역 축제 참여를 늘리는 플랫폼",
+      "singleCost": 0.0004867,
+      "multiCost": 0.00023365000000000001,
+      "singleOverall": 4,
+      "multiOverall": 3.75,
+      "winner": "tie"
+    },
+    {
+      "goal": "학원 강사의 학부모 소통을 돕는 도구",
+      "singleCost": 0.0009513,
+      "multiCost": 0.0003411,
+      "singleOverall": 3.6,
+      "multiOverall": 4.1,
+      "winner": "multi"
+    }
+  ]
+}

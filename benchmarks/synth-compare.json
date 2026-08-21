@@ -1,0 +1,68 @@
+{
+  "ranAt": "2026-08-19T01:53:34.432Z",
+  "single": "google/gemini-2.5-flash",
+  "fanout": [
+    {
+      "a": "사업성",
+      "s": "upstage/solar-pro4"
+    },
+    {
+      "a": "사용자경험",
+      "s": "google/gemini-2.5-flash-lite"
+    },
+    {
+      "a": "기술",
+      "s": "openai/gpt-4o-mini"
+    },
+    {
+      "a": "참신함",
+      "s": "mistralai/mistral-medium-3"
+    }
+  ],
+  "synths": [
+    {
+      "n": "MR-FlashLite",
+      "s": "google/gemini-2.5-flash-lite"
+    },
+    {
+      "n": "MR-Solar",
+      "s": "upstage/solar-pro4"
+    },
+    {
+      "n": "MR-GPT4omini",
+      "s": "openai/gpt-4o-mini"
+    },
+    {
+      "n": "MR-Flash(현재)",
+      "s": "google/gemini-2.5-flash"
+    }
+  ],
+  "n": 6,
+  "rows": [
+    {
+      "config": "단일",
+      "quality": 4.17,
+      "cost": 0.000806
+    },
+    {
+      "config": "MR-FlashLite",
+      "quality": 4.08,
+      "cost": 0.000419
+    },
+    {
+      "config": "MR-Solar",
+      "quality": 4.42,
+      "cost": 0.000292
+    },
+    {
+      "config": "MR-GPT4omini",
+      "quality": 3.75,
+      "cost": 0.000524
+    },
+    {
+      "config": "MR-Flash(현재)",
+      "quality": 4.25,
+      "cost": 0.001267
+    }
+  ]
+}

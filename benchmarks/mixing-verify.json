@@ -1,0 +1,118 @@
+{
+  "ranAt": "2026-08-19T09:44:55.595Z",
+  "n": 7,
+  "judges": [
+    "openai/gpt-4o-mini",
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-medium-3"
+  ],
+  "rows": [
+    {
+      "config": "S_single",
+      "quality": 3.429,
+      "cost": 0.000024,
+      "wins": 0,
+      "judgedGoals": 7
+    },
+    {
+      "config": "SR_selfrefine",
+      "quality": 4.429,
+      "cost": 0.000173,
+      "wins": 3,
+      "judgedGoals": 7
+    },
+    {
+      "config": "XR_crossrefine",
+      "quality": 4.143,
+      "cost": 0.007244,
+      "wins": 2,
+      "judgedGoals": 7
+    },
+    {
+      "config": "SEL_perspective",
+      "quality": 4.286,
+      "cost": 0.00684,
+      "wins": 2,
+      "judgedGoals": 7
+    }
+  ],
+  "perGoal": [
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "judges": 2,
+      "scores": {
+        "S_single": 4,
+        "XR_crossrefine": 5,
+        "SR_selfrefine": 4,
+        "SEL_perspective": 4
+      },
+      "winner": "XR_crossrefine"
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "judges": 2,
+      "scores": {
+        "SR_selfrefine": 4.5,
+        "XR_crossrefine": 4,
+        "SEL_perspective": 5,
+        "S_single": 3.5
+      },
+      "winner": "SEL_perspective"
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "judges": 2,
+      "scores": {
+        "SR_selfrefine": 4.5,
+        "SEL_perspective": 4.5,
+        "S_single": 3,
+        "XR_crossrefine": 3
+      },
+      "winner": "SR_selfrefine"
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "judges": 2,
+      "scores": {
+        "XR_crossrefine": 4.5,
+        "SR_selfrefine": 4,
+        "S_single": 3.5,
+        "SEL_perspective": 5
+      },
+      "winner": "SEL_perspective"
+    },
+    {
+      "goal": "노인의 디지털 기기 사용을 돕는 서비스",
+      "judges": 2,
+      "scores": {
+        "S_single": 4,
+        "XR_crossrefine": 5,
+        "SEL_perspective": 3.5,
+        "SR_selfrefine": 4
+      },
+      "winner": "XR_crossrefine"
+    },
+    {
+      "goal": "지역 축제 참여를 늘리는 플랫폼",
+      "judges": 2,
+      "scores": {
+        "XR_crossrefine": 4,
+        "S_single": 3.5,
+        "SR_selfrefine": 5,
+        "SEL_perspective": 4
+      },
+      "winner": "SR_selfrefine"
+    },
+    {
+      "goal": "프리랜서의 계약·정산을 돕는 서비스",
+      "judges": 2,
+      "scores": {
+        "SR_selfrefine": 5,
+        "SEL_perspective": 4,
+        "XR_crossrefine": 3.5,
+        "S_single": 2.5
+      },
+      "winner": "SR_selfrefine"
+    }
+  ]
+}

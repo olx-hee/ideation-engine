@@ -1,0 +1,234 @@
+{
+  "ranAt": "2026-08-14T18:19:24.401Z",
+  "goals": 4,
+  "wins": {
+    "사업성": {
+      "Gemini-Flash-Lite": 3,
+      "Solar-Pro-3": 0,
+      "GPT-4o-mini": 0,
+      "Gemini-2.5-Flash": 1
+    },
+    "사용자경험": {
+      "Gemini-Flash-Lite": 2,
+      "Solar-Pro-3": 1,
+      "GPT-4o-mini": 1,
+      "Gemini-2.5-Flash": 0
+    },
+    "기술": {
+      "Gemini-Flash-Lite": 1,
+      "Solar-Pro-3": 2,
+      "GPT-4o-mini": 0,
+      "Gemini-2.5-Flash": 1
+    },
+    "참신함": {
+      "Gemini-Flash-Lite": 2,
+      "Solar-Pro-3": 1,
+      "GPT-4o-mini": 0,
+      "Gemini-2.5-Flash": 1
+    }
+  },
+  "avgScore": {
+    "사업성": {
+      "Gemini-Flash-Lite": 4.75,
+      "Solar-Pro-3": 4,
+      "GPT-4o-mini": 3.25,
+      "Gemini-2.5-Flash": 3.25
+    },
+    "사용자경험": {
+      "Gemini-Flash-Lite": 3.75,
+      "Solar-Pro-3": 3.5,
+      "GPT-4o-mini": 4,
+      "Gemini-2.5-Flash": 3
+    },
+    "기술": {
+      "Gemini-Flash-Lite": 3.5,
+      "Solar-Pro-3": 4.5,
+      "GPT-4o-mini": 3.5,
+      "Gemini-2.5-Flash": 3.5
+    },
+    "참신함": {
+      "Gemini-Flash-Lite": 4,
+      "Solar-Pro-3": 3.25,
+      "GPT-4o-mini": 3,
+      "Gemini-2.5-Flash": 4
+    }
+  },
+  "detail": [
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "angle": "사업성",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite",
+        "GPT-4o-mini",
+        "Solar-Pro-3"
+      ]
+    },
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "angle": "사용자경험",
+      "winner": "Solar-Pro-3",
+      "order": [
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite",
+        "GPT-4o-mini",
+        "Solar-Pro-3"
+      ]
+    },
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "angle": "기술",
+      "winner": "Solar-Pro-3",
+      "order": [
+        "GPT-4o-mini",
+        "Gemini-Flash-Lite",
+        "Gemini-2.5-Flash",
+        "Solar-Pro-3"
+      ]
+    },
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "angle": "참신함",
+      "winner": "Gemini-2.5-Flash",
+      "order": [
+        "GPT-4o-mini",
+        "Solar-Pro-3",
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite"
+      ]
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "angle": "사업성",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "Solar-Pro-3",
+        "Gemini-Flash-Lite",
+        "Gemini-2.5-Flash",
+        "GPT-4o-mini"
+      ]
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "angle": "사용자경험",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "GPT-4o-mini",
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite",
+        "Solar-Pro-3"
+      ]
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "angle": "기술",
+      "winner": "Solar-Pro-3",
+      "order": [
+        "Solar-Pro-3",
+        "Gemini-Flash-Lite",
+        "GPT-4o-mini",
+        "Gemini-2.5-Flash"
+      ]
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "angle": "참신함",
+      "winner": "Solar-Pro-3",
+      "order": [
+        "Gemini-2.5-Flash",
+        "Solar-Pro-3",
+        "GPT-4o-mini",
+        "Gemini-Flash-Lite"
+      ]
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "angle": "사업성",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "GPT-4o-mini",
+        "Solar-Pro-3",
+        "Gemini-Flash-Lite",
+        "Gemini-2.5-Flash"
+      ]
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "angle": "사용자경험",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "GPT-4o-mini",
+        "Solar-Pro-3",
+        "Gemini-Flash-Lite",
+        "Gemini-2.5-Flash"
+      ]
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "angle": "기술",
+      "winner": "Gemini-2.5-Flash",
+      "order": [
+        "Gemini-2.5-Flash",
+        "GPT-4o-mini",
+        "Solar-Pro-3",
+        "Gemini-Flash-Lite"
+      ]
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "angle": "참신함",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "Solar-Pro-3",
+        "Gemini-2.5-Flash",
+        "GPT-4o-mini",
+        "Gemini-Flash-Lite"
+      ]
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "angle": "사업성",
+      "winner": "Gemini-2.5-Flash",
+      "order": [
+        "Solar-Pro-3",
+        "Gemini-2.5-Flash",
+        "GPT-4o-mini",
+        "Gemini-Flash-Lite"
+      ]
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "angle": "사용자경험",
+      "winner": "GPT-4o-mini",
+      "order": [
+        "GPT-4o-mini",
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite",
+        "Solar-Pro-3"
+      ]
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "angle": "기술",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "Solar-Pro-3",
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite",
+        "GPT-4o-mini"
+      ]
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "angle": "참신함",
+      "winner": "Gemini-Flash-Lite",
+      "order": [
+        "Solar-Pro-3",
+        "GPT-4o-mini",
+        "Gemini-2.5-Flash",
+        "Gemini-Flash-Lite"
+      ]
+    }
+  ]
+}

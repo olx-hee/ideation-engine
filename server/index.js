@@ -185,7 +185,11 @@ app.post("/api/ai", aiLimiter, h(async (req, res) => {
   // sessionId는 '실제 존재하는 세션'일 때만 미터에 누적(임의 id로 미터 오염·Map 증식 방지)
   let sessionId = b.sessionId ? String(b.sessionId).slice(0, 64) : null;
   if (sessionId && !(await store.get(sessionId))) sessionId = null;
-  res.json(await orchestrate({ sessionId, kind: b.kind || "idea", goal, context }));
+  const quality = b.quality === true || b.quality === "true"; // 발산 품질모드(Self-Refine) 옵션
+  // concepts용 아이디어 풀(배열) · verify용 검증 대상 텍스트
+  const pool = Array.isArray(b.pool) ? b.pool.slice(0, 24).map((x) => String(typeof x === "string" ? x : (x?.title || x?.text || "")).slice(0, 240)) : [];
+  const contentText = typeof b.content === "string" ? b.content.slice(0, 4000) : null;
+  res.json(await orchestrate({ sessionId, kind: b.kind || "idea", goal, context, quality, pool, content: contentText }));
 }));
 
 /* 세션 AI 비용 미터 요약 (발표 패널). 읽기 전용(조회로 미터 생성 안 함) + 레이트리밋 */

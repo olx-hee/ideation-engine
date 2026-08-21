@@ -1,0 +1,140 @@
+{
+  "ranAt": "2026-08-20T13:23:05.361Z",
+  "part1_subtleRecall": {
+    "items": 5,
+    "totalFlaws": 20,
+    "rows": [
+      {
+        "model": "GLM-4.6",
+        "recall": 0.3,
+        "costAvg": 0.003875,
+        "empty": 4
+      },
+      {
+        "model": "Llama-3.3",
+        "recall": 1,
+        "costAvg": 0.000117,
+        "empty": 0
+      },
+      {
+        "model": "DeepSeek-V3.2",
+        "recall": 1,
+        "costAvg": 0.000168,
+        "empty": 0
+      },
+      {
+        "model": "Kimi-K2.5",
+        "recall": 1,
+        "costAvg": 0.005585,
+        "empty": 0
+      },
+      {
+        "model": "Gemini-2.5-F",
+        "recall": 1,
+        "costAvg": 0.000667,
+        "empty": 0
+      },
+      {
+        "model": "Solar-Pro4",
+        "recall": 1,
+        "costAvg": 0.000032,
+        "empty": 0
+      },
+      {
+        "model": "Qwen3.7-Plus",
+        "recall": 0.975,
+        "costAvg": 0.0025,
+        "empty": 0
+      }
+    ]
+  },
+  "part2_selfVsOther": {
+    "note": "Solar 생성물을 Solar-self vs other가 검증. otherCaught_selfMissed>selfCaught_otherMissed면 독립이 더 잡음.",
+    "rows": [
+      {
+        "other": "Llama-3.3",
+        "otherCaught_selfMissed_avg": 2,
+        "selfCaught_otherMissed_avg": 1.3,
+        "bothCaught_avg": 3.9
+      },
+      {
+        "other": "DeepSeek-V3.2",
+        "otherCaught_selfMissed_avg": 2.8,
+        "selfCaught_otherMissed_avg": 2.5,
+        "bothCaught_avg": 2.8
+      }
+    ],
+    "perGoal": [
+      {
+        "goal": "중고 거래 사기를 줄이",
+        "other": "Llama-3.3",
+        "otherCaught_selfMissed": 3.5,
+        "selfCaught_otherMissed": 1.5,
+        "both": 3
+      },
+      {
+        "goal": "중고 거래 사기를 줄이",
+        "other": "DeepSeek-V3.2",
+        "otherCaught_selfMissed": 2.5,
+        "selfCaught_otherMissed": 3.5,
+        "both": 2.5
+      },
+      {
+        "goal": "1인 가구의 식단·장보",
+        "other": "Llama-3.3",
+        "otherCaught_selfMissed": 0,
+        "selfCaught_otherMissed": 0,
+        "both": 7.5
+      },
+      {
+        "goal": "1인 가구의 식단·장보",
+        "other": "DeepSeek-V3.2",
+        "otherCaught_selfMissed": 3.5,
+        "selfCaught_otherMissed": 2,
+        "both": 3.5
+      },
+      {
+        "goal": "노인의 디지털 기기 사",
+        "other": "Llama-3.3",
+        "otherCaught_selfMissed": 1.5,
+        "selfCaught_otherMissed": 1,
+        "both": 2.5
+      },
+      {
+        "goal": "노인의 디지털 기기 사",
+        "other": "DeepSeek-V3.2",
+        "otherCaught_selfMissed": 2.5,
+        "selfCaught_otherMissed": 3,
+        "both": 2.5
+      },
+      {
+        "goal": "비대면 팀 회의의 효율",
+        "other": "Llama-3.3",
+        "otherCaught_selfMissed": 2,
+        "selfCaught_otherMissed": 2.5,
+        "both": 2.5
+      },
+      {
+        "goal": "비대면 팀 회의의 효율",
+        "other": "DeepSeek-V3.2",
+        "otherCaught_selfMissed": 2,
+        "selfCaught_otherMissed": 1.5,
+        "both": 2.5
+      },
+      {
+        "goal": "프리랜서의 계약·정산을",
+        "other": "Llama-3.3",
+        "otherCaught_selfMissed": 3,
+        "selfCaught_otherMissed": 1.5,
+        "both": 4
+      },
+      {
+        "goal": "프리랜서의 계약·정산을",
+        "other": "DeepSeek-V3.2",
+        "otherCaught_selfMissed": 3.5,
+        "selfCaught_otherMissed": 2.5,
+        "both": 3
+      }
+    ]
+  }
+}
