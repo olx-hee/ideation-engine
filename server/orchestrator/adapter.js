@@ -3,6 +3,8 @@
        없거나 실패하면 '목업'으로 폴백한다(best-effort, 설계 §5). 이 함수만 실호출로 바뀐다.
    ⓐ 슬라이스: 우선 ice(=Nemotron-Nano)만 실 슬러그로 매핑해 실호출을 검증한다. */
 
+import { logGeneration } from "./langfuse.js";
+
 // 모델별 capability 자리(설계 §6) — P2에서 실제 값으로 채운다. 지금은 기본 스텁.
 export const MODEL_CAPS = {
   default: { supportsJsonSchema: false, supportsTools: false, authStyle: "bearer" },
@@ -59,6 +61,7 @@ async function callOpenRouter({ slug, kind, tier, prompt }) {
     messages: buildMessages(kind, prompt),
     max_tokens: MAX_TOKENS_BY_KIND[kind] ?? 256,
     temperature: 0.7,
+    usage: { include: true }, // OpenRouter 실비용($)을 usage.cost로 회신받음(Langfuse 실측용)
     // flagship(analyze/report)의 하이브리드 모델(GLM 등) 추론 기본 OFF — 필요 각도만 켠다(§5·벤치 9~22배).
     ...(tier === "flagship" ? { reasoning: { enabled: false } } : {}),
   };
@@ -78,7 +81,8 @@ async function callOpenRouter({ slug, kind, tier, prompt }) {
   const u = data?.usage || {};
   const inTok = u.prompt_tokens ?? 0;
   const outTok = u.completion_tokens ?? 0;
-  return { text, inTok, outTok, total: u.total_tokens ?? inTok + outTok };
+  const cost = typeof u.cost === "number" ? u.cost : null; // OpenRouter 실비용($) — usage.include로 회신
+  return { text, inTok, outTok, total: u.total_tokens ?? inTok + outTok, cost };
 }
 
 const MOCK_BY_KIND = {
@@ -105,7 +109,8 @@ export async function callModel({ model, tier, kind, prompt = "" }) {
   if (process.env.OPENROUTER_API_KEY && slug) {
     try {
       const r = await callOpenRouter({ slug, kind, tier, prompt });
-      return { text: r.text, model, tier, usageTokensIn: r.inTok, usageTokensOut: r.outTok, usageTokens: r.total, mock: false, slug };
+      logGeneration({ kind, model, tier, inTok: r.inTok, outTok: r.outTok, total: r.total, cost: r.cost, prompt, output: r.text });
+      return { text: r.text, model, tier, usageTokensIn: r.inTok, usageTokensOut: r.outTok, usageTokens: r.total, usageCost: r.cost, mock: false, slug };
     } catch (e) {
       console.warn(`[adapter] OpenRouter 실호출 실패(${model}→${slug}) — 목업 폴백: ${e.message}`);
     }
