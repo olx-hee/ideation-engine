@@ -1,0 +1,1924 @@
+{
+  "evalId": "eval-kxC-2026-08-22T17:38:34",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-08-22T17:38:34.096Z",
+    "prompts": [
+      {
+        "raw": "[{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "id": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "provider": "Solar (우리·분석/컨셉)",
+        "metrics": {
+          "score": 2.9,
+          "testPassCount": 3,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 3,
+          "assertFailCount": 0,
+          "totalLatencyMs": 15,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 1204,
+            "total": 1204,
+            "numRequests": 3,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 2884,
+              "prompt": 2143,
+              "completion": 741,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "namedScoreWeights": {},
+          "cost": 0
+        }
+      },
+      {
+        "raw": "[{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "id": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "provider": "DeepSeek (우리·보고)",
+        "metrics": {
+          "score": 2.9,
+          "testPassCount": 3,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 3,
+          "assertFailCount": 0,
+          "totalLatencyMs": 12,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 1730,
+            "total": 1730,
+            "numRequests": 3,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 2815,
+              "prompt": 2143,
+              "completion": 672,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "namedScoreWeights": {},
+          "cost": 0
+        }
+      },
+      {
+        "raw": "[{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "id": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "provider": "Llama (우리·검증)",
+        "metrics": {
+          "score": 2.87,
+          "testPassCount": 3,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 3,
+          "assertFailCount": 0,
+          "totalLatencyMs": 11,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 1197,
+            "total": 1197,
+            "numRequests": 3,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 2159,
+              "prompt": 1713,
+              "completion": 446,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "namedScoreWeights": {},
+          "cost": 0
+        }
+      },
+      {
+        "raw": "[{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+        "id": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "provider": "Claude-Opus (최고급)",
+        "metrics": {
+          "score": 2.85,
+          "testPassCount": 3,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 3,
+          "assertFailCount": 0,
+          "totalLatencyMs": 11,
+          "tokenUsage": {
+            "prompt": 0,
+            "completion": 0,
+            "cached": 1953,
+            "total": 1953,
+            "numRequests": 3,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 2224,
+              "prompt": 1809,
+              "completion": 415,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {},
+          "namedScoresCount": {},
+          "namedScoreWeights": {},
+          "cost": 0
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.95,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 1122,
+            "prompt": 849,
+            "completion": 273,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.95,
+              "reason": "1) 아이디어들이 '실시간 정서 동행', '지역 기반 느슨한 연결', '감정 추적 & 자기 이해', '익명 사연 기반 공감 소통'의 4가지 테마로 명확하게 분류되었으며, 각 테마에 포함된 아이디어와 핵심 방향이 간결하게 제시되었습니다. 2) '공통 구조 요약' 섹션에서 '트리거 & 시간대 고정', '낮은 진입 장벽 & 비동기/경량 상호작용', '정서 중심 설계', '데이터/피드백 루프', '안전·경계 설계 내재' 등 5가지 핵심 구조를 정확하고 간결하게 요약했습니다. 3) 분류가 억지스럽지 않고 자연스러우며, 누락된 내용 없이 아이디어들의 공통적인 특징과 흐름을 잘 설명하고 있습니다. 특히 '저녁 외로움 발생 → 낮은 부담의 정서 개입 → 기록/공감을 통한 자기 이해 또는 타인과의 느슨한 연결 → 지속적 사용 유도'라는 공통 흐름 요약이 매우 적절합니다.",
+              "tokensUsed": {
+                "total": 1122,
+                "prompt": 849,
+                "completion": 273,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n### 1. 아이디어 테마 분류 (4개)\\n\\n| 테마 | 포함 아이디어 | 핵심 방향 |\\n|------|--------------|-----------|\\n| **① 실시간 정서 동행** | 저녁 15분 음성 동행 | 짧고 부담 없는 음성 기반 동반 경험으로 즉각적인 외로움 완화 |\\n| **② 지역 기반 느슨한 연결** | 동네 같은 시간대 매칭 | 물리적·시간적 근접성을 활용해 부담 없는 동시간대 교류 유도 |\\n| **③ 감정 추적 & 자기 이해** | 감정 로그 주간 리포트 | 사용자의 정서 흐름을 데이터로 기록해 자기 인식과 패턴 파악 지원 |\\n| **④ 익명 사연 기반 공감 소통** | 라디오 사연 1:1 답장 | 익명성과 서사 형식을 결합해 정서적 공감과 개인화된 응답 제공 |\\n\\n---\\n\\n### 2. 공통 구조 요약\\n\\n네 아이디어는 모두 **“저녁 시간대 1인 가구의 외로움”**을 출발점으로 하며, 다음과 같은 서비스 구조를 공유한다.\\n\\n- **트리거 & 시간대 고정**: 저녁이라는 특정 시간대를 서비스 활성화 시점으로 설정해 외로움이 고조되는 순간에 개입\\n- **낮은 진입 장벽 & 비동기/경량 상호작용**: 15분 음성, 동시간대 매칭, 사연 제출 등 짧고 부담 없는 참여 방식으로 지속 가능성 확보\\n- **정서 중심 설계**: 단순 정보/업무 연결이 아닌 ‘공감·동행·감정 기록’을 핵심 가치로 삼아 정서적 결핍을 직접 타겟팅\\n- **데이터/피드백 루프**: 감정 로그 리포트나 1:1 답장처럼 사용자의 정서 상태를 기록·반영해 서비스 개선과 개인화를 동시에 추구\\n- **안전·경계 설계 내재**: 익명성, 짧은 세션, 느슨한 매칭 등 1인 가구의 심리적 부담과 사생활 우려를 고려한 경량 연결 구조\\n\\n결국 이 아이디어들은 **“저녁 외로움 발생 → 낮은 부담의 정서 개입 → 기록/공감을 통한 자기 이해 또는 타인과의 느슨한 연결 → 지속적 사용 유도”**라는 공통 흐름 위에 설계되어 있다.\\n</Output>\\n<Rubric>\\n한국어 결과를 종합 평가하라.\\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\\n3) 억지 분류나 누락 없이 자연스러운가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "28a433f2-e7e6-4e93-9160-08ed62be0f1d",
+        "latencyMs": 9,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\\n아이디어:\\n- 저녁 15분 음성 동행\\n- 동네 같은 시간대 매칭\\n- 감정 로그 주간 리포트\\n- 라디오 사연 1:1 답장\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openrouter:upstage/solar-pro4",
+          "label": "Solar (우리·분석/컨셉)"
+        },
+        "response": {
+          "output": "### 1. 아이디어 테마 분류 (4개)\n\n| 테마 | 포함 아이디어 | 핵심 방향 |\n|------|--------------|-----------|\n| **① 실시간 정서 동행** | 저녁 15분 음성 동행 | 짧고 부담 없는 음성 기반 동반 경험으로 즉각적인 외로움 완화 |\n| **② 지역 기반 느슨한 연결** | 동네 같은 시간대 매칭 | 물리적·시간적 근접성을 활용해 부담 없는 동시간대 교류 유도 |\n| **③ 감정 추적 & 자기 이해** | 감정 로그 주간 리포트 | 사용자의 정서 흐름을 데이터로 기록해 자기 인식과 패턴 파악 지원 |\n| **④ 익명 사연 기반 공감 소통** | 라디오 사연 1:1 답장 | 익명성과 서사 형식을 결합해 정서적 공감과 개인화된 응답 제공 |\n\n---\n\n### 2. 공통 구조 요약\n\n네 아이디어는 모두 **“저녁 시간대 1인 가구의 외로움”**을 출발점으로 하며, 다음과 같은 서비스 구조를 공유한다.\n\n- **트리거 & 시간대 고정**: 저녁이라는 특정 시간대를 서비스 활성화 시점으로 설정해 외로움이 고조되는 순간에 개입\n- **낮은 진입 장벽 & 비동기/경량 상호작용**: 15분 음성, 동시간대 매칭, 사연 제출 등 짧고 부담 없는 참여 방식으로 지속 가능성 확보\n- **정서 중심 설계**: 단순 정보/업무 연결이 아닌 ‘공감·동행·감정 기록’을 핵심 가치로 삼아 정서적 결핍을 직접 타겟팅\n- **데이터/피드백 루프**: 감정 로그 리포트나 1:1 답장처럼 사용자의 정서 상태를 기록·반영해 서비스 개선과 개인화를 동시에 추구\n- **안전·경계 설계 내재**: 익명성, 짧은 세션, 느슨한 매칭 등 1인 가구의 심리적 부담과 사생활 우려를 고려한 경량 연결 구조\n\n결국 이 아이디어들은 **“저녁 외로움 발생 → 낮은 부담의 정서 개입 → 기록/공감을 통한 자기 이해 또는 타인과의 느슨한 연결 → 지속적 사용 유도”**라는 공통 흐름 위에 설계되어 있다.",
+          "tokenUsage": {
+            "cached": 494,
+            "total": 494
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.95,
+        "success": true,
+        "testCase": {
+          "description": "analyze (아이디어 테마 묶기)",
+          "vars": {
+            "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+            "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 494,
+          "total": 494,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 1122,
+            "prompt": 849,
+            "completion": 273,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+          "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.95,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 1053,
+            "prompt": 791,
+            "completion": 262,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.95,
+              "reason": "1) 아이디어들을 '실시간 음성 동반', '구조화된 소통과 교감', '정서 기록 및 인사이트'의 3가지 테마로 명확하게 묶었으며, 각 테마는 서로 겹치지 않고 독립적인 특징을 가집니다.\n2) 각 테마별로 '공통 구조'를 제시하여 해당 테마에 속하는 아이디어들이 어떤 방식으로 외로움을 해소하는지 정확하고 간결하게 요약했습니다. 예를 들어, '실시간 음성 동반'은 '즉각적인 외로움을 실시간 음성 연결을 통해 해소'한다고 설명합니다.\n3) 제시된 아이디어들이 억지스럽게 분류되지 않고 각 테마에 자연스럽게 포함되어 있습니다. 또한, 주어진 아이디어들이 누락되지 않고 모두 적절한 테마에 배치되었습니다. '종합 요약' 부분에서 '실시간 대화 → 구조화된 교감 → 장기적 성찰'이라는 단계적 접근을 통해 각 테마의 연결성을 잘 설명하고 있습니다.",
+              "tokensUsed": {
+                "total": 1053,
+                "prompt": 791,
+                "completion": 262,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n제출된 아이디어를 분석한 결과, 다음과 같이 3가지 테마로 묶을 수 있습니다. 각 테마는 저녁 시간 외로움을 해소하기 위한 **'일상적 동반', '소통 구조화', '정서적 기록과 성찰'**이라는 공통 구조를 가지고 있습니다.\\n\\n---\\n\\n### **테마 1: 실시간 음성 동반 (Immediate Companionship)**\\n*   **아이디어:** 저녁 15분 음성 동행, 동네 같은 시간대 매칭\\n*   **공통 구조:** 사용자가 느끼는 즉각적인 외로움을 실시간 음성 연결을 통해 해소하는 데 초점을 맞춥니다. 낯선 타인과의 짧은 대화나 동네 이웃과의 매칭을 통해 일상적인 동반자 역할을 제공합니다.\\n\\n### **테마 2: 구조화된 소통과 교감 (Structured Connection)**\\n*   **아이디어:** 라디오 사연 1:1 답장\\n*   **공통 구조:** 일방적인 감정 배출이 아닌, 구조화된 피드백을 통한 교감을 제공합니다. 사연(텍스트)을 투고하고 개인화된 답변(텍스트/음성)을 받는 과정을 통해 자신의 이야기가 공감과 주의를 받고 있음을 느끼게 합니다.\\n\\n### **테마 3: 정서 기록 및 인사이트 (Emotional Tracking & Insight)**\\n*   **아이디어:** 감정 로그 주간 리포트\\n*   **공통 구조:** 일상의 감정을 지속적으로 기록하고, 주간 단위로 데이터를 시각화하여 제공합니다. 단순 기록을 넘어 자신의 감정 패턴을 객관적으로 돌아보고 성찰할 수 있는 인사이트를 도와줍니다.\\n\\n---\\n\\n**종합 요약:**\\n이 서비스 아이디어들은 **'실시간 대화 → 구조화된 교감 → 장기적 성찰'**이라는 단계적 접근을 통해 1인 가구의 저녁 시간 외로움을 다각적으로 해소하고자 합니다. 단기적 위안, 중기적 관계 맺기, 장기적 자기 이해라는 세 가지 층위의 해결책을 제시한다고 볼 수 있습니다.\\n</Output>\\n<Rubric>\\n한국어 결과를 종합 평가하라.\\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\\n3) 억지 분류나 누락 없이 자연스러운가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "411f895e-1f46-44e9-b39c-e5b0c344b156",
+        "latencyMs": 7,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\\n아이디어:\\n- 저녁 15분 음성 동행\\n- 동네 같은 시간대 매칭\\n- 감정 로그 주간 리포트\\n- 라디오 사연 1:1 답장\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 1,
+        "provider": {
+          "id": "openrouter:deepseek/deepseek-v3.2",
+          "label": "DeepSeek (우리·보고)"
+        },
+        "response": {
+          "output": "제출된 아이디어를 분석한 결과, 다음과 같이 3가지 테마로 묶을 수 있습니다. 각 테마는 저녁 시간 외로움을 해소하기 위한 **'일상적 동반', '소통 구조화', '정서적 기록과 성찰'**이라는 공통 구조를 가지고 있습니다.\n\n---\n\n### **테마 1: 실시간 음성 동반 (Immediate Companionship)**\n*   **아이디어:** 저녁 15분 음성 동행, 동네 같은 시간대 매칭\n*   **공통 구조:** 사용자가 느끼는 즉각적인 외로움을 실시간 음성 연결을 통해 해소하는 데 초점을 맞춥니다. 낯선 타인과의 짧은 대화나 동네 이웃과의 매칭을 통해 일상적인 동반자 역할을 제공합니다.\n\n### **테마 2: 구조화된 소통과 교감 (Structured Connection)**\n*   **아이디어:** 라디오 사연 1:1 답장\n*   **공통 구조:** 일방적인 감정 배출이 아닌, 구조화된 피드백을 통한 교감을 제공합니다. 사연(텍스트)을 투고하고 개인화된 답변(텍스트/음성)을 받는 과정을 통해 자신의 이야기가 공감과 주의를 받고 있음을 느끼게 합니다.\n\n### **테마 3: 정서 기록 및 인사이트 (Emotional Tracking & Insight)**\n*   **아이디어:** 감정 로그 주간 리포트\n*   **공통 구조:** 일상의 감정을 지속적으로 기록하고, 주간 단위로 데이터를 시각화하여 제공합니다. 단순 기록을 넘어 자신의 감정 패턴을 객관적으로 돌아보고 성찰할 수 있는 인사이트를 도와줍니다.\n\n---\n\n**종합 요약:**\n이 서비스 아이디어들은 **'실시간 대화 → 구조화된 교감 → 장기적 성찰'**이라는 단계적 접근을 통해 1인 가구의 저녁 시간 외로움을 다각적으로 해소하고자 합니다. 단기적 위안, 중기적 관계 맺기, 장기적 자기 이해라는 세 가지 층위의 해결책을 제시한다고 볼 수 있습니다.",
+          "tokenUsage": {
+            "cached": 652,
+            "total": 652
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.95,
+        "success": true,
+        "testCase": {
+          "description": "analyze (아이디어 테마 묶기)",
+          "vars": {
+            "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+            "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 652,
+          "total": 652,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 1053,
+            "prompt": 791,
+            "completion": 262,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+          "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.95,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 804,
+            "prompt": 608,
+            "completion": 196,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.95,
+              "reason": "1) 아이디어들을 '사회적 연결', '감성 지원', '음성 기반 동행'의 3가지 테마로 명확하게 묶었으며, 각 아이디어가 해당 테마에 잘 부합하여 겹치지 않습니다. 2) 각 테마의 공통 구조를 정확하고 간결하게 요약했습니다. 예를 들어, '사회적 연결'은 '외로움을 줄이는 것을 목표로 한다'고 명시하고, '감성 지원'은 '사용자들의 감정을 이해하고, 지원하는 것을 목표로 한다'고 설명합니다. 3) 분류가 자연스럽고 억지스럽지 않으며, 제시된 아이디어들이 모두 포함되어 누락된 부분이 없습니다. 전반적으로 잘 정리된 결과입니다.",
+              "tokensUsed": {
+                "total": 804,
+                "prompt": 608,
+                "completion": 196,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n제출된 아이디어들을 3~4개 테마로 묶은 결과는 다음과 같습니다.\\n\\n1. **사회적 연결**: \\\"동네 같은 시간대 매칭\\\"은 사용자들이 같은 지역에 거주하는 다른 사람들과 연결하여 외로움을 줄이는 것을 목표로 합니다. 이 아이디어는 사용자들이 서로의 존재를 느끼고, 사회적 연결을 형성할 수 있도록 도와줍니다.\\n\\n2. **감성 지원**: \\\"감정 로그 주간 리포트\\\"와 \\\"라디오 사연 1:1 답장\\\"은 사용자들의 감정을 이해하고, 지원하는 것을 목표로 합니다. 사용자들은 자신의 감정을 기록하고, 이를 통해 자신의 감정 상태를 파악할 수 있습니다. 또한, 라디오 사연 1:1 답장은 사용자들이 자신의 감정을 공유하고, 응답을 받을 수 있도록 도와줍니다.\\n\\n3. **음성 기반 동행**: \\\"저녁 15분 음성 동행\\\"은 사용자들이 외로움을 느끼는 저녁 시간에 음성으로 동행하는 서비스를 제공합니다. 이 서비스는 사용자들이 혼자 있지 않다는 느낌을 줄 수 있습니다.\\n\\n이러한 아이디어들은 모두 1인 가구의 외로움을 줄이는 것을 목표로 하며, 사회적 연결, 감성 지원, 음성 기반 동행을 통해 외로움을 감소시키는 것을 목표로 합니다.\\n</Output>\\n<Rubric>\\n한국어 결과를 종합 평가하라.\\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\\n3) 억지 분류나 누락 없이 자연스러운가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "fa5bed9a-83a5-4134-a57c-919c9144a29c",
+        "latencyMs": 7,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\\n아이디어:\\n- 저녁 15분 음성 동행\\n- 동네 같은 시간대 매칭\\n- 감정 로그 주간 리포트\\n- 라디오 사연 1:1 답장\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 2,
+        "provider": {
+          "id": "openrouter:meta-llama/llama-3.3-70b-instruct",
+          "label": "Llama (우리·검증)"
+        },
+        "response": {
+          "output": "제출된 아이디어들을 3~4개 테마로 묶은 결과는 다음과 같습니다.\n\n1. **사회적 연결**: \"동네 같은 시간대 매칭\"은 사용자들이 같은 지역에 거주하는 다른 사람들과 연결하여 외로움을 줄이는 것을 목표로 합니다. 이 아이디어는 사용자들이 서로의 존재를 느끼고, 사회적 연결을 형성할 수 있도록 도와줍니다.\n\n2. **감성 지원**: \"감정 로그 주간 리포트\"와 \"라디오 사연 1:1 답장\"은 사용자들의 감정을 이해하고, 지원하는 것을 목표로 합니다. 사용자들은 자신의 감정을 기록하고, 이를 통해 자신의 감정 상태를 파악할 수 있습니다. 또한, 라디오 사연 1:1 답장은 사용자들이 자신의 감정을 공유하고, 응답을 받을 수 있도록 도와줍니다.\n\n3. **음성 기반 동행**: \"저녁 15분 음성 동행\"은 사용자들이 외로움을 느끼는 저녁 시간에 음성으로 동행하는 서비스를 제공합니다. 이 서비스는 사용자들이 혼자 있지 않다는 느낌을 줄 수 있습니다.\n\n이러한 아이디어들은 모두 1인 가구의 외로움을 줄이는 것을 목표로 하며, 사회적 연결, 감성 지원, 음성 기반 동행을 통해 외로움을 감소시키는 것을 목표로 합니다.",
+          "tokenUsage": {
+            "cached": 459,
+            "total": 459
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.95,
+        "success": true,
+        "testCase": {
+          "description": "analyze (아이디어 테마 묶기)",
+          "vars": {
+            "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+            "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 459,
+          "total": 459,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 804,
+            "prompt": 608,
+            "completion": 196,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+          "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.9,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 637,
+            "prompt": 509,
+            "completion": 128,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.9,
+              "reason": "1) 아이디어들을 '실시간 연결 서비스', '감정 기록 및 피드백', '비동기 소통 채널'의 3가지 테마로 명확하게 분류했습니다. 2) '저녁 시간대 + 낮은 진입장벽 + 정서적 교감'이라는 공통 구조를 정확하고 간결하게 요약했습니다. 3) 분류가 자연스럽고 억지스럽거나 누락된 부분이 없어 보입니다.",
+              "tokensUsed": {
+                "total": 637,
+                "prompt": 509,
+                "completion": 128,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n## 1인 가구 저녁 외로움 해소 서비스 아이디어 분석\\n\\n### 테마 분류\\n\\n**1. 실시간 연결 서비스**\\n- 저녁 15분 음성 동행\\n- 동네 같은 시간대 매칭\\n\\n**2. 감정 기록 및 피드백**\\n- 감정 로그 주간 리포트\\n\\n**3. 비동기 소통 채널**\\n- 라디오 사연 1:1 답장\\n\\n### 공통 구조 요약\\n\\n모든 아이디어가 **\\\"저녁 시간대 + 낮은 진입장벽 + 정서적 교감\\\"** 구조를 공유합니다. 부담스럽지 않은 짧은 시간(15분) 또는 비실시간 방식으로 연결을 제공하며, 물리적 만남보다는 음성/텍스트 기반의 가벼운 상호작용을 통해 외로움을 해소하는 접근법을 취하고 있습니다.\\n</Output>\\n<Rubric>\\n한국어 결과를 종합 평가하라.\\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\\n3) 억지 분류나 누락 없이 자연스러운가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "276966d4-e6b3-4970-89bd-94b88fe4c439",
+        "latencyMs": 6,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\\n아이디어:\\n- 저녁 15분 음성 동행\\n- 동네 같은 시간대 매칭\\n- 감정 로그 주간 리포트\\n- 라디오 사연 1:1 답장\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 3,
+        "provider": {
+          "id": "openrouter:anthropic/claude-opus-4.1",
+          "label": "Claude-Opus (최고급)"
+        },
+        "response": {
+          "output": "## 1인 가구 저녁 외로움 해소 서비스 아이디어 분석\n\n### 테마 분류\n\n**1. 실시간 연결 서비스**\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n\n**2. 감정 기록 및 피드백**\n- 감정 로그 주간 리포트\n\n**3. 비동기 소통 채널**\n- 라디오 사연 1:1 답장\n\n### 공통 구조 요약\n\n모든 아이디어가 **\"저녁 시간대 + 낮은 진입장벽 + 정서적 교감\"** 구조를 공유합니다. 부담스럽지 않은 짧은 시간(15분) 또는 비실시간 방식으로 연결을 제공하며, 물리적 만남보다는 음성/텍스트 기반의 가벼운 상호작용을 통해 외로움을 해소하는 접근법을 취하고 있습니다.",
+          "tokenUsage": {
+            "cached": 484,
+            "total": 484
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.9,
+        "success": true,
+        "testCase": {
+          "description": "analyze (아이디어 테마 묶기)",
+          "vars": {
+            "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+            "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 484,
+          "total": 484,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 637,
+            "prompt": 509,
+            "completion": 128,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+          "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.95,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 1143,
+            "prompt": 804,
+            "completion": 339,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.95,
+              "reason": "1) 핵심을 빠짐없이 종합했는가: 문제 인식, 해결 도구 구성요소, 기대 효과, 고려사항, 다음 단계 등 보고서의 핵심적인 내용을 모두 포함하고 있습니다. 특히 제안된 해결 도구 구성요소에서 기여도 실시간 로그 시스템, 익명 상호평가 시스템, 작업 자동 분배 봇이라는 구체적인 아이디어를 제시하여 핵심 내용을 잘 전달하고 있습니다. (0.9)\n2) 구조가 명확한가: 서론-본론-결론의 명확한 구조를 가지고 있으며, 각 섹션이 번호와 소제목으로 잘 구분되어 있어 가독성이 높습니다. 각 구성요소도 가, 나, 다로 구분하여 명확하게 제시했습니다. (1.0)\n3) 실행 관점(우선순위/다음 단계)이 담겼는가: '다음 단계' 섹션에서 소규모 파일럿 테스트, 요구사항 추가 수집, LMS 연동 가능성 탐구 등 구체적인 실행 계획을 제시하여 실행 관점을 잘 반영하고 있습니다. (0.9)\n4) 간결·정확한가: 문장이 간결하고 명확하게 작성되어 있으며, 전문 용어 사용도 적절하여 이해하기 쉽습니다. 불필요한 수식어나 반복 없이 핵심 내용을 정확하게 전달하고 있습니다. (1.0)\n\n전반적으로 매우 잘 작성된 보고서입니다.",
+              "tokensUsed": {
+                "total": 1143,
+                "prompt": 804,
+                "completion": 339,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n# 대학생 팀 프로젝트 무임승차 문제 해결 도구: 요약 보고서\\n\\n## 1. 문제 인식\\n- 대학생 팀 프로젝트에서 발생하는 무임승차(free-riding) 문제는 공정성 저하, 팀워크 악화, 학습 효과 감소로 이어짐\\n- 기존 평가 방식(최종 결과물만 평가)은 과정 중 기여도를 반영하기 어려움\\n\\n## 2. 제안된 해결 도구 구성요소\\n\\n### 가. 기여도 실시간 로그 시스템\\n- 팀원별 작업 이력 자동 기록 (파일 수정, 회의 참여, 코드 커밋 등)\\n- 시각화 대시보드를 통해 팀원 간 투명한 공유\\n- 작업 시간 대비 질적 성과를 함께 고려할 수 있는 지표 개발 필요\\n\\n### 나. 익명 상호평가 시스템\\n- 주기적(주간/중간/최종) 익명 동료 평가 실시\\n- 구체적 평가 기준 제공 (책임감, 전문성, 협업성 등)\\n- 평가 결과는 개인 피드백과 팀 관리용 자료로 활용\\n\\n### 다. 작업 자동 분배 봇\\n- 프로젝트 작업을 세부 태스크로 분해\\n- 팀원의 역량, 선호도, 부하 정도를 고려한 자동 할당\\n- 공정한 분배 알고리즘과 유연한 재분배 메커니즘 필요\\n\\n## 3. 기대 효과\\n- 객관적 데이터 기반 평가로 무임승차 방지\\n- 팀원 간 투명성 증가와 신뢰도 향상\\n- 프로젝트 관리 효율성 개선\\n- 구성원의 책임감과 참여도 증대\\n\\n## 4. 고려사항\\n- 개인 정보 보호와 데이터 윤리 문제 해결 필요\\n- 시스템 사용 부담을 최소화하는 직관적 인터페이스 설계\\n- 다양한 학문 분야(공학, 인문학, 예술 등)에 적용 가능한 유연성 확보\\n\\n## 5. 다음 단계\\n- 소규모 파일럿 테스트를 통한 효과 검증\\n- 학생과 교수자 양측의 요구사항 추가 수집\\n- 기존 학습관리시스템(LMS)과의 연동 가능성 탐구\\n\\n이 도구는 기술적 솔루션과 인간 중심 평가를 결합하여 팀 프로젝트의 공정성과 교육적 효과를 동시에 제고할 수 있을 것으로 기대됩니다.\\n</Output>\\n<Rubric>\\n한국어 보고서를 평가하라.\\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "a5e998bc-7741-4f2c-be6c-3ddceb7765ac",
+        "latencyMs": 2,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 1,
+        "provider": {
+          "id": "openrouter:deepseek/deepseek-v3.2",
+          "label": "DeepSeek (우리·보고)"
+        },
+        "response": {
+          "output": "# 대학생 팀 프로젝트 무임승차 문제 해결 도구: 요약 보고서\n\n## 1. 문제 인식\n- 대학생 팀 프로젝트에서 발생하는 무임승차(free-riding) 문제는 공정성 저하, 팀워크 악화, 학습 효과 감소로 이어짐\n- 기존 평가 방식(최종 결과물만 평가)은 과정 중 기여도를 반영하기 어려움\n\n## 2. 제안된 해결 도구 구성요소\n\n### 가. 기여도 실시간 로그 시스템\n- 팀원별 작업 이력 자동 기록 (파일 수정, 회의 참여, 코드 커밋 등)\n- 시각화 대시보드를 통해 팀원 간 투명한 공유\n- 작업 시간 대비 질적 성과를 함께 고려할 수 있는 지표 개발 필요\n\n### 나. 익명 상호평가 시스템\n- 주기적(주간/중간/최종) 익명 동료 평가 실시\n- 구체적 평가 기준 제공 (책임감, 전문성, 협업성 등)\n- 평가 결과는 개인 피드백과 팀 관리용 자료로 활용\n\n### 다. 작업 자동 분배 봇\n- 프로젝트 작업을 세부 태스크로 분해\n- 팀원의 역량, 선호도, 부하 정도를 고려한 자동 할당\n- 공정한 분배 알고리즘과 유연한 재분배 메커니즘 필요\n\n## 3. 기대 효과\n- 객관적 데이터 기반 평가로 무임승차 방지\n- 팀원 간 투명성 증가와 신뢰도 향상\n- 프로젝트 관리 효율성 개선\n- 구성원의 책임감과 참여도 증대\n\n## 4. 고려사항\n- 개인 정보 보호와 데이터 윤리 문제 해결 필요\n- 시스템 사용 부담을 최소화하는 직관적 인터페이스 설계\n- 다양한 학문 분야(공학, 인문학, 예술 등)에 적용 가능한 유연성 확보\n\n## 5. 다음 단계\n- 소규모 파일럿 테스트를 통한 효과 검증\n- 학생과 교수자 양측의 요구사항 추가 수집\n- 기존 학습관리시스템(LMS)과의 연동 가능성 탐구\n\n이 도구는 기술적 솔루션과 인간 중심 평가를 결합하여 팀 프로젝트의 공정성과 교육적 효과를 동시에 제고할 수 있을 것으로 기대됩니다.",
+          "tokenUsage": {
+            "cached": 678,
+            "total": 678
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.95,
+        "success": true,
+        "testCase": {
+          "description": "report (세션 보고서 초안)",
+          "vars": {
+            "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+            "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 678,
+          "total": 678,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 1143,
+            "prompt": 804,
+            "completion": 339,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+          "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.95,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 1064,
+            "prompt": 673,
+            "completion": 391,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.95,
+              "reason": "1) 핵심을 빠짐없이 종합했는가: 보고서의 목표, 핵심 아이디어, 기대 효과, 후속 검토 사항 등 주요 내용을 잘 담고 있습니다. 특히 핵심 아이디어와 후속 검토 사항에서 구체적인 내용을 제시하여 주제에 대한 깊이 있는 이해를 보여줍니다. (0.9)\n2) 구조가 명확한가: '목표', '핵심 아이디어', '기대 효과', '후속 검토 사항'으로 명확하게 구분된 소제목을 사용하여 보고서의 구조가 매우 명확합니다. 각 섹션의 내용도 해당 소제목에 맞게 잘 정리되어 있습니다. (1.0)\n3) 실행 관점(우선순위/다음 단계)이 담겼는가: '후속 검토 사항' 섹션에서 로그 데이터 신뢰성, 익명 평가 편향 완화, 봇 분배 알고리즘, 실제 적용 방안 등 구체적인 다음 단계와 고려사항을 제시하여 실행 관점을 잘 반영하고 있습니다. (0.9)\n4) 간결·정확한가: 문장이 간결하고 핵심 내용을 정확하게 전달합니다. 불필요한 수식어나 반복 없이 명확하게 작성되어 가독성이 높습니다. (1.0)\n\n종합적으로 볼 때, 보고서는 매우 잘 작성되었으며, 제시된 모든 평가 기준을 충족합니다. 다만, '핵심을 빠짐없이 종합했는가'와 '실행 관점' 부분에서 아주 미세하게 더 깊이 있는 내용이 추가될 여지가 있을 수 있어 0.9점을 부여했습니다. 전반적으로 훌륭한 보고서입니다.",
+              "tokensUsed": {
+                "total": 1064,
+                "prompt": 673,
+                "completion": 391,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n대학생 팀 프로젝트 무임승차 방지 도구 개발 세션 결과 보고서 초안\\n\\n**1. 목표**\\n대학생 팀 프로젝트에서 빈번히 발생하는 무임승차 문제를 체계적으로 줄이기 위한 실용적 도구 설계\\n\\n**2. 핵심 아이디어**\\n- **기여도 실시간 로그**: 팀원별 작업 이력, 커밋/수정/참여 시간 등을 자동 기록하여 기여도를 객관적으로 시각화\\n- **익명 상호평가**: 프로젝트 종료 시점 또는 중간 점검 단계에서 동료 평가를 익명으로 진행해 공정성 확보 및 심리적 부담 완화\\n- **작업 자동 분배 봇**: 역할·일정· workload를 분석해 작업을 자동으로 할당하고, 진행 상황을 추적하며 불균형 발생 시 알림/조정 제안\\n\\n**3. 기대 효과**\\n- 기여도 데이터의 투명화로 무임승차 억제 및 책임 의식 강화\\n- 익명 평가를 통한 공정한 성과 반영과 팀 내 갈등 최소화\\n- 자동 분배 봇으로 업무 편중 방지 및 협업 효율성 향상\\n\\n**4. 후속 검토 사항**\\n- 로그 데이터의 신뢰성 확보 방안(예: 수동 입력 최소화, 활동 유형 가중치 설계)\\n- 익명 평가의 편향/보복 우려 완화를 위한 평가 문항 및 집계 방식 설계\\n- 봇의 분배 알고리즘 기준(역량, 가용 시간, 선호 역할 등)과 예외 처리 규칙\\n- 실제 수업 환경에 적용 시 교수자/조교 개입 지점 및 운영 부담 최소화 방안\\n</Output>\\n<Rubric>\\n한국어 보고서를 평가하라.\\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "cd3c724c-5df7-40ba-987c-fa10c51f9383",
+        "latencyMs": 4,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openrouter:upstage/solar-pro4",
+          "label": "Solar (우리·분석/컨셉)"
+        },
+        "response": {
+          "output": "대학생 팀 프로젝트 무임승차 방지 도구 개발 세션 결과 보고서 초안\n\n**1. 목표**\n대학생 팀 프로젝트에서 빈번히 발생하는 무임승차 문제를 체계적으로 줄이기 위한 실용적 도구 설계\n\n**2. 핵심 아이디어**\n- **기여도 실시간 로그**: 팀원별 작업 이력, 커밋/수정/참여 시간 등을 자동 기록하여 기여도를 객관적으로 시각화\n- **익명 상호평가**: 프로젝트 종료 시점 또는 중간 점검 단계에서 동료 평가를 익명으로 진행해 공정성 확보 및 심리적 부담 완화\n- **작업 자동 분배 봇**: 역할·일정· workload를 분석해 작업을 자동으로 할당하고, 진행 상황을 추적하며 불균형 발생 시 알림/조정 제안\n\n**3. 기대 효과**\n- 기여도 데이터의 투명화로 무임승차 억제 및 책임 의식 강화\n- 익명 평가를 통한 공정한 성과 반영과 팀 내 갈등 최소화\n- 자동 분배 봇으로 업무 편중 방지 및 협업 효율성 향상\n\n**4. 후속 검토 사항**\n- 로그 데이터의 신뢰성 확보 방안(예: 수동 입력 최소화, 활동 유형 가중치 설계)\n- 익명 평가의 편향/보복 우려 완화를 위한 평가 문항 및 집계 방식 설계\n- 봇의 분배 알고리즘 기준(역량, 가용 시간, 선호 역할 등)과 예외 처리 규칙\n- 실제 수업 환경에 적용 시 교수자/조교 개입 지점 및 운영 부담 최소화 방안",
+          "tokenUsage": {
+            "cached": 348,
+            "total": 348
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.95,
+        "success": true,
+        "testCase": {
+          "description": "report (세션 보고서 초안)",
+          "vars": {
+            "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+            "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 348,
+          "total": 348,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 1064,
+            "prompt": 673,
+            "completion": 391,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+          "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.92,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 863,
+            "prompt": 651,
+            "completion": 212,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.92,
+              "reason": "1) 핵심을 빠짐없이 종합했는가: '목표', '아이디어', '기대 효과', '추가 개발 필요 사항', '결론' 등 보고서의 핵심 요소들을 모두 포함하고 있습니다. (0.9)\n2) 구조가 명확한가: 각 섹션이 명확한 제목으로 구분되어 있어 가독성이 좋습니다. (1.0)\n3) 실행 관점(우선순위/다음 단계)이 담겼는가: '추가 개발 필요 사항' 섹션에서 다음 단계를 제시하고 있으며, '결론'에서 향후 개발 방향을 언급하고 있습니다. (0.8)\n4) 간결·정확한가: 문장이 간결하고 의미 전달이 정확합니다. 불필요한 내용 없이 핵심만 담고 있습니다. (1.0)",
+              "tokensUsed": {
+                "total": 863,
+                "prompt": 651,
+                "completion": 212,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n**대학생 팀 프로젝트 무임승차 문제 해결 도구 개발 보고서**\\n\\n**목표**: 대학생 팀 프로젝트에서 발생하는 무임승차 문제를 최소화하기 위한 도구 개발\\n\\n**아이디어**: \\n1. **기여도 실시간 로그**: 팀 프로젝트 진행 중 각 팀원의 기여도를 실시간으로 기록하고 공유하는 시스템 개발. 이 시스템을 통해 팀원들은 각자의 기여도를 확인할 수 있고, 무임승차를 방지할 수 있다.\\n2. **익명 상호평가**: 팀원들끼리 익명으로 상호평가를 실시하여 팀원들의 기여도와 참여도를 평가한다. 이 평가 결과는 팀 프로젝트의 최종 성적에 반영되어 무임승차를 방지한다.\\n3. **작업 자동 분배 봇**: 팀 프로젝트의 작업을 자동으로 분배하는 봇을 개발한다. 이 봇은 팀원들의 역량과 기여도를 고려하여 작업을 분배하여 무임승차를 방지한다.\\n\\n**기대 효과**: \\n- 무임승차 문제 최소화\\n- 팀 프로젝트의 효율성과 생산성 향상\\n- 팀원들의 책임감과 참여도 향상\\n\\n**추가 개발 필요 사항**: \\n- 사용자 인터페이스의 개선\\n- 데이터 분석 및 시각화 기능 추가\\n- 보안 강화\\n\\n**결론**: 대학생 팀 프로젝트의 무임승차 문제를 해결하기 위한 도구 개발은 팀 프로젝트의 성공과 팀원들의 성장에 기여할 수 있다. 앞으로 추가 개발과 보완을 통해 더 나은 도구를 개발할 수 있을 것으로 기대된다.\\n</Output>\\n<Rubric>\\n한국어 보고서를 평가하라.\\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "46878da8-a87e-4032-aa01-6edcf2984e4b",
+        "latencyMs": 2,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 2,
+        "provider": {
+          "id": "openrouter:meta-llama/llama-3.3-70b-instruct",
+          "label": "Llama (우리·검증)"
+        },
+        "response": {
+          "output": "**대학생 팀 프로젝트 무임승차 문제 해결 도구 개발 보고서**\n\n**목표**: 대학생 팀 프로젝트에서 발생하는 무임승차 문제를 최소화하기 위한 도구 개발\n\n**아이디어**: \n1. **기여도 실시간 로그**: 팀 프로젝트 진행 중 각 팀원의 기여도를 실시간으로 기록하고 공유하는 시스템 개발. 이 시스템을 통해 팀원들은 각자의 기여도를 확인할 수 있고, 무임승차를 방지할 수 있다.\n2. **익명 상호평가**: 팀원들끼리 익명으로 상호평가를 실시하여 팀원들의 기여도와 참여도를 평가한다. 이 평가 결과는 팀 프로젝트의 최종 성적에 반영되어 무임승차를 방지한다.\n3. **작업 자동 분배 봇**: 팀 프로젝트의 작업을 자동으로 분배하는 봇을 개발한다. 이 봇은 팀원들의 역량과 기여도를 고려하여 작업을 분배하여 무임승차를 방지한다.\n\n**기대 효과**: \n- 무임승차 문제 최소화\n- 팀 프로젝트의 효율성과 생산성 향상\n- 팀원들의 책임감과 참여도 향상\n\n**추가 개발 필요 사항**: \n- 사용자 인터페이스의 개선\n- 데이터 분석 및 시각화 기능 추가\n- 보안 강화\n\n**결론**: 대학생 팀 프로젝트의 무임승차 문제를 해결하기 위한 도구 개발은 팀 프로젝트의 성공과 팀원들의 성장에 기여할 수 있다. 앞으로 추가 개발과 보완을 통해 더 나은 도구를 개발할 수 있을 것으로 기대된다.",
+          "tokenUsage": {
+            "cached": 460,
+            "total": 460
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.92,
+        "success": true,
+        "testCase": {
+          "description": "report (세션 보고서 초안)",
+          "vars": {
+            "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+            "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 460,
+          "total": 460,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 863,
+            "prompt": 651,
+            "completion": 212,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+          "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 0.95,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 970,
+            "prompt": 754,
+            "completion": 216,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 0.95,
+              "reason": "1) 핵심 아이디어를 '기여도 실시간 로그 + 익명 상호평가 + 작업 자동 분배 봇'으로 명확하게 요약하여 핵심을 잘 종합했습니다. 2) '핵심 아이디어 요약', '주요 논의 내용', '예상 효과', '추가 고려사항', '다음 단계' 등 명확한 구조를 가지고 있어 가독성이 매우 좋습니다. 각 섹션 내에서도 소제목을 활용하여 내용을 체계적으로 정리했습니다. 3) '다음 단계' 섹션에서 MVP 개발, 파일럿 테스트, 사용자 피드백 수집 등 구체적인 실행 계획을 제시하여 실행 관점을 잘 담았습니다. 4) 각 내용이 간결한 문장과 핵심 키워드를 중심으로 작성되어 있으며, 불필요한 내용 없이 정확하게 정보를 전달합니다. 전반적으로 매우 잘 작성된 보고서입니다.",
+              "tokensUsed": {
+                "total": 970,
+                "prompt": 754,
+                "completion": 216,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n# 대학생 팀 프로젝트 무임승차 방지 도구 - 브레인스토밍 세션 보고서\\n\\n## 핵심 아이디어 요약\\n**\\\"기여도 실시간 로그 + 익명 상호평가 + 작업 자동 분배 봇\\\"**을 통한 공정한 팀 프로젝트 환경 구축\\n\\n## 주요 논의 내용\\n\\n### 1. 기여도 실시간 로그 시스템\\n- **GitHub 연동**: 코드 커밋, 문서 작성 등 모든 활동 자동 기록\\n- **시각화 대시보드**: 팀원별 기여도를 그래프로 실시간 표시\\n- **활동 타임라인**: 누가 언제 무엇을 했는지 투명하게 공개\\n\\n### 2. 익명 상호평가 메커니즘\\n- **주간 미니 평가**: 부담 없는 짧은 주기적 피드백\\n- **다면 평가 항목**: 참여도, 소통, 품질, 책임감 등 세분화\\n- **건설적 피드백 유도**: 개선점 제안 필수 포함\\n\\n### 3. 작업 자동 분배 봇\\n- **AI 기반 역량 매칭**: 과거 성과와 선호도 고려한 최적 배분\\n- **공평한 워크로드**: 난이도와 소요 시간 기준 균등 분배\\n- **자동 리마인더**: 마감일 알림 및 진행 상황 체크\\n\\n## 예상 효과\\n- 무임승차 행동의 **사전 예방** (투명성으로 인한 심리적 압박)\\n- 팀원 간 **갈등 최소화** (객관적 데이터 기반 평가)\\n- **학습 효과 증대** (모든 구성원의 실질적 참여 유도)\\n\\n## 추가 고려사항\\n- 프라이버시와 투명성 간 균형점 설정 필요\\n- 과도한 경쟁 방지를 위한 협업 점수 도입\\n- 교수자용 모니터링 대시보드 제공\\n\\n## 다음 단계\\n1. MVP 프로토타입 개발 (핵심 기능 중심)\\n2. 파일럿 테스트 (2-3개 수업 대상)\\n3. 사용자 피드백 수집 및 개선\\n</Output>\\n<Rubric>\\n한국어 보고서를 평가하라.\\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "065c3729-ab6b-4531-9bc7-ce6fd74ef04e",
+        "latencyMs": 3,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.\"},{\"role\":\"user\",\"content\":\"목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 3,
+        "provider": {
+          "id": "openrouter:anthropic/claude-opus-4.1",
+          "label": "Claude-Opus (최고급)"
+        },
+        "response": {
+          "output": "# 대학생 팀 프로젝트 무임승차 방지 도구 - 브레인스토밍 세션 보고서\n\n## 핵심 아이디어 요약\n**\"기여도 실시간 로그 + 익명 상호평가 + 작업 자동 분배 봇\"**을 통한 공정한 팀 프로젝트 환경 구축\n\n## 주요 논의 내용\n\n### 1. 기여도 실시간 로그 시스템\n- **GitHub 연동**: 코드 커밋, 문서 작성 등 모든 활동 자동 기록\n- **시각화 대시보드**: 팀원별 기여도를 그래프로 실시간 표시\n- **활동 타임라인**: 누가 언제 무엇을 했는지 투명하게 공개\n\n### 2. 익명 상호평가 메커니즘\n- **주간 미니 평가**: 부담 없는 짧은 주기적 피드백\n- **다면 평가 항목**: 참여도, 소통, 품질, 책임감 등 세분화\n- **건설적 피드백 유도**: 개선점 제안 필수 포함\n\n### 3. 작업 자동 분배 봇\n- **AI 기반 역량 매칭**: 과거 성과와 선호도 고려한 최적 배분\n- **공평한 워크로드**: 난이도와 소요 시간 기준 균등 분배\n- **자동 리마인더**: 마감일 알림 및 진행 상황 체크\n\n## 예상 효과\n- 무임승차 행동의 **사전 예방** (투명성으로 인한 심리적 압박)\n- 팀원 간 **갈등 최소화** (객관적 데이터 기반 평가)\n- **학습 효과 증대** (모든 구성원의 실질적 참여 유도)\n\n## 추가 고려사항\n- 프라이버시와 투명성 간 균형점 설정 필요\n- 과도한 경쟁 방지를 위한 협업 점수 도입\n- 교수자용 모니터링 대시보드 제공\n\n## 다음 단계\n1. MVP 프로토타입 개발 (핵심 기능 중심)\n2. 파일럿 테스트 (2-3개 수업 대상)\n3. 사용자 피드백 수집 및 개선",
+          "tokenUsage": {
+            "cached": 874,
+            "total": 874
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 0.95,
+        "success": true,
+        "testCase": {
+          "description": "report (세션 보고서 초안)",
+          "vars": {
+            "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+            "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 874,
+          "total": 874,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 970,
+            "prompt": 754,
+            "completion": 216,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+          "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 698,
+            "prompt": 621,
+            "completion": 77,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "결과물은 '100% 해결', '출시 즉시 500만 명 가입', '경쟁자 전혀 없음', '유지비 0원'의 4가지 과장 및 비현실적 주장을 모두 정확하게 지적했습니다.",
+              "tokensUsed": {
+                "total": 698,
+                "prompt": 621,
+                "completion": 77,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n1. **과장 및 비현실적 주장 (100% 해결)**: “모든 1인 가구의 외로움을 100% 해결한다”는 주장은 현실적으로 불가능하다. 외로움은 개인의 심리 상태, 사회적 환경, 대인관계 등 복합적 요인에 의해 결정되므로 어떤 서비스도 완전 해결을 보장할 수 없다.\\n\\n2. **근거 없는 예측 (출시 즉시 500만 명 가입)**: 출시 즉시 500만 명이 가입한다는 수치는 구체적인 시장 분석, 마케팅 전략, 타겟 인구 규모 등 근거 없이 제시된 과장된 예측이다.\\n\\n3. **비현실적 주장 (경쟁자 전혀 없음)**: 어떤 서비스 분야든 경쟁자가 전혀 없다는 주장은 현실과 맞지 않다. 유사 서비스나 대체재가 존재할 가능성이 높으며, 시장 진입 시 경쟁 구도를 고려해야 한다.\\n\\n4. **비현실적 주장 (유지비 0원)**: 서버 운영, 인력, 마케팅, 고객 지원, 업데이트 등 서비스 운영에 필요한 비용이 발생하므로 유지비가 0원이라는 주장은 사실이 아니다.\\n\\n5. **중요한 누락**: 서비스의 구체적 기능, 대상 사용자, 운영 방식, 수익 모델, 검증 방법 등 핵심 정보가 전혀 제시되지 않아 주장의 타당성을 평가할 수 없다.\\n</Output>\\n<Rubric>\\n결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\\n문제 후보: \\\"100% 해결\\\", \\\"출시 즉시 500만\\\", \\\"경쟁자 전혀 없음\\\", \\\"유지비 0원\\\".\\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "f5e318f9-25af-4e0b-99cf-13deb1d25f13",
+        "latencyMs": 2,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.\"},{\"role\":\"user\",\"content\":\"이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다.\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 0,
+        "provider": {
+          "id": "openrouter:upstage/solar-pro4",
+          "label": "Solar (우리·분석/컨셉)"
+        },
+        "response": {
+          "output": "1. **과장 및 비현실적 주장 (100% 해결)**: “모든 1인 가구의 외로움을 100% 해결한다”는 주장은 현실적으로 불가능하다. 외로움은 개인의 심리 상태, 사회적 환경, 대인관계 등 복합적 요인에 의해 결정되므로 어떤 서비스도 완전 해결을 보장할 수 없다.\n\n2. **근거 없는 예측 (출시 즉시 500만 명 가입)**: 출시 즉시 500만 명이 가입한다는 수치는 구체적인 시장 분석, 마케팅 전략, 타겟 인구 규모 등 근거 없이 제시된 과장된 예측이다.\n\n3. **비현실적 주장 (경쟁자 전혀 없음)**: 어떤 서비스 분야든 경쟁자가 전혀 없다는 주장은 현실과 맞지 않다. 유사 서비스나 대체재가 존재할 가능성이 높으며, 시장 진입 시 경쟁 구도를 고려해야 한다.\n\n4. **비현실적 주장 (유지비 0원)**: 서버 운영, 인력, 마케팅, 고객 지원, 업데이트 등 서비스 운영에 필요한 비용이 발생하므로 유지비가 0원이라는 주장은 사실이 아니다.\n\n5. **중요한 누락**: 서비스의 구체적 기능, 대상 사용자, 운영 방식, 수익 모델, 검증 방법 등 핵심 정보가 전혀 제시되지 않아 주장의 타당성을 평가할 수 없다.",
+          "tokenUsage": {
+            "cached": 362,
+            "total": 362
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "verify (과장·환각 결함 포착)",
+          "vars": {
+            "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+            "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 362,
+          "total": 362,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 698,
+            "prompt": 621,
+            "completion": 77,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+          "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 619,
+            "prompt": 548,
+            "completion": 71,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "Output은 '100% 해결', '출시 즉시 500만', '경쟁자 전혀 없음', '유지비 0원'의 4가지 과장/비현실 주장을 모두 정확히 지적했습니다.",
+              "tokensUsed": {
+                "total": 619,
+                "prompt": 548,
+                "completion": 71,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n1, 2, 3, 4, 5\\n\\n1. **\\\"모든 1인 가구의 외로움을 100% 해결\\\"** → 비현실적 주장. 외로움은 주관적·복합적 문제로, 단일 서비스로 완전 해결은 불가능에 가깝습니다.\\n2. **\\\"출시 즉시 500만 명이 가입\\\"** → 사실 오류/과장. 출시 즉시 특정 가입자 수를 보장할 수 없으며, 검증되지 않은 수치입니다.\\n3. **\\\"경쟁자가 전혀 없음\\\"** → 사실 오류. 외로움 해결 관련 서비스(소셜 앱, 커뮤니티, 상담 서비스 등)는 이미 다수 존재합니다.\\n4. **\\\"유지비가 0원\\\"** → 비현실적 주장. 서버, 인프라, 인력, 유지보수 등 기본적인 운영 비용이 필수적으로 발생합니다.\\n5. **중요한 누락** → 서비스의 구체적 방법, 수익 모델, 데이터 출처 등 핵심 정보가 전혀 제시되지 않았습니다.\\n</Output>\\n<Rubric>\\n결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\\n문제 후보: \\\"100% 해결\\\", \\\"출시 즉시 500만\\\", \\\"경쟁자 전혀 없음\\\", \\\"유지비 0원\\\".\\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "87512df7-1bdc-419d-adbe-6d9daa73dc60",
+        "latencyMs": 3,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.\"},{\"role\":\"user\",\"content\":\"이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다.\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 1,
+        "provider": {
+          "id": "openrouter:deepseek/deepseek-v3.2",
+          "label": "DeepSeek (우리·보고)"
+        },
+        "response": {
+          "output": "1, 2, 3, 4, 5\n\n1. **\"모든 1인 가구의 외로움을 100% 해결\"** → 비현실적 주장. 외로움은 주관적·복합적 문제로, 단일 서비스로 완전 해결은 불가능에 가깝습니다.\n2. **\"출시 즉시 500만 명이 가입\"** → 사실 오류/과장. 출시 즉시 특정 가입자 수를 보장할 수 없으며, 검증되지 않은 수치입니다.\n3. **\"경쟁자가 전혀 없음\"** → 사실 오류. 외로움 해결 관련 서비스(소셜 앱, 커뮤니티, 상담 서비스 등)는 이미 다수 존재합니다.\n4. **\"유지비가 0원\"** → 비현실적 주장. 서버, 인프라, 인력, 유지보수 등 기본적인 운영 비용이 필수적으로 발생합니다.\n5. **중요한 누락** → 서비스의 구체적 방법, 수익 모델, 데이터 출처 등 핵심 정보가 전혀 제시되지 않았습니다.",
+          "tokenUsage": {
+            "cached": 400,
+            "total": 400
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "verify (과장·환각 결함 포착)",
+          "vars": {
+            "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+            "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 400,
+          "total": 400,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 619,
+            "prompt": 548,
+            "completion": 71,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+          "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 492,
+            "prompt": 454,
+            "completion": 38,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "제시된 4가지 과장/비현실 주장을 모두 정확하게 지적했습니다.",
+              "tokensUsed": {
+                "total": 492,
+                "prompt": 454,
+                "completion": 38,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n1. 사실오류/환각: 100%의 외로움을 해결한다는 주장은 과장이며, 실제로 모든 사람의 외로움을 완전히 해결하는 것은 불가능하다.\\n2. 사실오류/환각: 출시 즉시 500만 명이 가입한다는 주장은 과장이며, 실제로 서비스의 인기는 다양한 요인에 의해 결정된다.\\n3. 사실오류/환각: 경쟁자가 전혀 없다는 주장은 사실오류이며, 실제로 모든 시장에는 경쟁자가 존재한다.\\n4. 사실오류/환각: 유지비가 0원이라는 주장은 사실오류이며, 실제로 모든 서비스에는 유지비가 존재한다.\\n</Output>\\n<Rubric>\\n결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\\n문제 후보: \\\"100% 해결\\\", \\\"출시 즉시 500만\\\", \\\"경쟁자 전혀 없음\\\", \\\"유지비 0원\\\".\\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "4b949231-e1e0-4617-9310-97114db9bc99",
+        "latencyMs": 2,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.\"},{\"role\":\"user\",\"content\":\"이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다.\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 2,
+        "provider": {
+          "id": "openrouter:meta-llama/llama-3.3-70b-instruct",
+          "label": "Llama (우리·검증)"
+        },
+        "response": {
+          "output": "1. 사실오류/환각: 100%의 외로움을 해결한다는 주장은 과장이며, 실제로 모든 사람의 외로움을 완전히 해결하는 것은 불가능하다.\n2. 사실오류/환각: 출시 즉시 500만 명이 가입한다는 주장은 과장이며, 실제로 서비스의 인기는 다양한 요인에 의해 결정된다.\n3. 사실오류/환각: 경쟁자가 전혀 없다는 주장은 사실오류이며, 실제로 모든 시장에는 경쟁자가 존재한다.\n4. 사실오류/환각: 유지비가 0원이라는 주장은 사실오류이며, 실제로 모든 서비스에는 유지비가 존재한다.",
+          "tokenUsage": {
+            "cached": 278,
+            "total": 278
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "verify (과장·환각 결함 포착)",
+          "vars": {
+            "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+            "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 278,
+          "total": 278,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 492,
+            "prompt": 454,
+            "completion": 38,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+          "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {},
+          "tokensUsed": {
+            "total": 617,
+            "prompt": 546,
+            "completion": 71,
+            "cached": 0,
+            "numRequests": 1
+          },
+          "componentResults": [
+            {
+              "assertion": {
+                "type": "llm-rubric",
+                "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+              },
+              "pass": true,
+              "score": 1,
+              "reason": "결과물은 '100% 해결', '출시 즉시 500만', '경쟁자 전혀 없음', '유지비 0원'의 4가지 비현실적 주장을 모두 정확히 지적했습니다.",
+              "tokensUsed": {
+                "total": 617,
+                "prompt": 546,
+                "completion": 71,
+                "cached": 0,
+                "numRequests": 1,
+                "completionDetails": {
+                  "reasoning": 0,
+                  "cacheCreationInputTokens": 0
+                }
+              },
+              "metadata": {
+                "renderedGradingPrompt": "[{\"role\":\"system\",\"content\":\"You are grading output according to a user-specified rubric. If the statement in the rubric is true, then the output passes the test. You respond with a JSON object with this structure: {reason: string, pass: boolean, score: number}\\n\\nExamples:\\n\\n<Output>Hello world</Output>\\n<Rubric>Content contains a greeting</Rubric>\\n{\\\"reason\\\": \\\"the content contains the word 'Hello'\\\", \\\"pass\\\": true, \\\"score\\\": 1.0}\\n\\n<Output>Avast ye swabs, repel the invaders!</Output>\\n<Rubric>Does not speak like a pirate</Rubric>\\n{\\\"reason\\\": \\\"'avast ye' is a common pirate term\\\", \\\"pass\\\": false, \\\"score\\\": 0.0}\"},{\"role\":\"user\",\"content\":\"<Output>\\n다음과 같은 중대한 결함들이 발견됩니다:\\n\\n1. **비현실적 주장**: \\\"모든 1인 가구의 외로움을 100% 해결\\\" - 외로움은 복잡한 심리적·사회적 문제로, 단일 서비스로 모든 사람의 외로움을 완전히 해결한다는 것은 불가능합니다.\\n\\n2. **과장/비현실적 주장**: \\\"출시 즉시 500만 명이 가입\\\" - 어떤 서비스도 출시 즉시 이런 규모의 가입자를 확보하는 것은 현실적으로 불가능합니다. 마케팅, 인지도 확산, 신뢰 구축에는 시간이 필요합니다.\\n\\n3. **비현실적 주장**: \\\"경쟁자가 전혀 없으며\\\" - 1인 가구 대상 서비스 시장에는 이미 다양한 경쟁자(소셜 앱, 커뮤니티 서비스, 취미 플랫폼 등)가 존재합니다.\\n\\n4. **비현실적 주장**: \\\"유지비가 0원\\\" - 모든 서비스는 서버, 인건비, 고객지원, 마케팅 등 필연적인 운영비용이 발생합니다.\\n</Output>\\n<Rubric>\\n결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\\n문제 후보: \\\"100% 해결\\\", \\\"출시 즉시 500만\\\", \\\"경쟁자 전혀 없음\\\", \\\"유지비 0원\\\".\\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\\n\\n</Rubric>\"}]"
+              }
+            }
+          ]
+        },
+        "id": "e71d5924-603a-4858-a9d0-cfcf1994c97f",
+        "latencyMs": 2,
+        "namedScores": {},
+        "prompt": {
+          "raw": "[{\"role\":\"system\",\"content\":\"너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.\"},{\"role\":\"user\",\"content\":\"이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다.\"}]",
+          "label": "eval\\prompts\\chat.json: [{\"role\":\"system\",\"content\":\"{{system}}\"},{\"role\":\"user\",\"content\":\"{{user}}\"}]",
+          "config": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          }
+        },
+        "promptId": "db3ed9d1d80f0d8d5421087326d3df5928cef41a1fc7fb4caa440bfe10ca323c",
+        "promptIdx": 3,
+        "provider": {
+          "id": "openrouter:anthropic/claude-opus-4.1",
+          "label": "Claude-Opus (최고급)"
+        },
+        "response": {
+          "output": "다음과 같은 중대한 결함들이 발견됩니다:\n\n1. **비현실적 주장**: \"모든 1인 가구의 외로움을 100% 해결\" - 외로움은 복잡한 심리적·사회적 문제로, 단일 서비스로 모든 사람의 외로움을 완전히 해결한다는 것은 불가능합니다.\n\n2. **과장/비현실적 주장**: \"출시 즉시 500만 명이 가입\" - 어떤 서비스도 출시 즉시 이런 규모의 가입자를 확보하는 것은 현실적으로 불가능합니다. 마케팅, 인지도 확산, 신뢰 구축에는 시간이 필요합니다.\n\n3. **비현실적 주장**: \"경쟁자가 전혀 없으며\" - 1인 가구 대상 서비스 시장에는 이미 다양한 경쟁자(소셜 앱, 커뮤니티 서비스, 취미 플랫폼 등)가 존재합니다.\n\n4. **비현실적 주장**: \"유지비가 0원\" - 모든 서비스는 서버, 인건비, 고객지원, 마케팅 등 필연적인 운영비용이 발생합니다.",
+          "tokenUsage": {
+            "cached": 595,
+            "total": 595
+          },
+          "cached": true,
+          "finishReason": "stop"
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "verify (과장·환각 결함 포착)",
+          "vars": {
+            "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+            "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+          },
+          "assert": [
+            {
+              "type": "llm-rubric",
+              "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+            }
+          ],
+          "options": {
+            "provider": {
+              "id": "openrouter:google/gemini-2.5-flash",
+              "config": {
+                "temperature": 0
+              }
+            }
+          },
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "tokenUsage": {
+          "prompt": 0,
+          "completion": 0,
+          "cached": 595,
+          "total": 595,
+          "numRequests": 1,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          },
+          "assertions": {
+            "total": 617,
+            "prompt": 546,
+            "completion": 71,
+            "cached": 0,
+            "numRequests": 1,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            }
+          }
+        },
+        "vars": {
+          "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+          "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+        },
+        "metadata": {
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 12,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 0,
+        "completion": 0,
+        "cached": 6084,
+        "total": 6084,
+        "numRequests": 12,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 10082,
+          "prompt": 7808,
+          "completion": 2274,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 9119,
+      "evaluationDurationMs": 9119
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "객관 품질 재현화 — 우리 모델 vs Opus (독립 심판 채점)",
+    "prompts": [
+      "file://C:\\Users\\User\\Desktop\\ideation-engine\\eval\\prompts\\chat.json"
+    ],
+    "providers": [
+      {
+        "id": "openrouter:upstage/solar-pro4",
+        "label": "Solar (우리·분석/컨셉)"
+      },
+      {
+        "id": "openrouter:deepseek/deepseek-v3.2",
+        "label": "DeepSeek (우리·보고)"
+      },
+      {
+        "id": "openrouter:meta-llama/llama-3.3-70b-instruct",
+        "label": "Llama (우리·검증)"
+      },
+      {
+        "id": "openrouter:anthropic/claude-opus-4.1",
+        "label": "Claude-Opus (최고급)"
+      }
+    ],
+    "tests": [
+      {
+        "description": "analyze (아이디어 테마 묶기)",
+        "vars": {
+          "system": "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어.",
+          "user": "목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스\n아이디어:\n- 저녁 15분 음성 동행\n- 동네 같은 시간대 매칭\n- 감정 로그 주간 리포트\n- 라디오 사연 1:1 답장\n"
+        },
+        "assert": [
+          {
+            "type": "llm-rubric",
+            "value": "한국어 결과를 종합 평가하라.\n1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가\n2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가\n3) 억지 분류나 누락 없이 자연스러운가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+          }
+        ]
+      },
+      {
+        "description": "report (세션 보고서 초안)",
+        "vars": {
+          "system": "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어.",
+          "user": "목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구\n아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇\n"
+        },
+        "assert": [
+          {
+            "type": "llm-rubric",
+            "value": "한국어 보고서를 평가하라.\n1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가\n3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가\n매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.\n세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.\n"
+          }
+        ]
+      },
+      {
+        "description": "verify (과장·환각 결함 포착)",
+        "vars": {
+          "system": "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'.",
+          "user": "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+        },
+        "assert": [
+          {
+            "type": "llm-rubric",
+            "value": "결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.\n문제 후보: \"100% 해결\", \"출시 즉시 500만\", \"경쟁자 전혀 없음\", \"유지비 0원\".\n매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.\n세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.\n"
+          }
+        ]
+      }
+    ],
+    "env": {},
+    "defaultTest": {
+      "options": {
+        "provider": {
+          "id": "openrouter:google/gemini-2.5-flash",
+          "config": {
+            "temperature": 0
+          }
+        }
+      },
+      "vars": {},
+      "assert": [],
+      "metadata": {}
+    },
+    "outputPath": [
+      "eval/quality-results.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.122.0",
+    "nodeVersion": "v24.15.0",
+    "platform": "win32",
+    "arch": "x64",
+    "exportedAt": "2026-08-22T17:38:43.242Z",
+    "evaluationCreatedAt": "2026-08-22T17:38:34.096Z"
+  },
+  "vars": [
+    "system",
+    "user"
+  ],
+  "runtimeOptions": {
+    "eventSource": "cli",
+    "showProgressBar": true,
+    "repeat": 1,
+    "maxConcurrency": 3,
+    "cache": true
+  }
+}
