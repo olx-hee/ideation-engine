@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>컨셉 선택 단계 목업</title>
+<style>
+  :root{
+    --bg:#f3f4f6;--card:#ffffff;--ink:#171717;--soft:#525a63;--faint:#8a929b;--line:#e5e7eb;
+    --em:#059669;--em-soft:#d1fae5;--em-ink:#065f46;--accent:#0ea5a4;
+    --amber:#b45309;--amber-soft:#fef3c7;--violet:#6d28d9;--violet-soft:#ede9fe;--blue:#1d4ed8;--blue-soft:#dbeafe;--rose:#be185d;--rose-soft:#fce7f3;
+    --sans:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif;--mono:ui-monospace,Consolas,monospace;
+    --sh:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.05);
+  }
+  @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0f1214;--card:#181c1f;--ink:#e9edef;--soft:#aab3ba;--faint:#79828a;--line:#2a3035;
+    --em:#34d399;--em-soft:#0c3026;--em-ink:#6ee7b7;
+    --amber-soft:#3a2a08;--violet-soft:#241547;--blue-soft:#0f2455;--rose-soft:#3a0f28;--sh:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.4);}}
+  :root[data-theme="dark"]{--bg:#0f1214;--card:#181c1f;--ink:#e9edef;--soft:#aab3ba;--faint:#79828a;--line:#2a3035;--em:#34d399;--em-soft:#0c3026;--em-ink:#6ee7b7;--amber-soft:#3a2a08;--violet-soft:#241547;--blue-soft:#0f2455;--rose-soft:#3a0f28;--sh:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.4);}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55}
+  .wrap{max-width:940px;margin:0 auto;padding:22px 16px 60px}
+  .appbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  .goal{font-size:13px;color:var(--soft)}.goal b{color:var(--ink)}
+  .steps{display:flex;gap:6px;font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .steps .on{color:var(--em);font-weight:700}
+  h1{font-size:22px;margin:10px 0 3px}
+  .sub{color:var(--soft);font-size:13.5px;margin:0 0 4px}
+  .honest{font-size:12px;color:var(--faint);background:var(--card);border:1px dashed var(--line);border-radius:9px;padding:7px 11px;margin:12px 0 16px}
+  .toggle{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;margin:0 0 16px}
+  .toggle button{font:inherit;font-size:13px;font-weight:600;border:0;background:transparent;color:var(--soft);padding:6px 14px;border-radius:8px;cursor:pointer}
+  .toggle button.act{background:var(--em);color:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}@media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .cc{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px 16px;box-shadow:var(--sh);position:relative;display:flex;flex-direction:column}
+  .cc.lead{border-color:var(--em);box-shadow:0 0 0 2px var(--em-soft),var(--sh)}
+  .lens{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;font-family:var(--mono);padding:2px 9px;border-radius:999px;letter-spacing:.02em;width:fit-content}
+  .L1{background:var(--em-soft);color:var(--em-ink)}.L2{background:var(--rose-soft);color:var(--rose)}.L3{background:var(--blue-soft);color:var(--blue)}.L4{background:var(--violet-soft);color:var(--violet)}
+  .ct{font-size:16.5px;font-weight:750;margin:9px 0 5px}
+  .cs{font-size:13px;color:var(--soft);flex:1}
+  .src{display:flex;flex-wrap:wrap;gap:5px;margin:11px 0 12px}
+  .src .lbl{font-size:11px;color:var(--faint);margin-right:2px}
+  .chip{font-size:11px;font-family:var(--mono);background:var(--bg);border:1px solid var(--line);color:var(--soft);padding:1px 7px;border-radius:6px}
+  .voterow{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+  .vbtn{font:inherit;font-size:12.5px;font-weight:600;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:5px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+  .vbtn:hover{border-color:var(--em);color:var(--em)}
+  .vcount{font-family:var(--mono);font-size:12px;color:var(--soft)}
+  .vcount b{color:var(--em);font-size:15px}
+  .ledtag{position:absolute;top:-9px;right:12px;background:var(--em);color:#fff;font-size:10.5px;font-weight:700;font-family:var(--mono);padding:2px 9px;border-radius:999px}
+  /* compare view */
+  .cmpwrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px;box-shadow:var(--sh)}
+  table{border-collapse:collapse;width:100%;min-width:640px;background:var(--card);font-size:13px}
+  th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{position:sticky;top:0;background:var(--card)}
+  th.rowh{color:var(--faint);font-size:11px;font-family:var(--mono);text-transform:uppercase;width:78px;white-space:nowrap}
+  .cmp-ct{font-weight:700;font-size:14px}
+  .cmp-lead{background:var(--em-soft)}
+  /* dissent + selected */
+  .dissent{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+  .dtitle{font-size:13px;font-weight:700;color:var(--soft);display:flex;align-items:center;gap:7px;margin-bottom:9px}
+  .dtitle .k{font-family:var(--mono);font-size:11px;color:var(--faint);font-weight:400}
+  .dlist{display:flex;flex-direction:column;gap:7px}
+  .drow{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:12.5px;color:var(--soft)}
+  .drow .n{font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .final{margin-top:22px;background:var(--card);border:2px solid var(--em);border-radius:15px;padding:18px;box-shadow:var(--sh)}
+  .final .tag{font-size:11px;font-weight:700;font-family:var(--mono);color:var(--em);letter-spacing:.05em}
+  .final h3{margin:6px 0 8px;font-size:19px}
+  .final .pitch{font-size:13.5px;color:var(--soft)}
+  .final .row{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin-top:11px;font-size:13px}
+  .final .row .k{font-family:var(--mono);font-size:11px;color:var(--faint);white-space:nowrap;padding-top:2px}
+  .hide{display:none}
+  .cap{font-size:12px;color:var(--faint);margin:16px 0 0;text-align:center}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <div class="appbar">
+    <div class="goal">주제 · <b>중고 거래의 사기를 줄이는 앱</b></div>
+    <div class="steps"><span>1 발산</span><span>›</span><span class="on">2 컨셉 종합</span><span>›</span><span>3 보고</span></div>
+  </div>
+  <h1>어떤 방향으로 갈까요?</h1>
+  <p class="sub">발산 단계에서 팀이 모은 아이디어를 AI가 <b>4가지 전략 렌즈</b>로 종합했습니다. 하나로 합치지 않았습니다 — 팀이 비교하고 고르세요.</p>
+  <div class="honest">정직 안내 · 라벨은 <b>전략 렌즈</b>입니다(모델 브랜드 아님). AI는 후보만 펼치고, <b>최종은 팀이 투표로</b> 정합니다. 안 뽑힌 후보도 "다른 길"로 보존됩니다.</div>
+
+  <div class="toggle">
+    <button class="act" onclick="setView('card',this)">카드 뷰</button>
+    <button onclick="setView('cmp',this)">비교 뷰</button>
+  </div>
+
+  <!-- CARD VIEW -->
+  <div id="card">
+    <div class="grid">
+      <div class="cc lead">
+        <span class="ledtag">현재 1위</span>
+        <span class="lens L1">◆ 실용·저비용</span>
+        <div class="ct">현장동행 에스크로</div>
+        <div class="cs">신뢰점수·사기 문구 경고로 위험을 미리 거르고, 현장에서 양측 라이브 방송으로 AI가 동행을 검증한 뒤 스마트컨트랙트 에스크로로 즉시 정산. 기존 카메라·채팅·결제 API만 조합해 빠르게 MVP.</div>
+        <div class="src"><span class="lbl">근거 아이디어</span><span class="chip">#1 실명·생체</span><span class="chip">#2 라이브</span><span class="chip">#3 에스크로</span><span class="chip">#4 사기문구</span></div>
+        <div class="voterow"><button class="vbtn" onclick="vote(0)">👍 이 방향</button><span class="vcount"><b id="v0">3</b> 표</span></div>
+      </div>
+      <div class="cc">
+        <span class="lens L2">✦ 참신·차별화</span>
+        <div class="ct">AR 거래여정 검증</div>
+        <div class="cs">도난·허위매물을 AR로 즉시 확인하고, 직거래 장소·시간 준수를 앱으로 검증. 기존 앱엔 없던 AR+위치 인증으로 차별화된 신뢰 경험을 제공.</div>
+        <div class="src"><span class="lbl">근거 아이디어</span><span class="chip">#7 AR 스캔</span><span class="chip">#8 위치·시간</span></div>
+        <div class="voterow"><button class="vbtn" onclick="vote(1)">👍 이 방향</button><span class="vcount"><b id="v1">1</b> 표</span></div>
+      </div>
+      <div class="cc">
+        <span class="lens L3">▲ 기술 실현</span>
+        <div class="ct">신뢰도 다층 검증 인프라</div>
+        <div class="cs">실명·생체로 기초 신뢰를 세우고, NLP 채팅 분석으로 사기를 실시간 차단하며, 완료 거래의 행동 데이터를 ML로 축적해 신뢰도를 동적으로 갱신하는 클라우드 네이티브 시스템.</div>
+        <div class="src"><span class="lbl">근거 아이디어</span><span class="chip">#1 신뢰점수</span><span class="chip">#4 채팅분석</span><span class="chip">#5 신뢰기여</span></div>
+        <div class="voterow"><button class="vbtn" onclick="vote(2)">👍 이 방향</button><span class="vcount"><b id="v2">2</b> 표</span></div>
+      </div>
+      <div class="cc">
+        <span class="lens L4">✸ 이질적 결합</span>
+        <div class="ct">라이브 × AR 물품 검증</div>
+        <div class="cs">라이브 방송 중 AR 스캔으로 물품 진위를 확인하고, AI가 양측 시선·조작 장면을 분석해 현장 동행을 검증. 방송과 증강현실을 결합한 의외의 접근.</div>
+        <div class="src"><span class="lbl">근거 아이디어</span><span class="chip">#2 라이브</span><span class="chip">#7 AR</span></div>
+        <div class="voterow"><button class="vbtn" onclick="vote(3)">👍 이 방향</button><span class="vcount"><b id="v3">1</b> 표</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARE VIEW -->
+  <div id="cmp" class="hide">
+    <div class="cmpwrap"><table>
+      <thead><tr><th class="rowh"></th>
+        <th class="cmp-lead"><span class="lens L1">◆ 실용·저비용</span><div class="cmp-ct">현장동행 에스크로 · 1위</div></th>
+        <th><span class="lens L2">✦ 참신·차별화</span><div class="cmp-ct">AR 거래여정 검증</div></th>
+        <th><span class="lens L3">▲ 기술 실현</span><div class="cmp-ct">신뢰도 다층 인프라</div></th>
+        <th><span class="lens L4">✸ 이질적 결합</span><div class="cmp-ct">라이브×AR 검증</div></th></tr></thead>
+      <tbody>
+        <tr><th class="rowh">핵심</th><td class="cmp-lead">현장 라이브+에스크로로 즉시 정산</td><td>AR로 물품·장소 투명성 극대화</td><td>기초인증+NLP+ML 3층 자동검증</td><td>방송 중 AR 스캔+동행 검증</td></tr>
+        <tr><th class="rowh">근거</th><td class="cmp-lead">#1 #2 #3 #4</td><td>#7 #8</td><td>#1 #4 #5</td><td>#2 #7</td></tr>
+        <tr><th class="rowh">강점</th><td class="cmp-lead">저비용·빠른 MVP</td><td>시장 차별성</td><td>확장성·자동화</td><td>의외성·화제성</td></tr>
+        <tr><th class="rowh">약점</th><td class="cmp-lead">현장 동시 접속 필요</td><td>AR 정확도 의존</td><td>초기 구축 무거움</td><td>범위가 좁을 수 있음</td></tr>
+        <tr><th class="rowh">표</th><td class="cmp-lead"><b style="color:var(--em)">3표</b></td><td>1표</td><td>2표</td><td>1표</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- DISSENT + SELECTED preview -->
+  <div class="dissent">
+    <div class="dtitle">🗂 다른 길 <span class="k">— 버리지 않은 이견 (최종 선택 후에도 보존)</span></div>
+    <div class="dlist">
+      <div class="drow"><span class="n">✦ 참신</span> AR 거래여정 검증 — "AR 차별화가 진짜 승부처일 수 있다" (1표)</div>
+      <div class="drow"><span class="n">✸ 이질</span> 라이브×AR — "화제성으로 초기 유입엔 이게 나을 수도" (1표)</div>
+    </div>
+  </div>
+
+  <div class="final">
+    <span class="tag">최종 선택 (투표 1위) → 피치 한 장으로</span>
+    <h3>현장동행 에스크로</h3>
+    <p class="pitch">신뢰점수·사기경고로 위험을 거르고, 현장 라이브 방송으로 AI가 동행을 검증한 뒤 스마트컨트랙트 에스크로로 즉시 정산하는 중고거래 안전 앱.</p>
+    <div class="row">
+      <span class="k">누가·왜</span><span>고액 직거래가 불안한 20~30대. "만나서 확인했는데도 당했다"를 원천 차단.</span>
+      <span class="k">차별점</span><span>사후 신고가 아니라 <b>거래 순간</b>에 개입 — 라이브 동행 + 에스크로.</span>
+      <span class="k">근거</span><span>팀 아이디어 #1·#2·#3·#4 결합 · 실용 렌즈</span>
+    </div>
+  </div>
+
+  <p class="cap">※ 실제 AI가 생성한 컨셉(중고거래 사기 목표, 다중 엔진)으로 구성한 목업입니다. 투표·버튼은 시연용.</p>
+</div>
+<script>
+  const votes=[3,1,2,1];
+  function vote(i){votes[i]++;document.getElementById('v'+i).textContent=votes[i];}
+  function setView(v,btn){
+    document.getElementById('card').classList.toggle('hide',v!=='card');
+    document.getElementById('cmp').classList.toggle('hide',v!=='cmp');
+    document.querySelectorAll('.toggle button').forEach(b=>b.classList.remove('act'));
+    btn.classList.add('act');
+  }
+</script>
+
+</body>
+</html>

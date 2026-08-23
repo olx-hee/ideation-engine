@@ -1,0 +1,74 @@
+# 객관 품질 재현화 — 우리 role-map 모델 vs Claude-Opus, 독립 심판(Gemini-Flash)이 루브릭 채점.
+# 실행: npx promptfoo eval -c eval/promptfooconfig.yaml -o eval/quality-results.json
+# (OpenRouter 키는 .env에서 자동 로드 · 실제 API 소액 과금 발생)
+description: 객관 품질 재현화 — 우리 모델 vs Opus (독립 심판 채점)
+
+prompts:
+  - file://prompts/chat.json
+
+# 테스트 대상 모델(providers) × 아래 tests = 매트릭스. 작업별 '우리 픽' 셀 vs Opus 셀을 비교.
+providers:
+  - id: openrouter:upstage/solar-pro4
+    label: Solar (우리·분석/컨셉)
+  - id: openrouter:deepseek/deepseek-v3.2
+    label: DeepSeek (우리·보고)
+  - id: openrouter:meta-llama/llama-3.3-70b-instruct
+    label: Llama (우리·검증)
+  - id: openrouter:anthropic/claude-opus-4.1
+    label: Claude-Opus (최고급)
+
+# 심판은 테스트 대상이 아닌 중립 모델(자기채점 편향 방지) · 온도 0으로 재현성
+defaultTest:
+  options:
+    provider:
+      id: openrouter:google/gemini-2.5-flash
+      config:
+        temperature: 0
+
+tests:
+  - description: analyze (아이디어 테마 묶기)
+    vars:
+      system: "너는 분석가다. 제출된 아이디어들을 3~4개 테마로 묶고 공통 구조를 짧게 요약한다. 한국어."
+      user: |
+        목표: 저녁 시간 외로움을 느끼는 1인 가구를 위한 서비스
+        아이디어:
+        - 저녁 15분 음성 동행
+        - 동네 같은 시간대 매칭
+        - 감정 로그 주간 리포트
+        - 라디오 사연 1:1 답장
+    assert:
+      - type: llm-rubric
+        value: |
+          한국어 결과를 종합 평가하라.
+          1) 아이디어들을 겹치지 않는 3~4개 테마로 명확히 묶었는가
+          2) 각 테마의 공통 구조를 정확하고 간결하게 요약했는가
+          3) 억지 분류나 누락 없이 자연스러운가
+          매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.
+          세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.
+
+  - description: report (세션 보고서 초안)
+    vars:
+      system: "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다. 한국어."
+      user: |
+        목표: 대학생 팀 프로젝트의 무임승차 문제를 줄이는 도구
+        아이디어: 기여도 실시간 로그, 익명 상호평가, 작업 자동 분배 봇
+    assert:
+      - type: llm-rubric
+        value: |
+          한국어 보고서를 평가하라.
+          1) 핵심을 빠짐없이 종합했는가 2) 구조가 명확한가
+          3) 실행 관점(우선순위/다음 단계)이 담겼는가 4) 간결·정확한가
+          매우 엄격하게 채점하라: 완벽=1.0, 좋음=0.8, 보통=0.6, 미흡=0.4.
+          세밀한 소수 score를 반드시 부여하고 전부 1.0으로 주지 마라. 0.6 이상이면 pass=true.
+
+  - description: verify (과장·환각 결함 포착)
+    vars:
+      system: "너는 결과물 검증가다. 아래 결과물에서 사실오류·환각(없는 걸 있다고/과장)·논리모순·중요한 누락·비현실적 주장을 찾아 번호로 지적한다. 문제 없으면 '중대한 결함 없음'."
+      user: "이 서비스는 모든 1인 가구의 외로움을 100% 해결하며, 출시 즉시 500만 명이 가입하고, 경쟁자가 전혀 없으며, 유지비가 0원이다."
+    assert:
+      - type: llm-rubric
+        value: |
+          결과물의 과장·비현실 주장을 정확히 집어냈는지 평가하라.
+          문제 후보: "100% 해결", "출시 즉시 500만", "경쟁자 전혀 없음", "유지비 0원".
+          매우 엄격하게 채점하라: 4개 모두 명확히 지적=1.0, 3개=0.75, 2개=0.5, 1개=0.25.
+          세밀한 소수 score를 반드시 부여하라. 3개 이상이면 pass=true.

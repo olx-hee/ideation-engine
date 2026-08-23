@@ -1,0 +1,110 @@
+{
+  "ranAt": "2026-08-14T17:37:36.843Z",
+  "out": [
+    {
+      "label": "Qwen2.5-7B",
+      "slug": "qwen/qwen-2.5-7b-instruct",
+      "reps": 3,
+      "ok": 3,
+      "hanziRuns": 1,
+      "avgOut": 40,
+      "avgMs": 734,
+      "runs": [
+        {
+          "ok": true,
+          "ms": 1445,
+          "out": 36,
+          "cost": 0.0000378,
+          "hanzi": false,
+          "text": "다양한 의견을 균형있게 듣기 위해Everyone should have a chance to speak, even if they're not the loudest "
+        },
+        {
+          "ok": true,
+          "ms": 250,
+          "out": 22,
+          "cost": 0.0000134,
+          "hanzi": false,
+          "text": "모든 참가자들이 평등하게 의견을 나누는 방법은 무엇일까?"
+        },
+        {
+          "ok": true,
+          "ms": 507,
+          "out": 63,
+          "cost": 0.0000216,
+          "hanzi": true,
+          "text": "모든 참가者的，为了实现您的目标，我会给出一个简短的思维种子，帮助参与者思考如何在会议中更加均衡地表达意见： \"想象一个圆形的会议室，每个人的声音都能被周围的人清晰听到，思考在这种"
+        }
+      ]
+    },
+    {
+      "label": "Gemini-2.5-Flash-Lite",
+      "slug": "google/gemini-2.5-flash-lite",
+      "reps": 3,
+      "ok": 3,
+      "hanziRuns": 0,
+      "avgOut": 21,
+      "avgMs": 1153,
+      "runs": [
+        {
+          "ok": true,
+          "ms": 666,
+          "out": 22,
+          "cost": 0.0000153,
+          "hanzi": false,
+          "text": "모두가 안전하게 자신의 의견을 말할 수 있는 '말하기 허브'를 만들어 봅시다."
+        },
+        {
+          "ok": true,
+          "ms": 2204,
+          "out": 20,
+          "cost": 0.0000145,
+          "hanzi": false,
+          "text": "모든 사람이 마이크 앞에서 한마디씩 이야기하는 시간을 가져보는 건 어떨까요?"
+        },
+        {
+          "ok": true,
+          "ms": 590,
+          "out": 21,
+          "cost": 0.0000149,
+          "hanzi": false,
+          "text": "모든 목소리가 동등하게 울려 퍼지는 회의실을 상상해보세요."
+        }
+      ]
+    },
+    {
+      "label": "GPT-4o-mini",
+      "slug": "openai/gpt-4o-mini",
+      "reps": 3,
+      "ok": 3,
+      "hanziRuns": 0,
+      "avgOut": 22,
+      "avgMs": 852,
+      "runs": [
+        {
+          "ok": true,
+          "ms": 819,
+          "out": 19,
+          "cost": 0.0000234,
+          "hanzi": false,
+          "text": "각자 돌아가며 자신의 의견을 말할 수 있는 시간을 정해보세요."
+        },
+        {
+          "ok": true,
+          "ms": 642,
+          "out": 24,
+          "cost": 0.0000264,
+          "hanzi": false,
+          "text": "각 참가자가 자신의 의견을 적어낸 후, 무작위로 한 사람씩 발표하도록 해보세요."
+        },
+        {
+          "ok": true,
+          "ms": 1095,
+          "out": 24,
+          "cost": 0.0000264,
+          "hanzi": false,
+          "text": "모두가 발언할 기회를 가질 수 있는 '순환 발언' 시간을 만들어보세요."
+        }
+      ]
+    }
+  ]
+}

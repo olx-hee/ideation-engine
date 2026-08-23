@@ -1,0 +1,161 @@
+{
+  "ranAt": "2026-08-19T09:05:19.872Z",
+  "n": 5,
+  "task": "report",
+  "judges": [
+    "openai/gpt-4o-mini",
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-medium-3"
+  ],
+  "rows": [
+    {
+      "model": "GLM-4.6",
+      "slug": "z-ai/glm-4.6",
+      "quality": 3.8,
+      "cost": 0.007353,
+      "wins": 1,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "Nemotron-3.5L",
+      "slug": "nvidia/nemotron-3.5-lightning",
+      "quality": 4.2,
+      "cost": 0.000203,
+      "wins": 0,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "slug": "deepseek/deepseek-v3.2",
+      "quality": 4.567,
+      "cost": 0.000516,
+      "wins": 1,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "Qwen3.7-Plus",
+      "slug": "qwen/qwen3.7-plus",
+      "quality": 4.067,
+      "cost": 0.003572,
+      "wins": 0,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "quality": 4.533,
+      "cost": 0.000128,
+      "wins": 1,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "Kimi-K2.5",
+      "slug": "moonshotai/kimi-k2.5",
+      "quality": 4.5,
+      "cost": 0.007004,
+      "wins": 2,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "Grok-4.3",
+      "slug": "x-ai/grok-4.3",
+      "quality": 4.267,
+      "cost": 0.003235,
+      "wins": 0,
+      "empty": 0,
+      "judgedGoals": 5
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "quality": 3.733,
+      "cost": 0.003691,
+      "wins": 0,
+      "empty": 0,
+      "judgedGoals": 5
+    }
+  ],
+  "perGoal": [
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "judges": 3,
+      "scores": {
+        "Kimi-K2.5": 5,
+        "GLM-4.6": 3.67,
+        "Qwen3.7-Plus": 4.33,
+        "Nemotron-3.5L": 3.67,
+        "DeepSeek-V3.2": 4.33,
+        "Grok-4.3": 4.67,
+        "Gemini-2.5-F": 3.67,
+        "Solar-Pro4": 4.67
+      },
+      "winner": "Kimi-K2.5"
+    },
+    {
+      "goal": "중고 거래 사기를 줄이는 앱",
+      "judges": 3,
+      "scores": {
+        "Kimi-K2.5": 4.67,
+        "Gemini-2.5-F": 3.67,
+        "Nemotron-3.5L": 4.33,
+        "DeepSeek-V3.2": 4.33,
+        "Grok-4.3": 4.67,
+        "GLM-4.6": 3.67,
+        "Qwen3.7-Plus": 3.67,
+        "Solar-Pro4": 4.33
+      },
+      "winner": "Kimi-K2.5"
+    },
+    {
+      "goal": "노인의 디지털 기기 사용을 돕는 서비스",
+      "judges": 3,
+      "scores": {
+        "Gemini-2.5-F": 4.33,
+        "GLM-4.6": 5,
+        "Grok-4.3": 3.67,
+        "Nemotron-3.5L": 4,
+        "DeepSeek-V3.2": 4.67,
+        "Solar-Pro4": 4,
+        "Qwen3.7-Plus": 3.67,
+        "Kimi-K2.5": 4.33
+      },
+      "winner": "GLM-4.6"
+    },
+    {
+      "goal": "지역 축제 참여를 늘리는 플랫폼",
+      "judges": 2,
+      "scores": {
+        "Solar-Pro4": 5,
+        "Grok-4.3": 4,
+        "Gemini-2.5-F": 3,
+        "Nemotron-3.5L": 4,
+        "GLM-4.6": 3,
+        "Kimi-K2.5": 4.5,
+        "Qwen3.7-Plus": 4,
+        "DeepSeek-V3.2": 4.5
+      },
+      "winner": "Solar-Pro4"
+    },
+    {
+      "goal": "프리랜서의 계약·정산을 돕는 서비스",
+      "judges": 3,
+      "scores": {
+        "DeepSeek-V3.2": 5,
+        "Gemini-2.5-F": 4,
+        "Nemotron-3.5L": 5,
+        "GLM-4.6": 3.67,
+        "Qwen3.7-Plus": 4.67,
+        "Grok-4.3": 4.33,
+        "Solar-Pro4": 4.67,
+        "Kimi-K2.5": 4
+      },
+      "winner": "DeepSeek-V3.2"
+    }
+  ]
+}

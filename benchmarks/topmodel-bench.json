@@ -1,0 +1,87 @@
+{
+  "ranAt": "2026-08-20T14:33:39.568Z",
+  "n": 4,
+  "tasks": [
+    "analyze",
+    "report"
+  ],
+  "judges": [
+    "openai/gpt-4o-mini",
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-medium-3"
+  ],
+  "rows": [
+    {
+      "model": "Solar-Pro4",
+      "tier": "우리(저가)",
+      "analyze": 3.67,
+      "report": 4.38,
+      "avg": 4.03,
+      "costAvg": 0.000106,
+      "empty": 0
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "tier": "우리",
+      "analyze": 4.42,
+      "report": 4.38,
+      "avg": 4.4,
+      "costAvg": 0.000449,
+      "empty": 0
+    },
+    {
+      "model": "Gemini-2.5-Pro",
+      "tier": "상위",
+      "analyze": 3.17,
+      "report": 3.5,
+      "avg": 3.33,
+      "costAvg": 0.012158,
+      "empty": 0
+    },
+    {
+      "model": "GPT-5.6-terra-pro",
+      "tier": "상위",
+      "analyze": 4.17,
+      "report": 4,
+      "avg": 4.08,
+      "costAvg": 0.053509,
+      "empty": 0
+    },
+    {
+      "model": "Grok-4.6",
+      "tier": "상위",
+      "analyze": 3.67,
+      "report": 4.5,
+      "avg": 4.08,
+      "costAvg": 0.010869,
+      "empty": 1
+    },
+    {
+      "model": "Claude-Opus-4.1",
+      "tier": "상위(최고가)",
+      "analyze": 3.92,
+      "report": 4.5,
+      "avg": 4.21,
+      "costAvg": 0.071087,
+      "empty": 0
+    },
+    {
+      "model": "DeepSeek-V4-Pro",
+      "tier": "상위",
+      "analyze": 3.25,
+      "report": 4.38,
+      "avg": 3.81,
+      "costAvg": 0.005844,
+      "empty": 1
+    },
+    {
+      "model": "Qwen3.8-max",
+      "tier": "상위",
+      "analyze": 1,
+      "report": 3.13,
+      "avg": 2.06,
+      "costAvg": 0.014992,
+      "empty": 5
+    }
+  ]
+}

@@ -1,0 +1,168 @@
+{
+  "ranAt": "2026-08-19T06:51:12.585Z",
+  "n": 10,
+  "judges": [
+    "z-ai/glm-4.6",
+    "meta-llama/llama-3.3-70b-instruct",
+    "openai/gpt-4o-mini"
+  ],
+  "rows": [
+    {
+      "config": "S_single",
+      "quality": 3.967,
+      "cost": 0.000028,
+      "wins": 0,
+      "judgedGoals": 10
+    },
+    {
+      "config": "M1_lens",
+      "quality": 4.4,
+      "cost": 0.000159,
+      "wins": 3,
+      "judgedGoals": 10
+    },
+    {
+      "config": "M2_sample",
+      "quality": 4.5,
+      "cost": 0.000193,
+      "wins": 4,
+      "judgedGoals": 10
+    },
+    {
+      "config": "M3_hetero",
+      "quality": 4,
+      "cost": 0.001348,
+      "wins": 0,
+      "judgedGoals": 10
+    },
+    {
+      "config": "M4_refine",
+      "quality": 4.533,
+      "cost": 0.00017,
+      "wins": 3,
+      "judgedGoals": 10
+    }
+  ],
+  "perGoal": [
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "judges": 3,
+      "scores": {
+        "M3_hetero": 4,
+        "M4_refine": 4.67,
+        "M2_sample": 4,
+        "M1_lens": 5,
+        "S_single": 4.33
+      },
+      "winner": "M1_lens"
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "judges": 3,
+      "scores": {
+        "M1_lens": 4,
+        "M3_hetero": 4.33,
+        "M4_refine": 4.67,
+        "S_single": 3.67,
+        "M2_sample": 4.67
+      },
+      "winner": "M4_refine"
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "judges": 3,
+      "scores": {
+        "M1_lens": 4,
+        "M3_hetero": 3.67,
+        "S_single": 4,
+        "M2_sample": 4.33,
+        "M4_refine": 4.33
+      },
+      "winner": "M2_sample"
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "judges": 3,
+      "scores": {
+        "M4_refine": 5,
+        "S_single": 4,
+        "M3_hetero": 4.33,
+        "M2_sample": 5,
+        "M1_lens": 4.67
+      },
+      "winner": "M4_refine"
+    },
+    {
+      "goal": "노인의 디지털 기기 사용을 돕는 서비스",
+      "judges": 3,
+      "scores": {
+        "M4_refine": 4.33,
+        "M3_hetero": 3.67,
+        "M2_sample": 4.67,
+        "S_single": 3,
+        "M1_lens": 4.33
+      },
+      "winner": "M2_sample"
+    },
+    {
+      "goal": "반려동물 산책 메이트를 연결하는 앱",
+      "judges": 3,
+      "scores": {
+        "M4_refine": 5,
+        "S_single": 3.67,
+        "M3_hetero": 4,
+        "M2_sample": 4.67,
+        "M1_lens": 4.67
+      },
+      "winner": "M4_refine"
+    },
+    {
+      "goal": "지역 축제 참여를 늘리는 플랫폼",
+      "judges": 3,
+      "scores": {
+        "M4_refine": 4.33,
+        "M2_sample": 4.67,
+        "M3_hetero": 3.33,
+        "M1_lens": 4,
+        "S_single": 4.33
+      },
+      "winner": "M2_sample"
+    },
+    {
+      "goal": "학원 강사의 학부모 소통을 돕는 도구",
+      "judges": 3,
+      "scores": {
+        "M3_hetero": 4.33,
+        "M4_refine": 4.33,
+        "S_single": 4,
+        "M2_sample": 4,
+        "M1_lens": 4.67
+      },
+      "winner": "M1_lens"
+    },
+    {
+      "goal": "탄소 배출을 줄이는 시민 참여 앱",
+      "judges": 3,
+      "scores": {
+        "M3_hetero": 4.33,
+        "M1_lens": 4.67,
+        "M2_sample": 4.33,
+        "M4_refine": 4.33,
+        "S_single": 4
+      },
+      "winner": "M1_lens"
+    },
+    {
+      "goal": "프리랜서의 계약·정산을 돕는 서비스",
+      "judges": 3,
+      "scores": {
+        "M2_sample": 4.67,
+        "M3_hetero": 4,
+        "M1_lens": 4,
+        "M4_refine": 4.33,
+        "S_single": 4.67
+      },
+      "winner": "M2_sample"
+    }
+  ]
+}

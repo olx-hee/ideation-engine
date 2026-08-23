@@ -1,0 +1,27 @@
+{
+  "ranAt": "2026-08-19T04:39:42.609Z",
+  "n": 8,
+  "escalationRate": 0.63,
+  "rows": [
+    {
+      "config": "A_FlashLite",
+      "quality": 4.19,
+      "cost": 0.000153
+    },
+    {
+      "config": "B_Solar",
+      "quality": 4.13,
+      "cost": 0.000027
+    },
+    {
+      "config": "C_SelfMoA",
+      "quality": 4.56,
+      "cost": 0.000162
+    },
+    {
+      "config": "D_Cascade",
+      "quality": 3.94,
+      "cost": 0.000206
+    }
+  ]
+}

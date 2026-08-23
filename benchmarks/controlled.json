@@ -1,0 +1,75 @@
+{
+  "ranAt": "2026-08-14T18:37:55.760Z",
+  "model": "google/gemini-2.5-flash",
+  "judges": [
+    "z-ai/glm-4.6",
+    "meta-llama/llama-3.3-70b-instruct"
+  ],
+  "n": 8,
+  "rows": [
+    {
+      "goal": "비대면 팀 회의의 효율을 높이는 서비스",
+      "splitCost": 0.0006569,
+      "singleCost": 0.0005579,
+      "splitOverall": 4.25,
+      "singleOverall": 4.5,
+      "winner": "tie"
+    },
+    {
+      "goal": "동네 소상공인의 단골 관리를 돕는 앱",
+      "splitCost": 0.0005843,
+      "singleCost": 0.001331,
+      "splitOverall": 3.5,
+      "singleOverall": 4.75,
+      "winner": "single"
+    },
+    {
+      "goal": "1인 가구의 식단·장보기를 돕는 서비스",
+      "splitCost": 0.0009566999999999999,
+      "singleCost": 0.0006316,
+      "splitOverall": 4.25,
+      "singleOverall": 3.75,
+      "winner": "split"
+    },
+    {
+      "goal": "중고 거래의 사기를 줄이는 앱",
+      "splitCost": 0.0008158,
+      "singleCost": 0.0009645,
+      "splitOverall": 3.75,
+      "singleOverall": 4.75,
+      "winner": "single"
+    },
+    {
+      "goal": "직장인의 사내 스터디를 활성화하는 도구",
+      "splitCost": 0.0008192999999999999,
+      "singleCost": 0.001221,
+      "splitOverall": 4.25,
+      "singleOverall": 4.88,
+      "winner": "single"
+    },
+    {
+      "goal": "노인의 디지털 기기 사용을 돕는 서비스",
+      "splitCost": 0.0006807,
+      "singleCost": 0.0007651,
+      "splitOverall": 4.6,
+      "singleOverall": 3.6,
+      "winner": "split"
+    },
+    {
+      "goal": "반려동물 산책 메이트를 연결하는 앱",
+      "splitCost": 0.0009695000000000001,
+      "singleCost": 0.0007123,
+      "splitOverall": 4.38,
+      "singleOverall": 4.88,
+      "winner": "single"
+    },
+    {
+      "goal": "학원 강사의 학부모 소통을 돕는 도구",
+      "splitCost": 0.000848,
+      "singleCost": 0.0009663,
+      "splitOverall": 4,
+      "singleOverall": 5,
+      "winner": "single"
+    }
+  ]
+}
