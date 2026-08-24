@@ -5,6 +5,7 @@
 
 import { ROUTING, IDEA_QUALITY, FALLBACK, CONCEPT_LENSES, VERIFY, REALITY } from "./registry.js";
 import { callModel } from "./adapter.js";
+import { braveSearch, BRAVE_ON } from "./search.js";
 import { makeMeter } from "./meter.js";
 
 // "컨셉명: X\n요약..." → {title, summary}. 형식이 흔들려도 첫 줄=제목, 나머지=요약으로 폴백.
@@ -77,6 +78,23 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
     const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "reality", prompt });
     entry.meter.record({ purpose: "verify", kind, role: REALITY.role, model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
     result = { kind, mode: "reality", model: REALITY.model, tier: REALITY.tier, analysis: r.text, marketChecked: false, deduped: false };
+  }
+  // [시중검색 게이트] 각 아이디어를 Brave로 실제 검색 → 결과를 근거로 이미있음/유사/공백 판정(생성≠검증 독립).
+  //   검색결과는 <<<데이터>>>로 격리해 LLM에 전달(인젝션 방지). LLM 추정(reality ③⑤)을 실측으로 보강.
+  else if (kind === "market") {
+    const ideas = (pool || []).map((p) => (typeof p === "string" ? p : (p.title || p.text || ""))).filter(Boolean).slice(0, 6);
+    const sources = [];
+    for (const idea of ideas) {
+      const results = await braveSearch(`${idea} ${goal}`, { top: 3 });
+      sources.push({ idea, results });
+      entry.meter.record({ purpose: "route", kind, role: "시중검색", model: "Brave-Search", tier: "small", usageTokens: 0 });
+    }
+    const block = sources.map((s, i) =>
+      `아이디어 ${i + 1}: ${s.idea}\n<<<데이터: 검색결과>>>\n${s.results.map((r) => `- ${r.title} | ${r.url}\n  ${r.snippet}`).join("\n") || "  (결과 없음)"}\n<<<끝>>>`
+    ).join("\n\n");
+    const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "market", prompt: block });
+    entry.meter.record({ purpose: "verify", kind, role: "시중검색 판정", model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
+    result = { kind, mode: "market", brave: BRAVE_ON, labels: r.text, sources, deduped: false };
   }
   // 발산 품질모드: Self-Refine(초안→비평→수정) — 같은 강모델을 3패스. rematch 품질 1위, Grok 채택.
   else if (kind === "idea" && quality) {

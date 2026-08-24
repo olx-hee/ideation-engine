@@ -45,5 +45,9 @@ export const api = {
   reality: (goal, pool, sessionId) =>
     fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "reality", goal, pool, sessionId }) }).then(j),
 
+  // 시중검색 게이트 — 각 아이디어를 Brave로 실제 검색해 '이미있음/유사/공백' 판정(추정을 실측 보강)
+  market: (goal, pool, sessionId) =>
+    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "market", goal, pool, sessionId }) }).then(j),
+
   getAiMeter: (id) => fetch(`/api/sessions/${id}/ai-meter`).then(j),
 };

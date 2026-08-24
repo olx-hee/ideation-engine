@@ -65,4 +65,4 @@ export const ANGLE_MODELS = {
 export const SYNTH = { tier: "small", model: "Solar-Pro4", role: "종합" };
 
 // 라우팅 kind + 특수 kind(concepts=창의 후보 다중, verify=독립 검증). 서버 유효성 검사용.
-export const ORCHESTRATOR_KINDS = [...Object.keys(ROUTING), "concepts", "verify", "reality"];
+export const ORCHESTRATOR_KINDS = [...Object.keys(ROUTING), "concepts", "verify", "reality", "market"];
