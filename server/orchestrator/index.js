@@ -3,7 +3,7 @@
    ('다른 모델 섞기' fanout은 품질 반증되어 기본 경로에서 제거 — 창의모드용으로 registry에만 보존)
    B(임의 요청 분해)는 P4 — 여기서는 고정 목업 스텁만 둔다(설계 §9 과설계 금지). */
 
-import { ROUTING, IDEA_QUALITY, FALLBACK, CONCEPT_LENSES, VERIFY } from "./registry.js";
+import { ROUTING, IDEA_QUALITY, FALLBACK, CONCEPT_LENSES, VERIFY, REALITY } from "./registry.js";
 import { callModel } from "./adapter.js";
 import { makeMeter } from "./meter.js";
 
@@ -68,6 +68,15 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
     const r = await callModel({ model: VERIFY.model, tier: VERIFY.tier, kind: "verify", prompt: `[결과물]\n${content || goal}` });
     entry.meter.record({ purpose: "verify", kind, role: VERIFY.role, model: VERIFY.model, tier: VERIFY.tier, usageTokens: r.usageTokens });
     result = { kind, mode: "verify", model: VERIFY.model, tier: VERIFY.tier, issues: r.text, deduped: false };
+  }
+  // [현실성 패스] 발산 아이디어에 실현가능성·"왜 아직 없나"·수요를 붙임(뻔함·공상 배제, 보류도 보존).
+  //   ③⑤는 아직 LLM '추정' — 다음 단계에서 시중검색(Brave)으로 실측 라벨을 덧붙일 자리.
+  else if (kind === "reality") {
+    const poolText = (pool || []).map((p, i) => `${i + 1}. ${typeof p === "string" ? p : (p.title || p.text || "")}`).join("\n");
+    const prompt = `목표: ${goal}\n\n[검토할 아이디어]\n${poolText || content || "(아이디어 없음)"}`;
+    const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "reality", prompt });
+    entry.meter.record({ purpose: "verify", kind, role: REALITY.role, model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
+    result = { kind, mode: "reality", model: REALITY.model, tier: REALITY.tier, analysis: r.text, marketChecked: false, deduped: false };
   }
   // 발산 품질모드: Self-Refine(초안→비평→수정) — 같은 강모델을 3패스. rematch 품질 1위, Grok 채택.
   else if (kind === "idea" && quality) {

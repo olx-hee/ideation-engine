@@ -41,5 +41,9 @@ export const api = {
   verify: (content, sessionId) =>
     fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "verify", content, sessionId }) }).then(j),
 
+  // 현실성 패스 — 발산 아이디어(pool)에 실현가능성·왜없나·수요를 붙임(③⑤는 추정, 시중검색 전)
+  reality: (goal, pool, sessionId) =>
+    fetch("/api/ai", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "reality", goal, pool, sessionId }) }).then(j),
+
   getAiMeter: (id) => fetch(`/api/sessions/${id}/ai-meter`).then(j),
 };

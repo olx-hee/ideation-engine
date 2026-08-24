@@ -46,6 +46,11 @@ export const CONCEPT_LENSES = [
    verify-bench2: 독립(Llama)이 자기검증(Solar)이 놓친 유효 결함을 더 잡음(방법론적 정당). optics 아님. */
 export const VERIFY = { tier: "small", model: "Llama-3.3", role: "독립 검증" };
 
+/* [현실성 패스] 발산 아이디어를 받아 각 아이디어에 실현가능성·"왜 아직 없나"·수요를 붙이는 별도 단계.
+   창의 사람축 결과 애매(공상 유도) → 발산은 자유롭게 두고, 현실성 검토는 여기서 분리(Grok 0430 검수).
+   DeepSeek(추론·구조화 강함) 채택. ③왜없나·⑤수요는 'LLM 추정' → 다음 단계 시중검색(Brave)으로 실측 보강. */
+export const REALITY = { tier: "small", model: "DeepSeek-V3.2", role: "현실성 검토" };
+
 export const FALLBACK = { tier: "mid", model: "Llama-3.3", role: "일반" };
 
 /* [창의(다성) 모드 전용 — 기본 경로 아님]
@@ -60,4 +65,4 @@ export const ANGLE_MODELS = {
 export const SYNTH = { tier: "small", model: "Solar-Pro4", role: "종합" };
 
 // 라우팅 kind + 특수 kind(concepts=창의 후보 다중, verify=독립 검증). 서버 유효성 검사용.
-export const ORCHESTRATOR_KINDS = [...Object.keys(ROUTING), "concepts", "verify"];
+export const ORCHESTRATOR_KINDS = [...Object.keys(ROUTING), "concepts", "verify", "reality"];
