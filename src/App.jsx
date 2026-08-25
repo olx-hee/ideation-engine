@@ -69,6 +69,7 @@ const REPORT = {
 const PHASES = [
   { key: "ice", label: "아이스브레이킹", duration: 10, icon: "💬", color: "from-pink-500 to-purple-500", desc: "어색함 해소 + 주제 워밍업" },
   { key: "idea", label: "아이디어 발산", duration: 20, icon: "💡", color: "from-amber-500 to-orange-500", desc: "자유 브레인스토밍 + AI 자극" },
+  { key: "reality", label: "현실성 검토", duration: 10, icon: "🧭", color: "from-slate-500 to-slate-600", desc: "실현가능성·수요 + 시중검색(이미 있나?)" },
   { key: "analyze", label: "AI 분석 + 투표", duration: 15, icon: "📊", color: "from-blue-500 to-cyan-500", desc: "테마 그룹화 + 팀 투표" },
   { key: "report", label: "결과 보고서", duration: 5, icon: "📋", color: "from-green-500 to-emerald-500", desc: "AI 요약 + 액션 아이템" },
 ];
@@ -323,7 +324,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
     const local = parseInt(sessionStorage.getItem("ie_step"), 10);
     const l = Number.isInteger(local) ? local : 0;
     const sp = Number.isInteger(serverPhase) ? serverPhase : 0;
-    return Math.min(3, Math.max(0, Math.max(l, sp)));
+    return Math.min(4, Math.max(0, Math.max(l, sp)));
   });
   const [votes, setVotes] = useState(() => { try { return JSON.parse(sessionStorage.getItem("ie_votes")) || {}; } catch { return {}; } });
   // 현재 단계의 시작 시각을 저장 → 새로고침해도 남은 시간이 0으로 리셋되지 않고 이어짐
@@ -337,7 +338,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
   const votedThemes = THEMES.filter(t => votes[t.id]).map(t => t.name);
   useEffect(() => { const id = setInterval(() => setElapsed(Math.max(0, Math.floor((Date.now() - phaseStart) / 1000))), 1000); return () => clearInterval(id); }, [phaseStart]);
   const goToStep = (n) => {
-    const clamped = Math.min(3, Math.max(0, n));
+    const clamped = Math.min(4, Math.max(0, n));
     setStep(clamped); setPhaseStart(Date.now()); setElapsed(0);
     if (sessionId) api.patchSession(sessionId, { phase: clamped }).catch(() => {}); // 서버에 단계 저장(best-effort)
   };
@@ -349,7 +350,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
   useEffect(() => {
     if (!Number.isInteger(serverPhase) || phaseReconciled.current) return;
     phaseReconciled.current = true;
-    if (serverPhase > step) { setStep(Math.min(3, serverPhase)); setPhaseStart(Date.now()); setElapsed(0); }
+    if (serverPhase > step) { setStep(Math.min(4, serverPhase)); setPhaseStart(Date.now()); setElapsed(0); }
   }, [serverPhase]);
   // 서버에 영속된 내 투표를 복원(로컬 투표가 아직 없을 때만 → 진행 중 투표를 덮지 않음)
   useEffect(() => {
@@ -362,7 +363,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
   // report는 ReportPhase가 소유(레이스 방지: 응답에 실린 미터를 그대로 사용).
   const aiFired = useRef(new Set());
   useEffect(() => {
-    const kind = ["ice", "idea", "analyze"][step];
+    const kind = ["ice", "idea", null, "analyze", null][step]; // reality(2)·report(4)는 자기 컴포넌트가 호출
     if (!sessionId || !kind || aiFired.current.has(kind)) return;
     aiFired.current.add(kind);
     api.ai(kind, goal, null, sessionId).catch(() => {});
@@ -407,15 +408,16 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
           {syncError && <div className="mb-4 rounded-xl bg-red-50 border border-red-200 px-4 py-2.5 text-xs text-red-700 flex items-start gap-2"><span>⚠️</span><span>방금 제출이 <strong>서버에 저장되지 않았어요</strong>(네트워크·서버 문제). 화면엔 보이지만 새로고침 시 사라질 수 있습니다.</span></div>}
           {step === 0 && <IcePhase sessionId={sessionId} myProfile={myProfile} goal={goal} method={method} initialIce={content?.ice} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 1 && <IdeaPhase sessionId={sessionId} myProfile={myProfile} method={method} goal={goal} initialIdeas={content?.ideas} onContentSync={onContentSync} onSyncError={onSyncError} />}
-          {step === 2 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} onContentSync={onContentSync} onSyncError={onSyncError} />}
-          {step === 3 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} goal={goal} />}
+          {step === 2 && <RealityPhase sessionId={sessionId} goal={goal} ideas={content?.ideas} />}
+          {step === 3 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} onContentSync={onContentSync} onSyncError={onSyncError} />}
+          {step === 4 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} goal={goal} />}
         </div>
       </main>
       <footer className="bg-white border-t sticky bottom-0">
         <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
           <button onClick={prev} disabled={step === 0} className="px-4 py-2 border rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-neutral-50 transition disabled:opacity-30"><ChevronLeft size={14} /> 이전</button>
           <div className="text-sm font-medium text-neutral-500">{phase.icon} {phase.label} · {adjD}분 배정</div>
-          {step < 3 ? <button onClick={next} className="px-5 py-2 bg-neutral-900 text-white rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-neutral-800 transition">다음 <ChevronRight size={14} /></button>
+          {step < 4 ? <button onClick={next} className="px-5 py-2 bg-neutral-900 text-white rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-neutral-800 transition">다음 <ChevronRight size={14} /></button>
             : <button onClick={onExit} className="px-5 py-2 bg-green-600 text-white rounded-xl text-sm font-medium flex items-center gap-1 hover:bg-green-700 transition"><Check size={14} /> 완료 — 새 세션</button>}
         </div>
       </footer>
@@ -699,6 +701,94 @@ function IdeaSixHats({ goal }) {
           : <span className="text-sm text-green-600 font-medium self-center flex items-center gap-1"><Check size={14} /> 6색 모자 검토 완료</span>}
       </div>
       <style>{`.anim-up{animation:fadeUp .4s ease-out}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+
+/* ═══════ Phase (신규): 현실성 검토 + 시중검색 게이트 ═══════
+   발산 아이디어를 reality(실현가능성·수요) + market(Brave 실검색 '이미 있나') 백엔드에 통과시켜 카드로 보여준다.
+   ③⑤는 AI 추정, market 라벨은 실검색 URL 근거. (서버/키 없으면 폴백 안내) */
+const RE_VERDICT = /판정\s*:?\s*\[([^\]]+)\]/;
+const RE_MARKET = /아이디어\s*(\d+)\s*[:：]\s*\[([^\]]+)\]\s*[—\-–]\s*(.+)/;
+function pick(re, s) { const m = (s || "").match(re); return m ? m[1].trim() : ""; }
+function marketTone(label) {
+  if (/이미/.test(label)) return { cls: "border-red-300 bg-red-50", badge: "bg-red-500", chip: "text-red-700" };
+  if (/유사/.test(label)) return { cls: "border-amber-300 bg-amber-50", badge: "bg-amber-500", chip: "text-amber-700" };
+  return { cls: "border-emerald-300 bg-emerald-50", badge: "bg-emerald-500", chip: "text-emerald-700" };
+}
+function RealityPhase({ sessionId, goal = "", ideas }) {
+  const pool = (Array.isArray(ideas) && ideas.length ? ideas : IDEAS).map(i => i.title || i).filter(Boolean).slice(0, 4);
+  const [state, setState] = useState({ loading: true, err: false, reality: "", labels: "", sources: [], brave: false });
+  useEffect(() => {
+    let live = true;
+    (async () => {
+      try {
+        const [r, m] = await Promise.all([api.reality(goal, pool, sessionId), api.market(goal, pool, sessionId)]);
+        if (live) setState({ loading: false, err: false, reality: r.analysis || "", labels: m.labels || "", sources: m.sources || [], brave: !!m.brave });
+      } catch { if (live) setState({ loading: false, err: true, reality: "", labels: "", sources: [], brave: false }); }
+    })();
+    return () => { live = false; };
+  }, [sessionId]);
+
+  // reality analysis를 아이디어 블록으로 분할
+  const blocks = state.reality ? state.reality.split(/\n(?=\s*\d+\.\s)/).map(s => s.trim()).filter(Boolean) : [];
+  const labelLines = state.labels ? state.labels.split("\n").map(l => l.trim()).filter(Boolean) : [];
+  const marketByIdx = {};
+  labelLines.forEach(l => { const m = l.match(RE_MARKET); if (m) marketByIdx[Number(m[1]) - 1] = { label: m[2].trim(), reason: m[3].trim() }; });
+
+  return (
+    <div className="max-w-4xl mx-auto anim-up">
+      <div className="mb-5">
+        <div className="text-xs font-mono tracking-wide text-slate-500 uppercase mb-1">🧭 현실성 검토 + 시중검색</div>
+        <h2 className="text-2xl font-bold tracking-tight">발산한 아이디어, 현실에 발 붙는지 확인</h2>
+        <p className="text-sm text-neutral-500 mt-1">실현가능성·수요를 따지고, <b>"이미 있나?"는 AI가 아니라 실제 검색(Brave)</b>이 확인합니다. {state.brave ? <span className="text-emerald-600">· 검색 연결됨</span> : <span className="text-amber-600">· 검색 미연결(추정만)</span>}</p>
+      </div>
+
+      {state.loading && <div className="rounded-2xl border bg-white p-8 text-center text-sm text-neutral-500">AI가 현실성·시중검색을 확인하는 중…</div>}
+      {state.err && <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">⚠️ 백엔드에 연결하지 못했습니다(서버 미실행일 수 있음). 서버를 켜면 실제 현실성·시중검색 결과가 표시됩니다.</div>}
+
+      {!state.loading && !state.err && (
+        <div className="space-y-4">
+          {pool.map((title, i) => {
+            const blk = blocks[i] || "";
+            const mk = marketByIdx[i];
+            const tone = marketTone(mk?.label || "공백");
+            const verdict = pick(RE_VERDICT, blk);
+            const feas = pick(/②[^:：]*[:：]\s*([상중하])/, blk);
+            const why = pick(/③[^:：]*[:：]\s*(.+)/, blk);
+            const demand = pick(/⑤[^:：]*[:：]\s*(.+)/, blk);
+            const links = (state.sources[i]?.results || []).slice(0, 2);
+            return (
+              <div key={i} className={`rounded-2xl border bg-white overflow-hidden ${verdict.includes("보류") ? "border-amber-200" : "border-neutral-200"}`}>
+                <div className="flex items-center justify-between gap-2 px-5 pt-4">
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-500">발산 아이디어 {i + 1}</span>
+                  {verdict && <span className={`text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full ${verdict.includes("보류") ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>판정 [{verdict}]</span>}
+                </div>
+                <div className="px-5 pt-2 pb-3 text-[17px] font-semibold tracking-tight">{title}</div>
+
+                {mk && (
+                  <div className={`mx-5 mb-3 rounded-xl border p-3 flex gap-3 items-start ${tone.cls}`}>
+                    <span className={`flex-none text-[11px] font-mono font-semibold text-white px-2 py-1 rounded-md ${tone.badge}`}>{mk.label}</span>
+                    <div className="text-[13px] text-neutral-800 leading-snug">
+                      {mk.reason}
+                      {links.length > 0 && <div className="mt-1.5 flex flex-col gap-0.5">{links.map((l, k) => <a key={k} href={l.url} target="_blank" rel="noreferrer" className="text-[11.5px] font-mono text-slate-600 hover:underline truncate">🔗 {l.title || l.url}</a>)}</div>}
+                    </div>
+                  </div>
+                )}
+
+                <div className="px-5 pb-4 grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-2 text-[13px]">
+                  {feas && <div><div className="text-[10px] font-mono uppercase tracking-wide text-neutral-400">실현가능성</div><div className={`font-bold ${feas === "상" ? "text-emerald-600" : feas === "중" ? "text-amber-600" : "text-red-600"}`}>{feas}</div></div>}
+                  {why && <div><div className="text-[10px] font-mono uppercase tracking-wide text-neutral-400">왜 아직 없나 · 추정</div><div className="text-neutral-700">{why.slice(0, 60)}</div></div>}
+                  {demand && <div><div className="text-[10px] font-mono uppercase tracking-wide text-neutral-400">진짜 수요 · 추정</div><div className="text-neutral-700">{demand.slice(0, 60)}</div></div>}
+                </div>
+              </div>
+            );
+          })}
+          <p className="text-[11px] text-neutral-400 leading-relaxed pt-1">
+            🧭 <b>적재적소 분업:</b> "이미 있나"는 Brave 검색이, 판정·현실성은 DeepSeek이 맡았습니다. ③⑤는 AI 추정 + 검색 보강이며, 최종 라벨은 AI 판정(URL은 실측)입니다.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
