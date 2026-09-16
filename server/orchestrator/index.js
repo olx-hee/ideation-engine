@@ -125,7 +125,15 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
     result = { kind, mode: "self-refine", model: q.model, tier: q.tier, text: rev.text, draft: draft.text, critique: crit.text, passes: q.passes, deduped: false };
   } else {
     // 단일 역할(기본) — idea 포함 모든 kind가 단일 모델 1콜.
-    const r = await callModel({ model: route.model, tier: route.tier, kind, prompt: goal });
+    // 분석·보고서는 '제출된 아이디어'를 프롬프트에 넣어 실제 세션 기반으로 생성(F-09).
+    const poolText = (pool || [])
+      .map((p) => (typeof p === "string" ? p : (p.title || p.text || "")))
+      .filter(Boolean)
+      .map((t, i) => `${i + 1}. ${t}`)
+      .join("\n");
+    const usePool = (kind === "analyze" || kind === "report") && poolText;
+    const prompt = usePool ? `목표: ${goal}\n\n[제출된 아이디어]\n${poolText}` : goal;
+    const r = await callModel({ model: route.model, tier: route.tier, kind, prompt });
     entry.meter.record({ purpose: "generate", kind, role: route.role, model: route.model, tier: route.tier, usageTokens: r.usageTokens });
     result = { kind, mode: "single", role: route.role, model: route.model, tier: route.tier, text: r.text, deduped: false };
   }

@@ -363,7 +363,7 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
   // report는 ReportPhase가 소유(레이스 방지: 응답에 실린 미터를 그대로 사용).
   const aiFired = useRef(new Set());
   useEffect(() => {
-    const kind = ["ice", "idea", null, "analyze", null][step]; // reality(2)·report(4)는 자기 컴포넌트가 호출
+    const kind = ["ice", "idea", null, null, null][step]; // reality(2)·analyze(3)·report(4)는 자기 컴포넌트가 소유 호출
     if (!sessionId || !kind || aiFired.current.has(kind)) return;
     aiFired.current.add(kind);
     api.ai(kind, goal, null, sessionId).catch(() => {});
@@ -409,8 +409,8 @@ function SessionView({ sessionId, goal, mins, mode = "offline", method = "brain"
           {step === 0 && <IcePhase sessionId={sessionId} myProfile={myProfile} goal={goal} method={method} initialIce={content?.ice} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 1 && <IdeaPhase sessionId={sessionId} myProfile={myProfile} method={method} goal={goal} initialIdeas={content?.ideas} onContentSync={onContentSync} onSyncError={onSyncError} />}
           {step === 2 && <RealityPhase sessionId={sessionId} goal={goal} ideas={content?.ideas} />}
-          {step === 3 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} onContentSync={onContentSync} onSyncError={onSyncError} />}
-          {step === 4 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} goal={goal} />}
+          {step === 3 && <AnalyzePhase sessionId={sessionId} votes={votes} setVotes={setVotes} method={method} goal={goal} initialIdeas={content?.ideas} onContentSync={onContentSync} onSyncError={onSyncError} />}
+          {step === 4 && <ReportPhase votedThemes={votedThemes} method={method} sessionId={sessionId} goal={goal} initialIdeas={content?.ideas} />}
         </div>
       </main>
       <footer className="bg-white border-t sticky bottom-0">
@@ -745,7 +745,7 @@ function RealityPhase({ sessionId, goal = "", ideas }) {
       <div className="mb-5">
         <div className="text-xs font-mono tracking-wide text-slate-500 uppercase mb-1">🧭 현실성 검토 + 시중검색</div>
         <h2 className="text-2xl font-bold tracking-tight">발산한 아이디어, 현실에 발 붙는지 확인</h2>
-        <p className="text-sm text-neutral-500 mt-1">실현가능성·수요를 따지고, <b>"이미 있나?"는 AI가 아니라 실제 검색(Brave)</b>이 확인합니다. {state.brave ? <span className="text-emerald-600">· 검색 연결됨</span> : <span className="text-amber-600">· 검색 미연결(추정만)</span>}{usingExample && <span className="text-amber-600"> · 예시 아이디어(발산 전)</span>}</p>
+        <p className="text-sm text-neutral-500 mt-1">실현가능성·수요를 따지고, <b>"이미 있나?"는 실제 검색(Brave) 결과를 근거로 AI가 임시 판정</b>합니다. {state.brave ? <span className="text-emerald-600">· 검색 연결됨</span> : <span className="text-amber-600">· 검색 미연결(추정만)</span>}{usingExample && <span className="text-amber-600"> · 예시 아이디어(발산 전)</span>}</p>
       </div>
 
       {state.loading && <div className="rounded-2xl border bg-white p-8 text-center text-sm text-neutral-500">AI가 현실성·시중검색을 확인하는 중…</div>}
@@ -798,7 +798,7 @@ function RealityPhase({ sessionId, goal = "", ideas }) {
 }
 
 /* ═══════ Phase 3: 분석 + 투표 ═══════ */
-function AnalyzePhase({ votes, setVotes, method = "brain", sessionId, onContentSync, onSyncError }) {
+function AnalyzePhase({ votes, setVotes, method = "brain", sessionId, goal = "", initialIdeas, onContentSync, onSyncError }) {
   const used = Object.values(votes).filter(Boolean).length;
   const remaining = 3 - used;
   const handleVote = (id) => {
@@ -810,15 +810,23 @@ function AnalyzePhase({ votes, setVotes, method = "brain", sessionId, onContentS
     if (sessionId) { const themeIds = Object.keys(next).filter((k) => next[k]).map(Number); api.setVotes(sessionId, "user", themeIds).then((s) => onContentSync?.(s)).catch(() => onSyncError?.()); }
   };
 
+  // 실제 제출 아이디어로 분석 생성(F-09). 서버·키 없으면 표시 안 함.
+  const [analysis, setAnalysis] = useState("");
+  useEffect(() => {
+    if (!sessionId) return;
+    const pool = (initialIdeas || []).map((i) => i.title || i).filter(Boolean);
+    api.ai("analyze", goal, null, sessionId, false, pool).then((r) => setAnalysis(r.text || "")).catch(() => {});
+  }, [sessionId]);
+
   return (
     <div>
       <div className="mb-3"><Badge variant="success">📊 PHASE 3 · 15분</Badge><h2 className="text-xl font-bold mt-1">AI 분석 및 그룹화 완료</h2><p className="text-sm text-neutral-500">{methodHint(method, "analyze")} (<strong>{methodName(method)}</strong> 방식)</p></div>
-      <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>아래 분석 문구·신뢰도·테마 수치는 <strong>시연용 샘플</strong>입니다. 실제 제출 아이디어에서 생성된 값이 아니며, 투표만 실제로 반영됩니다.</span></div>
+      <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>아래 <strong>테마 카드·수치</strong>는 시연용 샘플입니다(투표만 실제 반영). 위 AI 분석 문구는 <strong>실제 제출 아이디어 기반</strong>입니다.</span></div>
       <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl p-6 text-white mb-5">
-        <div className="text-xs text-green-400 tracking-wider mb-2">AI INSIGHT SUMMARY</div>
-        <p className="text-lg font-semibold mb-1">"팀원 4명의 아이디어가 하나의 공통 구조를 공유합니다: '반복적으로 발생하는 판단을 AI에 위임하여 인지 부하를 줄인다.'"</p>
-        <p className="text-sm text-neutral-400">회의 진행, 학습 정리, 공간 탐색, 식재료 관리 — 영역은 다르지만 해결 구조가 동일합니다.</p>
-        <div className="flex items-center gap-2 mt-2"><span className="text-xs text-neutral-500">분석 신뢰도</span><span className="text-xl font-bold text-green-400">94.2%</span><span className="text-[10px] text-neutral-500">· 시연용 예시값</span></div>
+        <div className="text-xs text-green-400 tracking-wider mb-2">AI 분석 {analysis ? "· 실제 제출 아이디어 기반" : "· 대기 중"}</div>
+        {analysis
+          ? <p className="text-sm text-neutral-100 whitespace-pre-line leading-relaxed">{analysis}</p>
+          : <p className="text-sm text-neutral-400">제출된 아이디어를 분석하는 중입니다… (서버·키 미연결 시 표시되지 않습니다)</p>}
       </div>
       <div className="mb-4 flex items-center gap-2 text-sm text-neutral-500">남은 투표권: <div className="flex gap-1">{[0, 1, 2].map(i => <div key={i} className={`w-5 h-5 rounded-full border-2 transition ${i < remaining ? "border-neutral-900 bg-neutral-900" : "border-neutral-300"}`} />)}</div></div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -840,14 +848,16 @@ function AnalyzePhase({ votes, setVotes, method = "brain", sessionId, onContentS
 }
 
 /* ═══════ Phase 4: 리포트 ═══════ */
-function ReportPhase({ votedThemes = [], method = "brain", sessionId, goal = "" }) {
+function ReportPhase({ votedThemes = [], method = "brain", sessionId, goal = "", initialIdeas }) {
   const [dl, setDl] = useState(false);
   const [meter, setMeter] = useState(null); // 오케스트레이터 비용 미터 (발표 패널)
+  const [body, setBody] = useState("");      // 실제 제출 아이디어로 생성한 보고서 본문(F-09)
   // report 호출을 여기서 소유 → 응답에 실린 '전체 미터'를 그대로 사용(별도 fetch 레이스 제거)
   useEffect(() => {
     if (!sessionId) return;
-    api.ai("report", goal, null, sessionId)
-      .then((r) => setMeter(r.meter))
+    const pool = (initialIdeas || []).map((i) => i.title || i).filter(Boolean);
+    api.ai("report", goal, null, sessionId, false, pool)
+      .then((r) => { setMeter(r.meter); setBody(r.text || ""); })
       .catch(() => api.getAiMeter(sessionId).then(setMeter).catch(() => {}));
   }, [sessionId]);
   return (
@@ -856,7 +866,13 @@ function ReportPhase({ votedThemes = [], method = "brain", sessionId, goal = "" 
         <div><Badge variant="primary">📋 FINAL · 5분</Badge><h2 className="text-xl font-bold mt-1">최종 아이데이션 결과 보고서</h2><p className="text-sm text-neutral-500 mt-0.5">🧭 {methodHint(method, "report")} (<strong>{methodName(method)}</strong>)</p></div>
         <button onClick={() => setDl(true)} className="px-4 py-2 rounded-xl text-sm font-medium border bg-neutral-100 text-neutral-500 hover:bg-neutral-200 transition">{dl ? "🚧 PDF 내보내기는 준비 중입니다" : "↓ PDF 다운로드 (준비 중)"}</button>
       </div>
-      <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>이 보고서는 <strong>시연용 고정 템플릿</strong>입니다. 실제 세션의 투표·아이디어로 자동 생성된 결과가 아닙니다.</span></div>
+      <div className="mb-4 rounded-xl bg-amber-50 border border-amber-200 px-4 py-2.5 text-xs text-amber-800 flex items-start gap-2"><span>⚠️</span><span>아래 <strong>선정 아이디어·실행계획 등 상세 카드</strong>는 시연용 고정 템플릿입니다. 위 <strong>"실제 제출 아이디어로 생성한 보고서"</strong>가 이번 세션 기반 결과입니다.</span></div>
+      {body && (
+        <div className="mb-5 rounded-2xl border border-neutral-200 bg-white p-6">
+          <div className="text-xs font-semibold text-neutral-500 mb-2">🧭 실제 제출 아이디어로 생성한 보고서</div>
+          <p className="text-sm text-neutral-700 whitespace-pre-line leading-relaxed">{body}</p>
+        </div>
+      )}
       {votedThemes.length > 0 && (
         <div className="mb-4 rounded-xl bg-neutral-900 text-white px-4 py-3"><span className="text-xs text-green-400">✅ 내가 이번 세션에서 실제로 투표한 테마</span><div className="font-semibold text-sm mt-0.5">{votedThemes.join(", ")}</div></div>
       )}
@@ -880,7 +896,7 @@ function ReportPhase({ votedThemes = [], method = "brain", sessionId, goal = "" 
             <span className="text-xs text-neutral-300">우리 방식 ${meter.ourCost} vs 전부 고가면 ${meter.allFlagshipCost}</span>
             <span className="text-[10px] text-neutral-400 w-full">품질 지표 — 승격률 {meter.escalateRate ?? 0}% · 오버헤드 ${meter.overheadCost ?? 0} (생성 콜만 절감 계산)</span>
           </div>
-          <p className="text-[11px] text-neutral-500 mt-2">※ {meter.baselineNote}. 저가/고가 LLM을 작업에 맞게 자동 배분한 결과입니다.</p>
+          <p className="text-[11px] text-neutral-500 mt-2">※ {meter.baselineNote}. 작업마다 측정으로 고른 모델을 배분한 결과입니다(난이도 기반 동적 승격은 미구현).</p>
         </div>
       )}
       <div className="flex flex-col lg:flex-row gap-6">
