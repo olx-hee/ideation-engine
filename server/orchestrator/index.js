@@ -21,6 +21,17 @@ function parseConcept(text = "") {
   return { title: (lines[0] || "컨셉").replace(/\*\*/g, "").slice(0, 40).trim(), summary: lines.slice(1).join(" ").trim() || t };
 }
 
+// 입력(pool/content) 지문 — 같은 kind라도 입력이 다르면 캐시를 분리한다.
+// (F-10: 캐시 키가 kind만 보면, 같은 세션에서 아이디어를 바꿔 다시 호출해도 옛 결과가 나온다.)
+function poolSig(pool = [], content = null) {
+  const s = (Array.isArray(pool) ? pool : [])
+    .map((p) => (typeof p === "string" ? p : (p && (p.title || p.text)) || "")).join("|") + "|" + (content || "");
+  if (!s.replace(/\|/g, "")) return "";
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return "#" + h.toString(36);
+}
+
 // 세션별 상태(P1: 인메모리). meter + 이미 기록한 kind(멱등) + 최근접근(LRU).
 const MAX_SESSIONS = 200;
 const sessions = new Map(); // sessionId → { meter, kinds:Set, ts }
@@ -42,7 +53,7 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
 
   // 멱등(S1 이중과금 차단): 같은 세션·같은 kind(+품질모드 여부) 재호출은 '실호출 없이' 캐시 반환.
   // StrictMode·재전송으로 두 번 들어와도 callModel(=실 API·크레딧)을 다시 치지 않는다.
-  const cacheKey = quality ? `${kind}#q` : kind;
+  const cacheKey = `${kind}${quality ? "#q" : ""}${poolSig(pool, content)}`;
   if (entry.last.has(cacheKey)) {
     return { ...entry.last.get(cacheKey), deduped: true, meter: entry.meter.summary() };
   }
@@ -73,11 +84,17 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
   // [현실성 패스] 발산 아이디어에 실현가능성·"왜 아직 없나"·수요를 붙임(뻔함·공상 배제, 보류도 보존).
   //   ③⑤는 아직 LLM '추정' — 다음 단계에서 시중검색(Brave)으로 실측 라벨을 덧붙일 자리.
   else if (kind === "reality") {
-    const poolText = (pool || []).map((p, i) => `${i + 1}. ${typeof p === "string" ? p : (p.title || p.text || "")}`).join("\n");
-    const prompt = `목표: ${goal}\n\n[검토할 아이디어]\n${poolText || content || "(아이디어 없음)"}`;
-    const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "reality", prompt });
-    entry.meter.record({ purpose: "verify", kind, role: REALITY.role, model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
-    result = { kind, mode: "reality", model: REALITY.model, tier: REALITY.tier, analysis: r.text, marketChecked: false, deduped: false };
+    // 아이디어별로 따로 호출해 1:1 배열로 돌려준다.
+    // (F-01: 한 번에 묶어 받으면 프론트 텍스트 분할이 어긋나 4개 중 1개만 표시됐음)
+    const ideas = (pool || []).map((p) => (typeof p === "string" ? p : (p.title || p.text || ""))).filter(Boolean).slice(0, 6);
+    const list = ideas.length ? ideas : [content || "(아이디어 없음)"];
+    const analyses = [];
+    for (const idea of list) {
+      const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "reality", prompt: `목표: ${goal}\n\n[검토할 아이디어]\n${idea}` });
+      entry.meter.record({ purpose: "verify", kind, role: REALITY.role, model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
+      analyses.push({ idea, text: r.text });
+    }
+    result = { kind, mode: "reality", model: REALITY.model, tier: REALITY.tier, analyses, marketChecked: false, deduped: false };
   }
   // [시중검색 게이트] 각 아이디어를 Brave로 실제 검색 → 결과를 근거로 이미있음/유사/공백 판정(생성≠검증 독립).
   //   검색결과는 <<<데이터>>>로 격리해 LLM에 전달(인젝션 방지). LLM 추정(reality ③⑤)을 실측으로 보강.

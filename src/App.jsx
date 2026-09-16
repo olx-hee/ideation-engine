@@ -458,7 +458,7 @@ function IcePhase({ myProfile, goal, method = "brain", sessionId, initialIce, on
         <div className="mb-3"><Badge variant="info">💬 PHASE 1 · 10분</Badge><h2 className="text-xl font-bold mt-1">아이스브레이킹</h2><p className="text-sm text-neutral-500">세션 목표와 연결된 워밍업 질문입니다. 이 답변들이 다음 아이디어 발산의 출발점이 됩니다.</p></div>
         <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-indigo-50 text-indigo-700 text-xs px-3 py-1.5"><span>🧭 이 세션 방식: <strong>{methodName(method)}</strong></span><span className="opacity-70">· {methodHint(method, "ice")}</span></div>
         <div className="bg-neutral-900 text-white rounded-2xl p-6 mb-5">
-          <div className="text-xs text-neutral-400 mb-2 flex items-center gap-1"><Sparkles size={11} /> 세션 목표 "{(goal || "이 세션의 목표").slice(0, 24)}{(goal || "").length > 24 ? "…" : ""}"에 맞춰 AI가 질문을 생성했습니다</div>
+          <div className="text-xs text-neutral-400 mb-2 flex items-center gap-1"><Sparkles size={11} /> 세션 목표 "{(goal || "이 세션의 목표").slice(0, 24)}{(goal || "").length > 24 ? "…" : ""}"에 맞춘 워밍업 질문입니다</div>
           <h3 className="text-2xl font-bold leading-snug">최근 일주일간 경험한 가장 큰 '불편함'은 무엇인가요?</h3>
           <p className="text-sm text-neutral-400 mt-2">💡 여기서 나온 불편함이 → 아이디어의 씨앗이 됩니다</p>
         </div>
@@ -717,21 +717,25 @@ function marketTone(label) {
   return { cls: "border-emerald-300 bg-emerald-50", badge: "bg-emerald-500", chip: "text-emerald-700" };
 }
 function RealityPhase({ sessionId, goal = "", ideas }) {
-  const pool = (Array.isArray(ideas) && ideas.length ? ideas : IDEAS).map(i => i.title || i).filter(Boolean).slice(0, 4);
-  const [state, setState] = useState({ loading: true, err: false, reality: "", labels: "", sources: [], brave: false });
+  // 실제 발산 아이디어를 검토 대상으로. 아직 없으면(발산 전) 예시로 대체하되 화면에 표기한다.
+  const usingExample = !(Array.isArray(ideas) && ideas.length);
+  const pool = (usingExample ? IDEAS : ideas).map(i => i.title || i).filter(Boolean).slice(0, 4);
+  const poolKey = pool.join("|"); // 아이디어가 바뀌면 다시 계산되도록 deps로 사용
+  const [state, setState] = useState({ loading: true, err: false, analyses: [], labels: "", sources: [], brave: false });
   useEffect(() => {
     let live = true;
+    setState((s) => ({ ...s, loading: true, err: false }));
     (async () => {
       try {
         const [r, m] = await Promise.all([api.reality(goal, pool, sessionId), api.market(goal, pool, sessionId)]);
-        if (live) setState({ loading: false, err: false, reality: r.analysis || "", labels: m.labels || "", sources: m.sources || [], brave: !!m.brave });
-      } catch { if (live) setState({ loading: false, err: true, reality: "", labels: "", sources: [], brave: false }); }
+        if (live) setState({ loading: false, err: false, analyses: r.analyses || [], labels: m.labels || "", sources: m.sources || [], brave: !!m.brave });
+      } catch { if (live) setState({ loading: false, err: true, analyses: [], labels: "", sources: [], brave: false }); }
     })();
     return () => { live = false; };
-  }, [sessionId]);
+  }, [sessionId, poolKey]);
 
-  // reality analysis를 아이디어 블록으로 분할
-  const blocks = state.reality ? state.reality.split(/\n(?=\s*\d+\.\s)/).map(s => s.trim()).filter(Boolean) : [];
+  // 아이디어별 현실성 분석 — 백엔드가 pool과 같은 순서의 1:1 배열로 반환한다(인덱스 매핑).
+  const blocks = (state.analyses || []).map((a) => (a && a.text) || "");
   const labelLines = state.labels ? state.labels.split("\n").map(l => l.trim()).filter(Boolean) : [];
   const marketByIdx = {};
   labelLines.forEach(l => { const m = l.match(RE_MARKET); if (m) marketByIdx[Number(m[1]) - 1] = { label: m[2].trim(), reason: m[3].trim() }; });
@@ -741,7 +745,7 @@ function RealityPhase({ sessionId, goal = "", ideas }) {
       <div className="mb-5">
         <div className="text-xs font-mono tracking-wide text-slate-500 uppercase mb-1">🧭 현실성 검토 + 시중검색</div>
         <h2 className="text-2xl font-bold tracking-tight">발산한 아이디어, 현실에 발 붙는지 확인</h2>
-        <p className="text-sm text-neutral-500 mt-1">실현가능성·수요를 따지고, <b>"이미 있나?"는 AI가 아니라 실제 검색(Brave)</b>이 확인합니다. {state.brave ? <span className="text-emerald-600">· 검색 연결됨</span> : <span className="text-amber-600">· 검색 미연결(추정만)</span>}</p>
+        <p className="text-sm text-neutral-500 mt-1">실현가능성·수요를 따지고, <b>"이미 있나?"는 AI가 아니라 실제 검색(Brave)</b>이 확인합니다. {state.brave ? <span className="text-emerald-600">· 검색 연결됨</span> : <span className="text-amber-600">· 검색 미연결(추정만)</span>}{usingExample && <span className="text-amber-600"> · 예시 아이디어(발산 전)</span>}</p>
       </div>
 
       {state.loading && <div className="rounded-2xl border bg-white p-8 text-center text-sm text-neutral-500">AI가 현실성·시중검색을 확인하는 중…</div>}
@@ -931,13 +935,17 @@ function ReportPhase({ votedThemes = [], method = "brain", sessionId, goal = "" 
 }
 
 /* ═══════ 대기실 (로비) ═══════ */
-function LobbyView({ sessionId, goal, mins, mode = "offline", method = "brain", onSessionStart }) {
+function LobbyView({ sessionId, goal, mins, mode = "offline", method = "brain", myProfile, onSessionStart }) {
   // 서버에서 발급된 실제 세션 id를 초대 링크에 사용 (서버 미연결 시 데모 표기)
   const link = sessionId ? `https://ideationengine.app/s/${sessionId}` : "https://ideationengine.app/s/(서버 연결 대기)";
   const md = MODES[mode];
   const isOnline = mode === "online";
   const [copied, setCopied] = useState(false);
-  const [joined, setJoined] = useState([MEMBERS[0]]); // 방장만 처음에
+  // 방장(진행자) = 실제 나(프로필). 서버 미연결/프로필 없을 때만 데모 인물로 폴백.
+  const me = myProfile && myProfile.name
+    ? { id: "user", name: myProfile.name, initial: myProfile.name.charAt(0), color: "bg-emerald-500 text-white", isHost: true }
+    : MEMBERS[0];
+  const [joined, setJoined] = useState([me]);
 
   // 시연용: 2초 간격으로 팀원이 한 명씩 입장
   useEffect(() => {
@@ -1166,7 +1174,7 @@ export default function App() {
     return <CreateView myProfile={myProfile} onStart={startSession} />;
   }
   if (view === "lobby") {
-    return <LobbyView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} onSessionStart={() => setView("session")} />;
+    return <LobbyView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} myProfile={myProfile} onSessionStart={() => setView("session")} />;
   }
   return <SessionView sessionId={sessionId} goal={data.goal} mins={data.mins} mode={data.mode} method={data.method} deadlineAt={data.deadlineAt} serverPhase={data.phase} content={content} onContentSync={onContentSync} onSyncError={onSyncError} syncError={syncError} myProfile={myProfile} onExit={exitToNew} />;
 }

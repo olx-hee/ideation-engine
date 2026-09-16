@@ -66,8 +66,8 @@ app.get("/api/health", (req, res) => {
   const body = { ok: true };
   if (!isProd) {
     body.store = store.kind;
-    // 실제 LLM 호출은 아직 미구현이므로 키가 있어도 'mock-pending'으로 정직 표기
-    body.ai = process.env.ANTHROPIC_API_KEY ? "mock-pending" : "mock";
+    // 실호출은 OpenRouter로 나간다. 키가 있으면 'live', 없으면 목업 폴백.
+    body.ai = process.env.OPENROUTER_API_KEY ? "live" : "mock";
     body.time = new Date().toISOString();
   }
   res.json(body);
