@@ -71,10 +71,24 @@ function renderOverview(r) {
   const hint = App.$$('.sc2 p').find(p => p.textContent.includes('발산 때') || p.textContent.includes('있어요'));
   if (hint && r.hint) hint.textContent = r.hint;
 }
-async function load() { const r = await api.call('ice.overview'); if (r) renderOverview(r); }
+let lastOverview = null;   // 다시 묶기 응답엔 progress·newsReactions가 없어서, 지워버리지 않고 마지막 값을 이어 쓴다
+async function load() {
+  let r;
+  try { r = await api.call('ice.overview'); }
+  catch (e) {
+    if (e.code === 'FORBIDDEN') { App.go(App.screen('07-1-icebreak-q1-discomfort')); return; }   // 참가자가 잘못 들어온 경우
+    throw e;
+  }
+  if (r) { lastOverview = r; renderOverview(r); }
+}
 if (!IE_CONFIG.useMock) App.run(null, load);
 
-App.action('regroup', async () => { const r = await api.call('ice.regroup', {}, {}); if (!IE_CONFIG.useMock) renderOverview(Object.assign({ progress: [], newsReactions: [] }, r)); App.toast('재료를 다시 묶었어요'); return false; });
+App.action('regroup', async () => {
+  const r = await api.call('ice.regroup', {}, {});
+  if (!IE_CONFIG.useMock) { lastOverview = Object.assign({}, lastOverview, r); renderOverview(lastOverview); }
+  App.toast('재료를 다시 묶었어요');
+  return false;
+});
 App.action('prevStage', async () => { await api.call('session.back', {}, { from: 'icebreak' }); App.toast('이전 단계로 돌아갔어요'); return false; });
 App.action('nextStage', async () => { await api.call('session.advance', {}, { from: 'icebreak' }); });
 
@@ -82,7 +96,8 @@ realtime.connect(App.sessionId(), (ev) => {
   if (ev.type === 'icebreak.progress') {
     const row = App.$$('.pr').find(r => r.querySelector('.nm2').textContent.startsWith(ev.data.nickname));
     if (row && ev.data.done) { row.querySelector('.bar')?.remove(); const st = row.querySelector('.st'); st.textContent = '완료'; st.classList.add('done'); }
-    else if (row) { row.querySelector('.bar i').style.width = ev.data.step * 20 + '%'; row.querySelector('.st').textContent = ev.data.step + ' / 5'; }
+    else if (row) { const bar = row.querySelector('.bar i'); if (bar) bar.style.width = ev.data.step * 20 + '%'; row.querySelector('.st').textContent = ev.data.step + ' / 5'; }
   }
   if (ev.type === 'icebreak.groups.updated') App.toast(`새 재료 ${ev.data.newMaterials}개가 들어왔어요 · "다시 묶기"로 반영해요`);
+  if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.write') App.go(App.screen('07-7-diverge-materials'));
 });

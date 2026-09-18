@@ -49,11 +49,25 @@ function hostButton(isHost, hasOverlap) {
   b.textContent = stage === 'team.questions' ? '질문 마감하고 배치 보기 →' : (hasOverlap ? '추가 질문 시작 →' : '배치 초안 보기 →');
 }
 
+/* AI가 파트를 나누는 중(ready=false)이면 안내 띄우고, 끝나면 걷는다 — 8-5 AI 검증과 같은 방식 */
+function pending(ready) {
+  App.$('.tdim')?.remove();
+  if (ready) return;
+  const dim = document.createElement('div'); dim.className = 'tdim';
+  dim.innerHTML = '<div class="tdlg" style="text-align:center"><div class="avatar" style="width:72px;height:72px;font-size:var(--fs-h1);margin:0 auto 14px">AI</div><h3>파트를 나누는 중이에요</h3><p>주제를 파트로 나누고 프로필로 후보를 찾고 있어요</p><p class="quiet">끝나면 자동으로 보여요</p></div>';
+  (App.$('.board') || document.body).appendChild(dim);
+}
+
+let loadSeq = 0;
 async function load() {
+  const seq = ++loadSeq;
   const s = await api.call('session.get');
+  if (seq !== loadSeq) return;               // 그 사이 새 load()가 시작됨 — 늦게 온 이 응답은 버림
   stage = s.stage.id;
   const d = await api.call('team.parts');
-  if (!d.ready) { App.toast('AI가 파트를 나누는 중이에요. 잠시만 기다려 주세요'); return; }
+  if (seq !== loadSeq) return;
+  pending(d.ready);
+  if (!d.ready) return;
   render(d);
   hostButton(s.me.role === 'host', d.parts.some(p => p.status === 'overlap'));
   if (stage === 'team.questions' && d.myPendingQuestions > 0) App.go(App.screen('09-2-overlap-questions'));

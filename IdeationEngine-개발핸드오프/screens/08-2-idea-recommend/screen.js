@@ -65,3 +65,8 @@ App.action('submitIdeas', async () => {
   await api.call('idea.submit', {}, { ideas });
 });
 paint();
+
+realtime.connect(App.sessionId(), (ev) => {
+  if (ev.type === 'ideas.submitted') App.progress(ev.data.submittedCount, ev.data.memberCount);   // 진행자 막대(T2)
+  if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.board') App.go(App.screen('08-3-idea-board'));
+});

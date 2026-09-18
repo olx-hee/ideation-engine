@@ -97,9 +97,20 @@ function render(r) {
   App.$('.dvh h3').innerHTML = `<span class="rmeta">첫 회의 결과 보고서 · ${esc(r.meta.date)} · 팀원 ${r.meta.memberCount}명 · 약 ${r.meta.durationMin}분</span>${esc(r.topic.title)}`;
 }
 
+/* 보고서를 만드는 중(ready=false)이면 안내 띄우고, 끝나면 걷는다 — 8-5 AI 검증과 같은 방식 */
+function pending(ready) {
+  App.$('.tdim')?.remove();
+  if (ready) return;
+  const dim = document.createElement('div'); dim.className = 'tdim';
+  dim.innerHTML = '<div class="tdlg" style="text-align:center"><div class="avatar" style="width:72px;height:72px;font-size:var(--fs-h1);margin:0 auto 14px">AI</div><h3>보고서를 만드는 중이에요</h3><p>확정된 배치로 요약과 워크플로우를 만들고 있어요</p><p class="quiet">끝나면 자동으로 보여요</p></div>';
+  (App.$('.board') || document.body).appendChild(dim);
+}
+
 async function load() {
   const r = await api.call('report.get');
-  if (!r.ready) { App.toast('보고서를 만드는 중이에요. 잠시만 기다려 주세요'); return; }
+  pending(r.ready);
+  if (!r.ready) return;
+  if (report && r.version < report.version) return;   // 늦게 도착한 응답 — 이미 더 최신 보고서를 보고 있음
   render(r);
 }
 

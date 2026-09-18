@@ -1,8 +1,10 @@
 /* 8-6w 투표 마침 · 결과 기다리기 */
 const cnt = App.$('.wait-count b');
 async function load() {
-  const r = await api.call('vote.state');
+  const r = await App.run(null, () => api.call('vote.state'));
+  if (!r) return;
   if (!r.finished) { App.go(App.screen('08-6-vote')); return; }   // 아직 안 마친 사람은 투표 화면으로
+  if (r.votedCount >= r.memberCount) { App.go(App.screen('08-7-vote-result-host')); return; }   // 내가 마지막 투표자라 vote.closed를 놓쳤어도(화면 이동 중 끊긴 연결) 결과로
   cnt.textContent = `${r.votedCount} / ${r.memberCount}`;
 }
 if (!IE_CONFIG.useMock) load();

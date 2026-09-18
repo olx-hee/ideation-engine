@@ -122,9 +122,13 @@ App.action('confirmAssign', async () => {
 
 async function load() {
   const a = await api.call('team.assignment');
+  if (cur && a.version < cur.version) return;   // 늦게 도착한 응답 — 이미 더 최신 배치를 보고 있음
   if (a.viewer && !a.viewer.isLeader) { App.go(App.screen('09-3-assign-draft')); return; }
   render(a);
 }
-realtime.connect(App.sessionId(), (ev) => { if (ev.type === 'team.assignment.updated' && !IE_CONFIG.useMock) load(); });
+realtime.connect(App.sessionId(), (ev) => {
+  if (ev.type === 'team.assignment.updated' && !IE_CONFIG.useMock) load();
+  if (ev.type === 'team.confirmed' || (ev.type === 'stage.changed' && ev.data.stage.id === 'report')) App.go(App.screen('09-5-report'));
+});
 if (!IE_CONFIG.useMock) load();
 if (IE_CONFIG.useMock) api.call('team.assignment').then(a => { cur = a; });   // 목업 모드: 이름 목록만 미리 받아둠

@@ -66,9 +66,11 @@ function renderList(r) {
   });
   App.$('.rail .ri')?.click();
 }
+let loadSeq = 0;   // 느린 네트워크에서 응답이 뒤섞여 와도(경쟁 조건) 가장 최근 요청만 반영
 async function load() {
+  const seq = ++loadSeq;
   const r = await App.run(null, () => api.call('review.list'));
-  if (!r) return;
+  if (!r || seq !== loadSeq) return;
   pending(r);
   if (r.ready) renderList(r);
 }

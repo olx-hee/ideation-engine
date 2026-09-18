@@ -70,6 +70,7 @@ App.$('.ptab').addEventListener('click', async (e) => {
 
 async function load() {
   const a = await api.call('team.assignment');
+  if (cur && a.version < cur.version) return;   // 늦게 도착한 응답 — 이미 더 최신 배치를 보고 있음
   if (a.viewer && a.viewer.isLeader) { App.go(App.screen('09-4-leader-confirm')); return; }
   render(a);
 }
