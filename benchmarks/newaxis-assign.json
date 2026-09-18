@@ -1,0 +1,362 @@
+{
+  "ranAt": "2026-09-18T10:58:30.270Z",
+  "reps": 2,
+  "tasks": [
+    "#11 파트 나누기+후보",
+    "#13 겹친 후보 추천+근거 한 줄(2026-09-18 스펙 변경)"
+  ],
+  "spec13": "AI는 결정하지 않는다 — 추천 1명 + 공개 근거 한 줄 + 동점이면 tie",
+  "team": [
+    {
+      "id": "P1",
+      "skills": [
+        "웹 화면(React)",
+        "디자인 감각"
+      ]
+    },
+    {
+      "id": "P2",
+      "skills": [
+        "웹 화면(React)",
+        "CSS"
+      ]
+    },
+    {
+      "id": "P3",
+      "skills": [
+        "백엔드(Node)",
+        "DB"
+      ]
+    },
+    {
+      "id": "P4",
+      "skills": [
+        "기획",
+        "발표"
+      ]
+    },
+    {
+      "id": "P5",
+      "skills": [
+        "기획",
+        "자료 조사"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "calls": 8,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 4106,
+      "p95": 9300,
+      "parts": {
+        "schemaPct": 100,
+        "effortCoverPct": 100,
+        "validCandPct": 100,
+        "altForMissingPct": 100,
+        "nameLeak": 0
+      },
+      "pick": {
+        "schemaPct": 100,
+        "validCandPct": 100,
+        "oneLinePct": 100,
+        "tieDetectPct": 0
+      },
+      "costPerCall": 0.000122,
+      "reasons": [
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 62,
+          "reason": "React로 목록과 필터를 직접 구현한 경험이 있어 공지 목록과 마감 알림 화면 구성에 바로 활용할 수 있어요."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 61,
+          "reason": "자료 조사와 슬라이드 정리를 여러 번 해봤다는 점에서 발표 자료 만들기에 필요한 반복 경험이 더 구체적이에요."
+        },
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 55,
+          "reason": "React로 목록·필터 구현 경험이 있어 공지 목록과 마감 알림 화면 구성에 바로 투입하기 좋아요."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 52,
+          "reason": "자료 조사와 슬라이드 정리를 여러 번 해봤다는 점에서 발표 자료 제작 경험이 더 구체적이에요."
+        }
+      ],
+      "failRaws": []
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "slug": "deepseek/deepseek-v3.2",
+      "calls": 8,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 14256,
+      "p95": 64826,
+      "parts": {
+        "schemaPct": 100,
+        "effortCoverPct": 100,
+        "validCandPct": 100,
+        "altForMissingPct": 75,
+        "nameLeak": 0
+      },
+      "pick": {
+        "schemaPct": 100,
+        "validCandPct": 100,
+        "oneLinePct": 100,
+        "tieDetectPct": 0
+      },
+      "costPerCall": 0.000232,
+      "reasons": [
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 29,
+          "reason": "React로 목록 화면과 필터를 구현한 경험이 있어요"
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 49,
+          "reason": "지난 학기 팀 발표를 직접 맡아 자료 제작과 발표까지 완수한 구체적인 경험을 언급했어요."
+        },
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 33,
+          "reason": "React로 목록 화면과 필터를 직접 구현한 경험이 있어요."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 43,
+          "reason": "지난 학기 팀 발표를 맡아서 자료 제작과 발표까지 직접 수행한 경험이 있어요."
+        }
+      ],
+      "failRaws": []
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "calls": 8,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 3208,
+      "p95": 4323,
+      "parts": {
+        "schemaPct": 100,
+        "effortCoverPct": 100,
+        "validCandPct": 100,
+        "altForMissingPct": 100,
+        "nameLeak": 0
+      },
+      "pick": {
+        "schemaPct": 100,
+        "validCandPct": 100,
+        "oneLinePct": 100,
+        "tieDetectPct": 0
+      },
+      "costPerCall": 0.00097,
+      "reasons": [
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 43,
+          "reason": "React로 목록 화면과 필터 구현 경험이 있어 공지 목록 화면에 적합합니다."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 42,
+          "reason": "자료 조사와 슬라이드 정리 경험이 풍부하여 발표 자료 제작에 더 적합합니다."
+        },
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 43,
+          "reason": "React로 목록 화면과 필터 구현 경험이 있어 공지 목록 화면에 적합합니다."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 30,
+          "reason": "지난 학기 팀 발표 자료 제작과 발표 경험이 있습니다."
+        }
+      ],
+      "failRaws": []
+    },
+    {
+      "model": "Flash-Lite",
+      "slug": "google/gemini-2.5-flash-lite",
+      "calls": 8,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 2028,
+      "p95": 3947,
+      "parts": {
+        "schemaPct": 100,
+        "effortCoverPct": 100,
+        "validCandPct": 100,
+        "altForMissingPct": 100,
+        "nameLeak": 0
+      },
+      "pick": {
+        "schemaPct": 100,
+        "validCandPct": 100,
+        "oneLinePct": 100,
+        "tieDetectPct": 0
+      },
+      "costPerCall": 0.000125,
+      "reasons": [
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 36,
+          "reason": "목록 화면과 필터 구현 경험이 있어 바로 업무 투입이 가능합니다."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 40,
+          "reason": "지난 학기 팀 발표 경험을 통해 자료 제작 및 발표 역량을 갖추었습니다."
+        },
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 35,
+          "reason": "목록 화면과 필터 구현 경험이 있어 바로 업무 투입이 가능해요."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 40,
+          "reason": "지난 학기 팀 발표 경험을 통해 자료 제작 및 발표 능력을 갖추었습니다."
+        }
+      ],
+      "failRaws": []
+    },
+    {
+      "model": "Grok-4.3",
+      "slug": "x-ai/grok-4.3",
+      "calls": 8,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 11783,
+      "p95": 16577,
+      "parts": {
+        "schemaPct": 100,
+        "effortCoverPct": 100,
+        "validCandPct": 100,
+        "altForMissingPct": 100,
+        "nameLeak": 0
+      },
+      "pick": {
+        "schemaPct": 100,
+        "validCandPct": 100,
+        "oneLinePct": 100,
+        "tieDetectPct": 50
+      },
+      "costPerCall": 0.003256,
+      "reasons": [
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 36,
+          "reason": "P1이 React로 목록 화면과 필터를 직접 붙인 경험이 있어요."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": false,
+          "len": 37,
+          "reason": "P4가 지난 학기 팀 발표 자료 제작 경험을 구체적으로 언급했어요."
+        },
+        {
+          "case": "clear",
+          "rec": "",
+          "tie": false,
+          "len": 37,
+          "reason": "P1이 React로 목록 화면과 필터를 직접 구현한 경험이 있어요."
+        },
+        {
+          "case": "tie",
+          "rec": "",
+          "tie": true,
+          "len": 28,
+          "reason": "비슷해요 P4가 팀 발표 자료 제작을 맡은 적 있음"
+        }
+      ],
+      "failRaws": []
+    },
+    {
+      "model": "GLM-4.6",
+      "slug": "z-ai/glm-4.6",
+      "calls": 8,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 11713,
+      "p95": 13595,
+      "parts": {
+        "schemaPct": 0,
+        "effortCoverPct": 0,
+        "validCandPct": 0,
+        "altForMissingPct": 0,
+        "nameLeak": 0
+      },
+      "pick": {
+        "schemaPct": 0,
+        "validCandPct": 0,
+        "oneLinePct": 0,
+        "tieDetectPct": 0
+      },
+      "costPerCall": 0.001672,
+      "reasons": [],
+      "failRaws": [
+        {
+          "task": "parts",
+          "case": "web",
+          "raw": "",
+          "finish": "length"
+        },
+        {
+          "task": "parts",
+          "case": "app",
+          "raw": "",
+          "finish": "length"
+        },
+        {
+          "task": "pick",
+          "case": "clear",
+          "raw": "",
+          "finish": "length"
+        }
+      ]
+    }
+  ]
+}

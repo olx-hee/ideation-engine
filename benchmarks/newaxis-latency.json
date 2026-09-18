@@ -1,0 +1,286 @@
+{
+  "ranAt": "2026-09-18T10:27:25.201Z",
+  "reps": 5,
+  "tasks": [
+    "#1 인터뷰 꼬리질문 판단",
+    "#3 이게 뭐예요 뜻풀이"
+  ],
+  "axes": [
+    "지연 p50/p95",
+    "스키마 준수",
+    "판단 정확도",
+    "문체 규칙",
+    "호출당 비용"
+  ],
+  "note": "지연은 네트워크·OpenRouter 라우팅 변동 포함. 비스트리밍 총 응답시간.",
+  "rows": [
+    {
+      "model": "Flash-Lite",
+      "slug": "google/gemini-2.5-flash-lite",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 886,
+      "p95": 2570,
+      "avg": 1336,
+      "schemaPct": 100,
+      "followupLogicPct": 50,
+      "explainStylePct": 100,
+      "costPerCall": 0.0000309,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin",
+          "enough": false,
+          "followup": "배달에서 어떤 점이 가장 불편하신가요?"
+        },
+        {
+          "task": "followup",
+          "case": "rich",
+          "enough": false,
+          "followup": "채소를 버리는 것 외에 또 어떤 점이 아쉬우신가요?"
+        },
+        {
+          "task": "explain",
+          "case": "sku",
+          "sents": 3,
+          "sample": "SKU는 '재고 관리 단위'라는 뜻이에요. 쉽게 말해, 어떤 물건이 종류별로 몇 개 있는지 세기 위한 번호라고 생각하면 돼요."
+        },
+        {
+          "task": "explain",
+          "case": "escrow",
+          "sents": 2,
+          "sample": "에스크로 결제는 물건을 주고받기 전에 돈을 중간에서 안전하게 보관해주는 방식이에요. 구매자와 판매자 모두 안심하고 거래할 수 "
+        }
+      ]
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 1260,
+      "p95": 1702,
+      "avg": 1213,
+      "schemaPct": 100,
+      "followupLogicPct": 50,
+      "explainStylePct": 100,
+      "costPerCall": 0.000182,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin",
+          "enough": false,
+          "followup": "배달 서비스 이용에 어떤 불편함이 있는지 좀 더 자세히 말씀해주시겠어요?"
+        },
+        {
+          "task": "followup",
+          "case": "rich",
+          "enough": false,
+          "followup": "어떤 종류의 채소가 주로 남고 버려지는지 좀 더 자세히 말씀해 주시겠어요?"
+        },
+        {
+          "task": "explain",
+          "case": "sku",
+          "sents": 3,
+          "sample": "SKU는 가게에서 파는 상품 하나하나를 구분하는 고유한 번호나 코드라고 생각하시면 돼요. 예를 들어, 같은 라면이라도 매운맛,"
+        },
+        {
+          "task": "explain",
+          "case": "escrow",
+          "sents": 2,
+          "sample": "에스크로는 물건을 사고팔 때, 중간에 믿을 수 있는 기관이 돈을 잠시 맡아주는 서비스예요. 물건을 잘 받았는지 확인하고 나서야"
+        }
+      ]
+    },
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 834,
+      "p95": 9058,
+      "avg": 1445,
+      "schemaPct": 55,
+      "followupLogicPct": 50,
+      "explainStylePct": 10,
+      "costPerCall": 0.0000291,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin",
+          "enough": false,
+          "followup": "배달에서 어떤 점이 특히 불편하게 느껴지세요?"
+        },
+        {
+          "task": "followup",
+          "case": "rich",
+          "enough": false,
+          "followup": "그럼 남은 재료를 버리지 않고 다른 요리에 활용해보거나, 소분해서 보관하는 방법을 따로 시도해본 적은 있어요"
+        },
+        {
+          "task": "explain",
+          "case": "sku"
+        },
+        {
+          "task": "explain",
+          "case": "escrow"
+        }
+      ]
+    },
+    {
+      "model": "GPT-4o-mini",
+      "slug": "openai/gpt-4o-mini",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 2044,
+      "p95": 3875,
+      "avg": 1904,
+      "schemaPct": 100,
+      "followupLogicPct": 50,
+      "explainStylePct": 100,
+      "costPerCall": 0.0000514,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin",
+          "enough": false,
+          "followup": "배달이 불편한 이유는 무엇인가요?"
+        },
+        {
+          "task": "followup",
+          "case": "rich",
+          "enough": false,
+          "followup": "그럼 장을 볼 때 어떤 재료가 가장 많이 남는지 구체적으로 이야기해 줄 수 있어요?"
+        },
+        {
+          "task": "explain",
+          "case": "sku",
+          "sents": 3,
+          "sample": "SKU는 '재고 관리 단위'라는 뜻이에요. 제품을 구분하기 위해 사용하는 고유한 번호나 코드라고 생각하면 돼요. 이렇게 구분하"
+        },
+        {
+          "task": "explain",
+          "case": "escrow",
+          "sents": 3,
+          "sample": "에스크로는 물건을 사고팔 때, 돈과 물건을 안전하게 주고받기 위해 중간에서 도와주는 서비스예요. 즉, 구매자가 돈을 먼저 보내"
+        }
+      ]
+    },
+    {
+      "model": "Llama-3.3",
+      "slug": "meta-llama/llama-3.3-70b-instruct",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 2540,
+      "p95": 29910,
+      "avg": 4401,
+      "schemaPct": 55,
+      "followupLogicPct": 50,
+      "explainStylePct": 10,
+      "costPerCall": 0.0000583,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin",
+          "enough": false,
+          "followup": "그럼 배달이 불편한 이유가 무엇인가요?"
+        },
+        {
+          "task": "followup",
+          "case": "rich",
+          "enough": false,
+          "followup": "그럼 채소 같은 경우는 어떻게 처리하시나요?"
+        },
+        {
+          "task": "explain",
+          "case": "sku",
+          "sents": 3,
+          "sample": "SKU는 상품을 구분하는 코드를 말해요. 예를 들어 같은 회사에서 만든 같은 종류의 제품이라도 색상이나 용량이 다르면 다른 S"
+        },
+        {
+          "task": "explain",
+          "case": "escrow"
+        }
+      ]
+    },
+    {
+      "model": "Nemotron-3.5L",
+      "slug": "nvidia/nemotron-3.5-lightning",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 2396,
+      "p95": 5079,
+      "avg": 2507,
+      "schemaPct": 20,
+      "followupLogicPct": 20,
+      "explainStylePct": 20,
+      "costPerCall": 0.000043,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin"
+        },
+        {
+          "task": "followup",
+          "case": "rich"
+        },
+        {
+          "task": "explain",
+          "case": "sku",
+          "sents": 3,
+          "sample": "SKU는 상품 고유 번호라고 해요. 가게에서 각 상품을 구분해서 관리하는 코드라고 생각하면 돼요. 3년 새 2배로 늘었다는 건"
+        },
+        {
+          "task": "explain",
+          "case": "escrow"
+        }
+      ]
+    },
+    {
+      "model": "Mistral-Med-3",
+      "slug": "mistralai/mistral-medium-3",
+      "calls": 20,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 1036,
+      "p95": 1824,
+      "avg": 1093,
+      "schemaPct": 100,
+      "followupLogicPct": 50,
+      "explainStylePct": 100,
+      "costPerCall": 0.0001267,
+      "samples": [
+        {
+          "task": "followup",
+          "case": "thin",
+          "enough": false,
+          "followup": "배달이 왜 불편한가요?"
+        },
+        {
+          "task": "followup",
+          "case": "rich",
+          "enough": false,
+          "followup": "그 문제를 해결하기 위해 어떤 방법을 시도해봤어요?"
+        },
+        {
+          "task": "explain",
+          "case": "sku",
+          "sents": 2,
+          "sample": "SKU는 상품의 종류나 번호를 뜻해요. 예를 들어, 같은 제품이라도 크기나 색이 다르면 다른 SKU로 구분해요."
+        },
+        {
+          "task": "explain",
+          "case": "escrow",
+          "sents": 2,
+          "sample": "에스크로는 거래 시 안전하게 돈을 보관하는 방식이에요. 구매자가 돈을 보내면 판매자가 물건을 보낼 때까지 중간에 보관하다가, "
+        }
+      ]
+    }
+  ]
+}

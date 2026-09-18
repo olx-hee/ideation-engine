@@ -1,0 +1,275 @@
+{
+  "ranAt": "2026-09-18T10:50:34.442Z",
+  "reps": 3,
+  "task": "#7 AI 검증·현실성",
+  "axes": [
+    "스키마",
+    "URL 환각",
+    "링크 인용",
+    "숫자 환각(exists)",
+    "근거 방향",
+    "등급 타당/일관",
+    "지연",
+    "비용"
+  ],
+  "note": "검색 스니펫은 고정 합성(Brave 대체). 스니펫에 수치를 넣지 않아 exists 요약의 수치는 곧 환각.",
+  "cases": [
+    {
+      "id": "crowded",
+      "idea": "과제 공지와 마감을 한곳에 모아 알려주는 웹",
+      "direction": "many",
+      "expectGrade": [
+        "fix",
+        "re"
+      ]
+    },
+    {
+      "id": "empty",
+      "idea": "시험기간에만 여는 열람실·카페 빈자리와 콘센트 자리를 서로 제보하는 게시판",
+      "direction": "none",
+      "expectGrade": [
+        "go",
+        "fix"
+      ]
+    },
+    {
+      "id": "heavyskill",
+      "idea": "강의 녹음을 올리면 자동으로 요약해 단톡방에 보내주는 앱",
+      "direction": "adjacent",
+      "expectGrade": [
+        "fix",
+        "re"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "model": "DeepSeek-V3.2",
+      "slug": "deepseek/deepseek-v3.2",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 10950,
+      "p95": 11218,
+      "schemaPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "dirMismatchPct": 0,
+      "gradeFitPct": 100,
+      "gradeConsistPct": 89,
+      "gradesByCase": {
+        "crowded": [
+          "re",
+          "re",
+          "re"
+        ],
+        "empty": [
+          "fix",
+          "fix",
+          "fix"
+        ],
+        "heavyskill": [
+          "fix",
+          "re",
+          "re"
+        ]
+      },
+      "costPerCall": 0.000276,
+      "findings": []
+    },
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 4255,
+      "p95": 14510,
+      "schemaPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "dirMismatchPct": 0,
+      "gradeFitPct": 100,
+      "gradeConsistPct": 89,
+      "gradesByCase": {
+        "crowded": [
+          "re",
+          "re",
+          "fix"
+        ],
+        "empty": [
+          "fix",
+          "fix",
+          "fix"
+        ],
+        "heavyskill": [
+          "fix",
+          "fix",
+          "fix"
+        ]
+      },
+      "costPerCall": 0.000175,
+      "findings": []
+    },
+    {
+      "model": "GLM-4.6",
+      "slug": "z-ai/glm-4.6",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 10723,
+      "p95": 12540,
+      "schemaPct": 0,
+      "urlHallucPct": 0,
+      "linkCitedPct": 0,
+      "numHallucPct": 0,
+      "dirMismatchPct": 0,
+      "gradeFitPct": 0,
+      "gradeConsistPct": 0,
+      "gradesByCase": {
+        "crowded": [],
+        "empty": [],
+        "heavyskill": []
+      },
+      "costPerCall": 0.002239,
+      "findings": []
+    },
+    {
+      "model": "Kimi-K2.5",
+      "slug": "moonshotai/kimi-k2.5",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 27952,
+      "p95": 161102,
+      "schemaPct": 33,
+      "urlHallucPct": 0,
+      "linkCitedPct": 33,
+      "numHallucPct": 0,
+      "dirMismatchPct": 0,
+      "gradeFitPct": 33,
+      "gradeConsistPct": 100,
+      "gradesByCase": {
+        "crowded": [
+          "re",
+          "re"
+        ],
+        "empty": [
+          "fix"
+        ],
+        "heavyskill": []
+      },
+      "costPerCall": 0.005109,
+      "findings": []
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 2600,
+      "p95": 3096,
+      "schemaPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "dirMismatchPct": 0,
+      "gradeFitPct": 100,
+      "gradeConsistPct": 100,
+      "gradesByCase": {
+        "crowded": [
+          "re",
+          "re",
+          "re"
+        ],
+        "empty": [
+          "fix",
+          "fix",
+          "fix"
+        ],
+        "heavyskill": [
+          "fix",
+          "fix",
+          "fix"
+        ]
+      },
+      "costPerCall": 0.001095,
+      "findings": []
+    },
+    {
+      "model": "Grok-4.3",
+      "slug": "x-ai/grok-4.3",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 12056,
+      "p95": 14510,
+      "schemaPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "dirMismatchPct": 0,
+      "gradeFitPct": 100,
+      "gradeConsistPct": 100,
+      "gradesByCase": {
+        "crowded": [
+          "re",
+          "re",
+          "re"
+        ],
+        "empty": [
+          "fix",
+          "fix",
+          "fix"
+        ],
+        "heavyskill": [
+          "re",
+          "re",
+          "re"
+        ]
+      },
+      "costPerCall": 0.003727,
+      "findings": []
+    },
+    {
+      "model": "Nemotron-3.5L",
+      "slug": "nvidia/nemotron-3.5-lightning",
+      "calls": 9,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 9157,
+      "p95": 13296,
+      "schemaPct": 56,
+      "urlHallucPct": 0,
+      "linkCitedPct": 56,
+      "numHallucPct": 0,
+      "dirMismatchPct": 11,
+      "gradeFitPct": 56,
+      "gradeConsistPct": 100,
+      "gradesByCase": {
+        "crowded": [
+          "fix"
+        ],
+        "empty": [
+          "fix",
+          "fix"
+        ],
+        "heavyskill": [
+          "fix",
+          "fix"
+        ]
+      },
+      "costPerCall": 0.000216,
+      "findings": [
+        {
+          "case": "empty",
+          "kind": "근거역방향",
+          "detail": "한 줄 판정 | 대학 도서관은 좌석 예약 시스템을 운영 중이나, 교외 카페의 좌석·콘센트 정보는 제공되지 않으며, "
+        }
+      ]
+    }
+  ]
+}
