@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8-3 발산 · 익명 순위표 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-3-idea-board" data-stage="diverge.board">
+<!--
+  ===== 화면 8-3 · 발산 · 익명 순위표 =====
+  보는 사람 : 모두
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:30%"></i></div><span class="ib-pct">30%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>02:30</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds cur"><i>2</i>순위 보기</span><b class="dl"></b><span class="ds "><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds "><i>4</i>AI 검증</span><b class="dl"></b><span class="ds "><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>모두의 1·2·3순위 아이디어예요</h3><p>누구 아이디어인지 신경 쓰지 말고, 아이디어만 보고 판단해 주세요.</p></div><span class="aside">4명 모두 제출했어요</span>
+      </div>
+  
+      <div class="panel2" style="overflow:hidden">
+        <table class="rtab">
+          <tr><th>익명</th><th>1순위</th><th>2순위</th><th>3순위</th></tr>
+          <tr class=""><td class="who">팀원 A</td><td class="r1">열람실·카페 빈자리를 함께 알려주는 지도</td><td>팀플 회의가 끝나면 할 일을 정리해 주는 서비스</td><td>내 필기로 시험 예상 문제를 만들어 주는 웹</td></tr>
+          <tr class=""><td class="who">팀원 B</td><td class="r1">학교 행사·특강 소식 중 관심 있는 것만 골라 알려주는 웹</td><td>중고 전공책을 같은 학과 안에서만 사고파는 게시판</td><td>디자인 수정 요청을 한 화면에 모아 보는 팀플 도구</td></tr>
+          <tr class="me"><td class="who">팀원 C<span class=metag>나</span></td><td class="r1">과제 공지와 마감을 한곳에 모아 알려주는 웹</td><td>강의자료 PDF를 요약해 주는 브라우저 도구</td><td>공동구매 정산을 링크로 확인하는 웹</td></tr>
+          <tr class=""><td class="who">팀원 D</td><td class="r1">동아리 굿즈 재고를 한 화면에서 관리</td><td>시간표가 겹치는 사람에게만 스터디 모집 보여주기</td><td>학교 앞 카페 콘센트 자리 알림</td></tr>
+        </table>
+      </div>
+      <div class="dfoot" style="margin-top:16px"><span class="quiet"><svg class="ico" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>줄 순서는 섞였고, 진행자도 누구 줄인지 몰라요 · 투표가 끝나면 아이디어 주인만 공개돼요</span><span class="quiet">진행자가 넘기면 댓글 달기가 시작돼요</span></div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

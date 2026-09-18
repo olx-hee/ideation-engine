@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5 대기실 (진행자) · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="05-lobby-host" data-stage="lobby">
+<!--
+  ===== 화면 5 · 대기실 (진행자) =====
+  보는 사람 : 진행자
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+
+    <div class="appbar"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="pbtn" data-go="../01-1-landing-logged-in/index.html"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    <div class="abody">
+      <div class="page" style="padding-bottom:36px">
+  
+        <div class="grid2" style="gap:20px;height:100%">
+    
+          <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(180deg,var(--key-50),var(--panel));padding:40px">
+      <span class="muted t-sm">방 코드</span>
+      
+            <div class="roomcode" style="font-size:72px;margin:4px 0 12px">7K2X9M</div>
+      <button class="btn soft sm" data-action="copyCode">📋 코드 복사</button>
+      
+            <div class="divider" style="width:100%;margin:36px 0 16px">또는 초대 링크 보내기</div>
+      
+            <div style="display:flex;gap:8px;width:100%"><input class="inp" style="text-align:left;font-family:var(--mono);font-size:var(--fs-sm)" value="ideationengine.app/s/7K2X9M"><button class="btn" data-action="copyLink">🔗 링크 복사</button></div>
+    
+          </div>
+    
+          <div class="card" style="display:flex;flex-direction:column">
+      
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:var(--fs-h3);font-weight:700">참여자</span><span class="badge ok">3 / 4</span></div>
+      
+            <div style="display:flex;flex-direction:column;gap:8px">
+        
+              <div class="prow"><span class="avatar">노</span><span style="flex:1;font-weight:500">노형원 <span class="badge key">진행자(나)</span></span><span class="dot"></span></div>
+        
+              <div class="prow"><span class="avatar">이</span><span style="flex:1">이세민 <span class="muted t-cap">· 클릭해 내보내기</span></span><span class="dot"></span></div>
+        
+              <div class="prow"><span class="avatar">김</span><span style="flex:1">김승희</span><span class="dot"></span></div>
+        
+              <div class="prow empty"><span class="avatar guest">?</span><span style="flex:1">기다리는 중…</span></div>
+      
+            </div>
+      
+            <div class="t-cap muted" style="margin-top:14px">⏱ 30분 세션 · 4명 (세션 만들기에서 설정)</div>
+      <button class="btn block lg" style="margin-top:auto" data-action="startSession" data-go="../07-1-icebreak-q1-discomfort/index.html">▶ 세션 시작하기</button>
+    
+          </div>
+  
+        </div>
+
+      </div>
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

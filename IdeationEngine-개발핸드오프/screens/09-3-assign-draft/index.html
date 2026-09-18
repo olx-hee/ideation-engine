@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9-3 배치 초안 (모두가 보는 화면) · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="09-3-assign-draft" data-stage="team.assign">
+<!--
+  ===== 화면 9-3 · 배치 초안 (모두가 보는 화면) =====
+  보는 사람 : 모두 (팀장은 9-4)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js + ../../assets/js/team.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">파트 나누기 · 보고서</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:80%"></i></div><span class="ib-pct">80%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">팀원 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>06:40</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>주제 확정</span><b class="dl"></b><span class="ds done"><i>2</i>파트 나누기</span><b class="dl"></b><span class="ds done"><i>3</i>겹친 후보 질문</span><b class="dl"></b><span class="ds cur"><i>4</i>배치 초안</span><b class="dl"></b><span class="ds "><i>5</i>팀장 확정</span><b class="dl"></b><span class="ds "><i>6</i>보고서</span></div>
+  
+      <div class="dvh">
+        <div><h3>파트마다 가장 잘할 사람으로 배치 초안을 만들었어요</h3><p>겹친 파트 3개는 추가 질문으로 정했어요. 작은 일은 모두 비슷한 분량이 되게 나눴어요. 확정은 팀장이 해요.</p></div><span class="pill9">초안 · 아직 확정 전</span>
+      </div>
+  
+      <div class="p9grid">
+        <div class="p9main">
+          <div class="load9">
+            <div class="lc me">
+              <div class="n"><i class="av9">노</i>노형원 <small>(나)</small></div>
+              <div class="bar"><i style="width:88%"></i></div>
+              <div class="c">핵심 2 · 보통 1 · 작은 일 0</div>
+            </div>
+            <div class="lc">
+              <div class="n"><i class="av9">박</i>박상진</div>
+              <div class="bar"><i style="width:86%"></i></div>
+              <div class="c">핵심 1 · 작은 일 1</div>
+            </div>
+            <div class="lc">
+              <div class="n"><i class="av9">김</i>김승희</div>
+              <div class="bar"><i style="width:84%"></i></div>
+              <div class="c">보통 1 · 작은 일 2</div>
+            </div>
+            <div class="lc">
+              <div class="n"><i class="av9">이</i>이세민</div>
+              <div class="bar"><i style="width:86%"></i></div>
+              <div class="c">보통 1 · 작은 일 3</div>
+            </div>
+          </div>
+          <div class="panel2 ptab" style="--cols:minmax(0,1fr) 150px 250px">
+            <div class="ph9"><span>파트</span><span>맡은 사람</span><span>정한 방법</span></div>
+            <div class="pg9">결과를 좌우하는 파트</div>
+            <div class="pr9 "><span class="pn">화면 만들기</span><span class="who9"><i class="av9">노</i>노형원</span><span class="cand"><span class="pill9 k">추가 질문으로 정했어요</span></span></div>
+            <div class="pr9 "><span class="pn">서버 · 공지 모으기</span><span class="who9"><i class="av9">박</i>박상진</span><span class="cand"><span class="q9">후보 1명 · 백엔드</span></span></div>
+            <div class="pr9 "><span class="pn">발표 · 시연</span><span class="who9"><i class="av9">노</i>노형원</span><span class="cand"><span class="pill9 k">추가 질문으로 정했어요</span></span></div>
+            <div class="pg9">보통 파트</div>
+            <div class="pr9 "><span class="pn">화면 디자인</span><span class="who9"><i class="av9">이</i>이세민</span><span class="cand"><span class="pill9 k">추가 질문으로 정했어요</span></span></div>
+            <div class="pr9 "><span class="pn">발표 자료</span><span class="who9"><i class="av9">김</i>김승희</span><span class="cand"><span class="q9">후보 1명 · PPT 디자인</span></span></div>
+            <div class="pr9 "><span class="pn">기획 · 범위 관리</span><span class="who9"><i class="av9">노</i>노형원</span><span class="cand"><span class="q9">후보 1명 · 서비스 기획</span></span></div>
+            <div class="pr9 out"><span class="pn">메일·LMS 자동 연동</span><span></span><span class="cand"><span class="q9">링크 붙여넣기로 대신 · 팀 선택</span></span></div>
+            <div class="pg9">작은 일 · 분량 맞추기</div>
+            <div class="sm9">
+              <div><span>경쟁 서비스 조사</span><span class="who9"><i class="av9">이</i>이세민</span></div>
+              <div><span>사용자 인터뷰 3명</span><span class="who9"><i class="av9">김</i>김승희</span></div>
+              <div><span>시연용 예시 공지 만들기</span><span class="who9"><i class="av9">이</i>이세민</span></div>
+              <div><span>제출 문서 · 보고서 정리</span><span class="who9"><i class="av9">김</i>김승희</span></div>
+              <div><span>기능 테스트 · 버그 기록</span><span class="who9"><i class="av9">이</i>이세민</span></div>
+              <div><span>회의록 · 일정 챙기기</span><span class="who9"><i class="av9">박</i>박상진</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="p9side">
+          <div class="sc2"><h4>분량은 이렇게 맞췄어요</h4><p>노형원 님에게 <b>핵심 파트가 몰려서</b> 작은 일은 드리지 않았어요. 작은 일 6개는 핵심 파트가 적은 사람일수록 더 맡아, 네 분의 분량이 비슷해지게 했어요.</p>
+            <div class="mine9" style="margin-top:6px"><span class="pill9">3개</span>이세민 · 보통 파트 1개</div>
+            <div class="mine9"><span class="pill9">2개</span>김승희 · 보통 파트 1개</div>
+            <div class="mine9"><span class="pill9">1개</span>박상진 · 핵심 파트 1개</div>
+          </div>
+          <div class="sc2"><h4>회의하면서 바꿔도 돼요</h4><p>AI 초안이에요. 함께 보면서 말로 정하고, 바꾸고 싶은 파트는 표시해 두면 <b>팀장 화면에 모여요.</b> 확정은 팀장이 해요.</p></div>
+          <div class="sc2 me9" style="margin-top:auto"><h4>내 파트 3개</h4><p>화면 만들기 · 발표·시연 · 기획·범위 관리</p><button class="btn ghost sm" style="width:100%;margin-top:10px" data-action="markMode">이야기해 볼 파트 표시하기</button></div>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/team.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

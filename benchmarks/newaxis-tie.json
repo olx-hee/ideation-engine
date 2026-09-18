@@ -1,0 +1,153 @@
+{
+  "ranAt": "2026-09-18T11:02:16.630Z",
+  "reps": 6,
+  "temperature": 0.3,
+  "task": "#13 겹친 후보 추천 — 동점 처리",
+  "meaning": "stabilityPct=같은 입력 반복 시 최빈 추천 비율(100%=일관, 50%=반반 흔들림) / tieTruePct=동점이라고 스스로 말한 비율",
+  "rows": [
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "cases": {
+        "tie(동점)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P4": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.000033,
+          "reasons": [
+            "지난 학기 실제 팀 발표를 맡아 자료 제작과 발표를 모두 수행했다는 구체적 경험이 있다.",
+            "P4는 지난 학기 실제 팀 발표에서 자료 제작과 발표를 모두 맡아 실행 경험이 더 구체적이다.",
+            "P4는 지난 학기 실제 팀 발표에서 자료 제작과 발표를 모두 맡아 경험이 더 구체적으로 드러나기 때문입니다."
+          ]
+        },
+        "clear(명백)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P1": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.000035,
+          "reasons": [
+            "목록 화면과 필터 구현 경험이 있어 공지 목록과 마감 알림 화면 제작에 더 적합하다.",
+            "React로 목록·필터 구현 경험이 있어 공지 목록과 마감 알림 화면 구성에 바로 투입하기 쉽다.",
+            "React로 목록·필터 구현 경험이 있어 공지 목록과 마감 알림 화면 만들기에 바로 투입하기 쉽다."
+          ]
+        }
+      }
+    },
+    {
+      "model": "Flash-Lite",
+      "slug": "google/gemini-2.5-flash-lite",
+      "cases": {
+        "tie(동점)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P4": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.000038,
+          "reasons": [
+            "지난 학기 팀 발표 경험을 바탕으로 자료 제작 및 발표까지 직접 수행했습니다.",
+            "지난 학기 발표 자료 제작 및 발표 경험이 구체적으로 언급되었습니다.",
+            "지난 학기 발표 자료 제작 및 발표 경험이 구체적으로 언급되었습니다."
+          ]
+        },
+        "clear(명백)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P1": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.000039,
+          "reasons": [
+            "목록 화면과 필터 구현 경험이 있어 해당 파트에 적합하다고 판단됩니다.",
+            "React로 목록 화면과 필터를 직접 구현한 경험이 있습니다.",
+            "목록 화면과 필터 구현 경험이 있어 해당 파트에 적합해 보입니다."
+          ]
+        }
+      }
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "cases": {
+        "tie(동점)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P4": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.000144,
+          "reasons": [
+            "발표 자료 제작부터 발표까지 전 과정을 경험했습니다.",
+            "발표 자료 제작부터 발표까지 전 과정을 경험했습니다.",
+            "발표 자료 제작부터 발표까지 전 과정을 경험했습니다."
+          ]
+        },
+        "clear(명백)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P1": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.000178,
+          "reasons": [
+            "React로 목록 화면과 필터 구현 경험이 있어 공지 목록 화면에 적합합니다.",
+            "React로 목록 화면과 필터 구현 경험이 있습니다.",
+            "React로 목록 화면과 필터 구현 경험이 있어 공지 목록 화면에 적합합니다."
+          ]
+        }
+      }
+    },
+    {
+      "model": "Grok-4.3",
+      "slug": "x-ai/grok-4.3",
+      "cases": {
+        "tie(동점)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P4": 6
+          },
+          "tieTruePct": 83,
+          "costPerCall": 0.002177,
+          "reasons": [
+            "P5와 비슷하게 발표 자료 경험 있음",
+            "P4와 P5 모두 발표 자료 제작 및 발표 경험 보유",
+            "P4와 P5 모두 자료 제작·정리 경험을 언급함"
+          ]
+        },
+        "clear(명백)": {
+          "n": 6,
+          "fail": 0,
+          "stabilityPct": 100,
+          "distribution": {
+            "P1": 6
+          },
+          "tieTruePct": 0,
+          "costPerCall": 0.001685,
+          "reasons": [
+            "P1이 React로 목록 화면과 필터를 직접 붙인 경험이 있다.",
+            "P1이 React로 목록 화면을 직접 구현한 경험이 있다.",
+            "P1이 React로 목록 화면과 필터를 직접 붙인 경험이 있습니다."
+          ]
+        }
+      }
+    }
+  ]
+}

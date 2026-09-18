@@ -1,0 +1,115 @@
+{
+  "ranAt": "2026-09-18T11:08:27.530Z",
+  "reps": 2,
+  "task": "#15 보고서 만들기 (A4 2쪽)",
+  "note": "품질 점수는 report-retest(2026-08-19)에서 이미 측정. 여기서는 커진 분량에서의 구조 유지만 본다.",
+  "excluded": "GLM-4.6·Kimi-K2.5·Nemotron-3.5L — #7/#11에서 반복 스키마 실패(추론 토큰 소진)",
+  "rows": [
+    {
+      "model": "DeepSeek-V3.2",
+      "slug": "deepseek/deepseek-v3.2",
+      "calls": 4,
+      "fail": 0,
+      "firstErr": null,
+      "tokenCut": 0,
+      "p50": 29288,
+      "p95": 35581,
+      "schemaPct": 100,
+      "workflow4Pct": 100,
+      "personValidPct": 100,
+      "lengthOkPct": 25,
+      "charsAvg": 811,
+      "unsupportedNumbers": [
+        "1주"
+      ],
+      "costPerCall": 0.000536,
+      "partials": []
+    },
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "calls": 4,
+      "fail": 0,
+      "firstErr": null,
+      "tokenCut": 0,
+      "p50": 10688,
+      "p95": 17835,
+      "schemaPct": 75,
+      "workflow4Pct": 100,
+      "personValidPct": 100,
+      "lengthOkPct": 100,
+      "charsAvg": 1079,
+      "unsupportedNumbers": [
+        "5조"
+      ],
+      "costPerCall": 0.000366,
+      "partials": [
+        {
+          "case": "seat",
+          "okSummary": true,
+          "okWf": true,
+          "wfLen": 4,
+          "okAssign": false,
+          "okHandoff": true,
+          "finish": "stop"
+        }
+      ]
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "calls": 4,
+      "fail": 0,
+      "firstErr": null,
+      "tokenCut": 0,
+      "p50": 6019,
+      "p95": 6447,
+      "schemaPct": 100,
+      "workflow4Pct": 100,
+      "personValidPct": 100,
+      "lengthOkPct": 0,
+      "charsAvg": 751,
+      "unsupportedNumbers": [],
+      "costPerCall": 0.002324,
+      "partials": []
+    },
+    {
+      "model": "Flash-Lite",
+      "slug": "google/gemini-2.5-flash-lite",
+      "calls": 4,
+      "fail": 0,
+      "firstErr": null,
+      "tokenCut": 0,
+      "p50": 3768,
+      "p95": 3810,
+      "schemaPct": 100,
+      "workflow4Pct": 100,
+      "personValidPct": 100,
+      "lengthOkPct": 0,
+      "charsAvg": 823,
+      "unsupportedNumbers": [],
+      "costPerCall": 0.000415,
+      "partials": []
+    },
+    {
+      "model": "Grok-4.3",
+      "slug": "x-ai/grok-4.3",
+      "calls": 4,
+      "fail": 0,
+      "firstErr": null,
+      "tokenCut": 0,
+      "p50": 17272,
+      "p95": 19968,
+      "schemaPct": 100,
+      "workflow4Pct": 100,
+      "personValidPct": 100,
+      "lengthOkPct": 0,
+      "charsAvg": 472,
+      "unsupportedNumbers": [
+        "5조"
+      ],
+      "costPerCall": 0.005194,
+      "partials": []
+    }
+  ]
+}

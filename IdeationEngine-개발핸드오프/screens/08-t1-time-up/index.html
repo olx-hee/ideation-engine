@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T1 세션 시간이 끝났을 때 (안내 창) · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-t1-time-up" data-stage="icebreak diverge.write diverge.board diverge.comment diverge.review diverge.vote diverge.result team.split team.questions team.assign report">
+<!--
+  ===== 화면 T1 · 세션 시간이 끝났을 때 (안내 창) =====
+  보는 사람 : 모두 (진행자에게만 버튼)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:55%"></i></div><span class="ib-pct">55%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">진행자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>00:00</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds done"><i>2</i>순위 보기</span><b class="dl"></b><span class="ds done"><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds done"><i>4</i>AI 검증</span><b class="dl"></b><span class="ds cur"><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>우리 팀이 해보고 싶은 아이디어에 투표해 주세요</h3><p>한 사람당 2표예요. (시간이 끝난 순간의 8-6 위에 뜨는 안내 — 다른 단계도 같은 창)</p></div>
+      </div>
+  
+      <div class="panel2" style="padding:22px 24px;min-height:320px"><p class="quiet">(지금 보고 있던 화면 그대로)</p></div>
+      <div class="tdim">
+        <div class="tdlg"><h3>세션 시간이 끝났어요</h3><p>정해둔 30분이 지났어요. 세션은 자동으로 끝나지 않아요 — 진행자가 정해요.</p>
+          <div class="tdk"><span>지금 단계</span><b>아이디어 발산 · 투표</b><span class="quiet" style="margin-left:auto">투표한 사람 3 / 4</span></div><p class="quiet">"5분 더"는 무료 세션 한도(30분)를 넘으면 안 돼요(PRO는 제한 없음) · 참가자 화면에는 "진행자가 정하는 중이에요"만 보여요</p>
+          <div class="tdf"><button class="btn gray" data-action="timeUpDismiss">이대로 계속 진행하기</button><button class="btn" data-action="timeUpExtend">5분 더 진행하기</button></div>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

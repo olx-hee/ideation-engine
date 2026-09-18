@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8-6 발산 · 투표 (+ AI가 모은 아이디어 · 숨은 공통점) · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-6-vote" data-stage="diverge.vote">
+<!--
+  ===== 화면 8-6 · 발산 · 투표 (+ AI가 모은 아이디어 · 숨은 공통점) =====
+  보는 사람 : 모두 (각자)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:55%"></i></div><span class="ib-pct">55%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>02:10</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds done"><i>2</i>순위 보기</span><b class="dl"></b><span class="ds done"><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds done"><i>4</i>AI 검증</span><b class="dl"></b><span class="ds cur"><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>우리 팀이 해보고 싶은 아이디어에 투표해 주세요</h3><p>한 사람당 2표예요. 누가 어디에 투표했는지는 끝까지 공개되지 않아요.</p></div><span class="aside" style="display:flex;align-items:center;gap:12px">남은 표<span class="dots3"><i></i><i class="e"></i></span><button class="btn ghost sm" style="margin-left:8px" data-action="finishVote">투표 마치기</button></span>
+      </div>
+  
+      <div class="focusgrid"><span class="railbtn" title="목록 접기">«</span>
+        <div class="rail">
+          <div class="rgl">투표 후보<small>12</small></div>
+          <div class="ri"><span class="cb on">✓</span><span class="gd go"></span><span class="t">과제 공지와 마감을 한곳에 모아 알려주는 웹</span><small>내 아이디어</small></div>
+          <div class="ri"><span class="cb"></span><span class="gd go"></span><span class="t">관심 있는 학교 행사·특강 소식만 골라 알려주는 웹</span></div>
+          <div class="ri on"><span class="cb"></span><span class="gd go"></span><span class="t">팀플 회의가 끝나면 할 일을 정리해 주는 서비스</span></div>
+          <div class="ri"><span class="cb"></span><span class="gd go"></span><span class="t">중고 전공책을 같은 학과 안에서만 사고파는 게시판</span></div>
+          <div class="ri"><span class="cb"></span><span class="gd fix"></span><span class="t">열람실·카페 빈자리를 함께 알려주는 지도</span></div>
+          <div class="ri"><span class="cb"></span><span class="gd re"></span><span class="t">강의자료 PDF를 요약해 주는 브라우저 도구</span><small>내 아이디어</small></div>
+          <div class="rmore">6개 더 보기</div>
+          <div class="rgl">AI가 좋은 점을 모아본 아이디어<small>2</small></div>
+          <div class="ri"><span class="cb"></span><span class="gd go"></span><span class="t">시험기간에만 여는 열람실·카페 빈자리·콘센트 제보판</span><span class="aitag">AI가 모음</span></div>
+          <div class="ri"><span class="cb"></span><span class="gd fix"></span><span class="t">팀플 자료·수정 요청을 링크 하나에 모으고 바뀐 점만 요약</span><span class="aitag">AI가 모음</span></div>
+          <div class="rgl">투표 참고 · 숨은 공통점<small>선택지 아님</small></div>
+          <div class="ri"><span class="n">1</span><span class="t">"누가 무엇을 했는지"가 한곳에 안 남아요</span><span class="s">후보 4</span></div>
+          <div class="ri"><span class="n">2</span><span class="t">알림이 너무 많아 중요한 걸 놓쳐요</span><span class="s">후보 2</span></div>
+          <div class="ri"><span class="n">3</span><span class="t">AI는 넣고 싶지만 무거운 서버는 피하고 싶어요</span><span class="s">후보 2</span></div>
+          <div class="rlegend"><span><i class="gd go"></i>바로 해볼 만해요</span><span><i class="gd fix"></i>보완</span><span><i class="gd re"></i>다시 생각</span></div>
+        </div>
+        <div class="panel2 detail lift" data-view="idea">
+          <div class="dhead">
+            <div>
+              <div class="dk">팀원 A의 2순위</div>
+              <div class="dt">팀플 회의가 끝나면 할 일을 정리해 주는 서비스</div>
+            </div><span class="grade go gbox"><i></i>바로 해볼 만해요</span>
+          </div>
+          <div class="sech"><b>처음 적은 내용</b></div>
+          <div class="orig">회의 메모나 녹음을 올리면 누가 언제까지 뭘 해야 하는지 정리해서 단톡방에 보내주는 서비스</div>
+          <div class="sech"><b>AI 검증</b>참고용</div>
+          <div class="qa tight"><b>이미 있나요?</b>
+            <div><span class="ans">비슷한 게 있음</span>회의록 AI는 많지만 대학 팀플·단톡 공유에 맞춘 건 드물어요. <a class="linkish">검색 결과 보기</a></div>
+          </div>
+          <div class="qa tight"><b>구현 가능성</b>
+            <div><span class="ans">상</span>텍스트 메모부터 시작하면 돼요. 녹음 변환은 나중으로 미루길 권해요.</div>
+          </div>
+          <div class="qa tight"><b>필요한가요?</b>
+            <div><span class="ans">있음</span>인터뷰에서 3명이 비슷한 경험을 말했어요.</div>
+          </div>
+          <div class="qa tight"><b>기간 안에 되나요?</b>
+            <div><span class="ans">가능</span>메모 입력과 할 일 정리 화면만 하면 시연할 수 있어요.</div>
+          </div>
+          <div class="sech"><b>익명 댓글</b>아쉬운 점 3 · 좋은 점 2</div>
+          <div class="cm"><span>아쉬운 점</span>회의 메모를 누가 정리해서 올릴지가 또 문제예요</div>
+          <div class="cm"><span>아쉬운 점</span>할 일을 잘못 뽑으면 오히려 헷갈릴 것 같아요</div>
+          <div class="cm plus"><span>좋은 점</span>팀플마다 겪는 문제라 발표할 때 공감을 얻기 쉬워요</div>
+          <div class="dfoot2"><span class="quiet">투표한 사람 3 / 4 · 모두 투표하면 결과가 열려요</span><button class="btn" data-action="voteCurrent">이 아이디어에 투표</button></div>
+        </div>
+        <div class="panel2 detail lift" data-view="ai" hidden>
+          <div class="dhead">
+            <div>
+              <div class="dk key">AI가 좋은 점을 모아본 아이디어</div>
+              <div class="dt">시험기간에만 여는 열람실·카페 빈자리·콘센트 제보판</div>
+            </div><span class="grade go gbox"><i></i>바로 해볼 만해요</span>
+          </div>
+          <div class="sec"><h6>어떤 아이디어에서 좋은 점을 가져왔나요</h6>
+            <div class="srcs">
+              <div class="src">
+                <div class="m">팀원 A의 1순위 · <span class="grade fix"><i></i>보완하면 좋아요</span></div>
+                <div class="tt">열람실·카페 빈자리를 함께 알려주는 지도</div>
+                <div class="g"><span>가져온 점</span>시험기간엔 누구나 겪는 문제라 공감이 커요</div>
+              </div>
+              <div class="src">
+                <div class="m">팀원 D의 3순위 · <span class="grade re"><i></i>다시 생각해 봐요</span></div>
+                <div class="tt">학교 앞 카페 콘센트 자리 알림</div>
+                <div class="g"><span>가져온 점</span>콘센트 자리는 실제로 다들 찾아다녀요</div>
+              </div>
+            </div>
+          </div>
+          <div class="sec"><h6>원래 아이디어의 아쉬운 점은 이렇게 줄였어요</h6>
+            <div class="fixrow"><span class="p">실시간 정보가 틀릴 수 있어요<small>아쉬운 점 3</small></span><span class="a">→</span><span>제보 시간과 "지금도 맞아요" 확인 수를 같이 보여주기</span></div>
+            <div class="fixrow"><span class="p">평소엔 쓸 일이 별로 없어요<small>아쉬운 점 2</small></span><span class="a">→</span><span>시험기간 2주만 여는 서비스로 범위 줄이기</span></div>
+          </div>
+          <div class="sec"><h6>AI 검증<small>참고용 · 새로 만든 아이디어로 다시 검증했어요</small></h6>
+            <div class="vgrid">
+              <div><b>이미 있나요?</b><span class="ans">비슷한 게 있음</span><a class="linkish">검색 결과</a></div>
+              <div><b>구현 가능성</b><span class="ans">상</span>장소 목록 + 제보 버튼</div>
+              <div><b>필요한가요?</b><span class="ans">있음</span>원래 두 아이디어의 좋은 점 3개</div>
+              <div><b>기간 안에 되나요?</b><span class="ans">가능</span>제보·확인 두 기능</div>
+            </div>
+          </div>
+          <div class="dfoot2"><span class="quiet">새로 만든 아이디어라 댓글은 없어요 · 똑같이 1표로 세고, 뽑히면 결과에 "AI가 모음"으로 표시돼요</span><button class="btn" data-action="voteCurrent">이 아이디어에 투표</button></div>
+        </div>
+        <div class="panel2 detail lift" data-view="thread" hidden>
+          <div class="dhead">
+            <div>
+              <div class="dk">투표 참고 · 숨은 공통점 1</div>
+              <div class="dt">팀플에서 "누가 무엇을 했는지"가 한곳에 남지 않아요</div>
+            </div><span class="quiet" style="flex:none"><svg class="ico" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>내 답도 들어 있어요 · 나만 보임</span>
+          </div>
+          <div class="sec"><h6>어디서 나왔나요<small>3명의 답 · 인터뷰 재료 요약 · 원문 인용 없음</small></h6>
+            <div class="from"><span>질문 1 · 불편</span>과제 공지가 메일·LMS·단톡으로 흩어져 마감을 놓침</div>
+            <div class="from"><span>질문 1 · 불편</span>팀플 회비를 누가 냈는지 헷갈림</div>
+            <div class="from"><span>질문 4 · 쓰는 서비스</span>피그마 수정 내역을 추적하기 어렵고, 노션엔 팀원이 잘 안 들어옴</div>
+          </div>
+          <div class="sec"><h6>왜 따로 보면 안 보였나요</h6><p class="t-sm muted" style="line-height:1.65">세 재료는 서로 다른 묶음(흩어진 학교 정보 · 돈·정산 · 팀의 조건)에 있었어요. 겉은 달라도 모두 "기록이 한곳에 없다"는 같은 문제예요.</p></div>
+          <div class="sec"><h6>이 공통점과 이어지는 후보 4개<small>같은 문제를 푸는 방향일 뿐, 추천 순서가 아니에요</small></h6>
+            <div class="crows">
+              <div class="crow"><span class="cb on">✓</span><span class="t">과제 공지와 마감을 한곳에 모아 알려주는 웹 <small>내 아이디어</small></span><span class="grade go"><i></i>바로 해볼 만해요</span></div>
+              <div class="crow"><span class="cb"></span><span class="t">팀플 회의가 끝나면 할 일을 정리해 주는 서비스</span><span class="grade go"><i></i>바로 해볼 만해요</span></div>
+              <div class="crow"><span class="cb"></span><span class="t">디자인 수정 요청을 한 화면에 모아 보는 팀플 도구</span><span class="grade fix"><i></i>보완하면 좋아요</span></div>
+              <div class="crow"><span class="cb"></span><span class="t">팀플 자료·수정 요청을 링크 하나에 모으고 바뀐 점만 요약 <span class="aitag">AI가 모음</span></span><span class="grade fix"><i></i>보완하면 좋아요</span></div>
+            </div>
+          </div>
+          <div class="dfoot2"><span class="quiet">투표 선택지가 아니에요 · AI가 찾은 연결이라 틀릴 수 있어요</span><span style="display:flex;align-items:center;gap:8px"><span class="t-cap muted">이 연결, 알고 있었나요?</span><span class="rbtn on">몰랐어요</span><span class="rbtn">이미 알았어요</span></span></div>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

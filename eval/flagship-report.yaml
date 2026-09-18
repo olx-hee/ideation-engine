@@ -1,0 +1,59 @@
+# 확대 재측정 — 보고서(report) 작업에서 고가(Opus)가 우리 저가를 이기는가?
+# 1차(flagship-mix)에서 보고서만 고가 우세 → 시나리오 5개로 재현 확인.
+# 실행: npx promptfoo eval -c eval/flagship-report.yaml -o eval/flagship-report-results.json
+description: 보고서 품질 A/B 확대 — 우리 저가(DeepSeek/Solar) vs 고가(Opus)
+
+prompts:
+  - file://prompts/chat.json
+
+providers:
+  - id: openrouter:deepseek/deepseek-v3.2
+    label: DeepSeek(우리·보고)
+  - id: openrouter:upstage/solar-pro4
+    label: Solar(우리·발산)
+  - id: openrouter:anthropic/claude-opus-4.1
+    label: Opus(고가)
+
+defaultTest:
+  vars:
+    system: "너는 정리 담당이다. 세션 결과를 종합한 짧은 보고서 초안을 작성한다."
+  options:
+    provider:
+      id: openrouter:google/gemini-2.5-flash
+      config:
+        temperature: 0
+  assert:
+    - type: llm-rubric
+      value: "선정 방향의 핵심가치·타겟·리스크가 구체적으로 잡혔는가, 제출 아이디어를 실제로 반영했는가(일반론·군더더기 아님), 해커톤 발표에 바로 쓸 만큼 실용적이고 명료한가. 이 세 가지를 종합해 채점."
+
+tests:
+  - description: report-캠퍼스생활
+    vars:
+      user: |
+        목표: 대학생 캠퍼스 생활을 돕는 서비스
+        선정 방향: 강의실 빈자리 실시간 표시
+        제출 아이디어: 빈자리 표시 / 과제 공지 모으기 / 학식 추천 / 무임승차 평가
+  - description: report-자취생
+    vars:
+      user: |
+        목표: 자취하는 대학생을 돕는 서비스
+        선정 방향: 남은 식재료 소분 공유
+        제출 아이디어: 식재료 소분 공유 / 자취 살림 꿀팁 / 공과금 분석 / 근처 자취생 모임
+  - description: report-동아리
+    vars:
+      user: |
+        목표: 대학 동아리 운영을 돕는 서비스
+        선정 방향: 신입 모집·활동 아카이브 통합 페이지
+        제출 아이디어: 모집 페이지 / 활동 사진 아카이브 / 회비 관리 / 일정 투표
+  - description: report-교내중고
+    vars:
+      user: |
+        목표: 교내 중고거래를 돕는 서비스
+        선정 방향: 전공서적 학기초 매칭
+        제출 아이디어: 전공서적 매칭 / 기숙사 앞 직거래 / 사기방지 학번 인증 / 가격 추천
+  - description: report-시험기간
+    vars:
+      user: |
+        목표: 시험기간 대학생을 돕는 서비스
+        선정 방향: 빈 스터디룸 실시간 + 스터디 매칭
+        제출 아이디어: 스터디룸 현황 / 과목별 스터디 매칭 / 족보 공유 / 집중 타이머

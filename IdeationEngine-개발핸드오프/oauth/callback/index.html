@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>소셜 로그인 처리 · IdeationEngine</title>
+<meta name="robots" content="noindex">
+<style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;font:14px/1.6 "Noto Sans KR",sans-serif;color:#626280;background:#FAFAFE}</style>
+<script>
+  // 소셜 로그인 redirect URI → A6 콜백 화면으로 (code · state 그대로)
+  (function () {
+    location.replace('/screens/A6-oauth-callback/index.html' + location.search);
+  })();
+</script>
+</head>
+<body><p>로그인 처리 중이에요… <a id="fallback" href="/screens/A6-oauth-callback/index.html">이동하지 않으면 눌러주세요</a></p></body>
+</html>

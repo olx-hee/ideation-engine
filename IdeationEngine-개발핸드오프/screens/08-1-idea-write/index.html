@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8-1 발산 · 내 아이디어 정하기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-1-idea-write" data-stage="diverge.write">
+<!--
+  ===== 화면 8-1 · 발산 · 내 아이디어 정하기 =====
+  보는 사람 : 모두 (각자)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:25%"></i></div><span class="ib-pct">25%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>04:10</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds cur"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds "><i>2</i>순위 보기</span><b class="dl"></b><span class="ds "><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds "><i>4</i>AI 검증</span><b class="dl"></b><span class="ds "><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>원래 해보고 싶었던 아이디어를 적어주세요</h3><p>최대 3개까지, 하고 싶은 순서대로 적어요.<span class="lockline"><svg class="ico" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>아이디어는 투표가 끝날 때까지 익명이에요. 결과가 나오면 주인만 공개되고, 댓글과 투표는 끝까지 익명이에요.</span></p></div><a class="linkish" data-go="../07-7-diverge-materials/index.html">아이스브레이킹 재료 11개 보기</a>
+      </div>
+  
+      <div class="panel2" style="padding:22px 24px">
+        <div class="rrow">
+          <div class="rk r1">1<small>순위</small></div>
+          <div>
+            <div class="rlab">가장 해보고 싶은 아이디어</div><input class="rin" value="과제 공지와 마감을 메일·학교 사이트·단톡에서 한곳에 모아 알려주는 웹">
+          </div>
+          <div class="arw"><span class="off">↑</span><span>↓</span></div>
+        </div>
+        <div class="rrow">
+          <div class="rk r2">2<small>순위</small></div>
+          <div>
+            <div class="rlab">두 번째</div><input class="rin" value="강의자료 PDF를 요약해 주는 브라우저 도구">
+          </div>
+          <div class="arw"><span>↑</span><span>↓</span></div>
+        </div>
+        <div class="rrow">
+          <div class="rk r3">3<small>순위</small></div>
+          <div>
+            <div class="rlab">세 번째 · 비어 있어요</div><input class="rin" placeholder="직접 적거나, AI 추천에서 골라 채워요">
+          </div>
+          <div class="arw"><span>↑</span><span class="off">↓</span></div>
+        </div>
+      </div>
+      <div class="dfoot" style="margin-top:16px"><span class="quiet">생각해 둔 아이디어가 없어도 괜찮아요. 아까 인터뷰를 바탕으로 추천해 드려요.</span><span style="display:flex;gap:8px"><button class="btn ghost" data-go="../08-2-idea-recommend/index.html">AI 추천 보기</button><button class="btn" data-action="submitIdeas" data-go="../08-3-idea-board/index.html">이 순서로 제출</button></span></div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

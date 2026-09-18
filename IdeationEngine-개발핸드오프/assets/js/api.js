@@ -1,0 +1,108 @@
+/* ─────────────────────────────────────────────
+   api.js — 백엔드 호출은 전부 여기로
+   사용법:  const data = await api.call('session.create', {}, { topic, durationMin });
+            await api.call('comment.create', { ideaId: 'ide_b1' }, { concern: '…' });
+            await api.call('history.list', { query: { role: 'host' } });
+   · 경로의 {sessionId}는 따로 안 넘기면 App.sessionId() 사용
+   · 엔드포인트 목록: endpoints.js (문서: docs/03-API-전체-목록.md)
+   · config.js의 useMock=true면 mock.js의 가짜 응답을 돌려줌
+   ───────────────────────────────────────────── */
+(function () {
+  const cfg = window.IE_CONFIG || {};
+  const ENDPOINTS = window.IE_ENDPOINTS || {};
+
+  // 401이어도 로그인 유지(refresh) 재시도를 하지 않는 API (로그인·가입 자체이거나 refresh 자신)
+  const NO_RETRY = ['auth.login', 'auth.signup', 'auth.oauth', 'auth.refresh', 'auth.logout', 'auth.passwordReset'];
+
+  class ApiError extends Error {
+    constructor(code, message, status, details) { super(message); this.code = code; this.status = status; this.details = details; }
+  }
+
+  function buildPath(tpl, params) {
+    return tpl.replace(/\{(\w+)\}/g, (_, k) => {
+      const v = params[k] != null ? params[k] : (k === 'sessionId' ? App.sessionId() : null);
+      if (v == null) throw new ApiError('CLIENT', `경로 값이 없어요: ${k}`, 0);
+      return encodeURIComponent(v);
+    });
+  }
+
+  async function call(id, params = {}, body) {
+    const ep = ENDPOINTS[id];
+    if (!ep) throw new ApiError('CLIENT', `알 수 없는 API: ${id}`, 0);
+    const path = buildPath(ep.path, params);
+    const query = params.query ? '?' + new URLSearchParams(Object.entries(params.query).filter(([, v]) => v != null && v !== '')) : '';
+
+    if (cfg.useMock) return window.IE_MOCK.handle(id, { params, query: params.query || {}, body, path });
+
+    const headers = {};
+    const token = App.state.accessToken;
+    if (token) headers.Authorization = 'Bearer ' + token;
+    let payload;
+    if (body instanceof FormData) payload = body;
+    else if (body !== undefined) { headers['Content-Type'] = 'application/json'; payload = JSON.stringify(body); }
+
+    const res = await fetch(cfg.baseUrl + path + query, { method: ep.method, headers, body: payload, credentials: 'include' });
+    const data = res.status === 204 ? null : await res.json().catch(() => null);
+    if (res.status === 401 && !NO_RETRY.includes(id) && !params._retried) {
+      if (await refresh()) return call(id, Object.assign({}, params, { _retried: true }), body);
+    }
+    if (!res.ok) {
+      const e = (data && data.error) || {};
+      throw new ApiError(e.code || ('HTTP_' + res.status), e.message || '요청에 실패했어요', res.status, e.details);
+    }
+    return data;
+  }
+
+  /* 로그인 유지: 리프레시 쿠키로 새 액세스 토큰 받기. 동시에 여러 요청이 401이어도 한 번만 부름 */
+  let refreshing = null;
+  function refresh() {
+    if (cfg.useMock) return Promise.resolve(!!App.state.accessToken);
+    if (!refreshing) {
+      refreshing = fetch(cfg.baseUrl + '/auth/refresh', { method: 'POST', credentials: 'include' })
+        .then(async (r) => { if (!r.ok) throw new Error('refresh'); const d = await r.json(); App.save({ accessToken: d.accessToken, user: d.user }); return true; })
+        .catch(() => { App.logoutLocal(); return false; })
+        .finally(() => { setTimeout(() => { refreshing = null; }, 0); });
+    }
+    return refreshing;
+  }
+
+  /* 실시간: 세션 화면에서 realtime.connect(sessionId, ev => …) — ev = { type, data, at } */
+  const realtime = {
+    connect(sessionId, onEventRaw) {
+      /* 공통 처리: 타이머 보정(timer.sync)과 상단바 단계(stage.changed)는 화면마다 쓰지 않고 여기서 */
+      const onEvent = (ev) => {
+        try {
+          if (ev && ev.type === 'timer.sync' && ev.data && ev.data.endsAt) {
+            const now = ev.data.serverNow ? Date.parse(ev.data.serverNow) : Date.now();
+            App.setTimer(Math.max(0, Math.round((Date.parse(ev.data.endsAt) - now) / 1000)));
+          }
+          if (ev && ev.type === 'stage.changed' && ev.data) App.setStage(ev.data.stage);
+        } catch (e) { /* 보정 실패는 화면 동작을 막지 않음 */ }
+        return onEventRaw(ev);
+      };
+      if (cfg.useMock) return window.IE_MOCK.stream(sessionId, onEvent);
+      const base = cfg.wsUrl || (location.origin.replace(/^http/, 'ws') + cfg.baseUrl);
+      let ws, retry = 0, closed = false;
+      const open = () => {
+        const token = App.state.accessToken || '';   // 연결할 때마다 최신 토큰으로 (1시간 뒤 토큰이 바뀌어도 재연결됨)
+        ws = new WebSocket(`${base}/sessions/${encodeURIComponent(sessionId)}/stream?token=${encodeURIComponent(token)}`);
+        ws.onopen = () => { retry = 0; };
+        ws.onmessage = (m) => { try { onEvent(JSON.parse(m.data)); } catch (e) { console.warn('이벤트 파싱 실패', e); } };
+        ws.onclose = async (e) => {
+          if (closed) return;
+          if (e.code === 4401) {                      // 토큰 만료 → 한 번 새로 받고 다시 연결
+            if (await api.refresh()) { retry = 0; return open(); }
+            return;                                   // 로그인 자체가 풀렸으면 멈춤 (화면 쪽에서 로그인으로 보냄)
+          }
+          if (e.code === 4403) return;                // 이 세션 참가자가 아님 · 내보내짐 → 계속 재연결하지 않음
+          setTimeout(open, Math.min(10000, 500 * 2 ** retry++));
+        };
+      };
+      open();
+      return { close() { closed = true; ws && ws.close(); } };
+    }
+  };
+
+  window.api = { call, refresh, ApiError, endpoints: ENDPOINTS };
+  window.realtime = realtime;
+})();

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8-6w 발산 · 투표 마침 — 결과 기다리기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-6w-vote-wait" data-stage="diverge.vote">
+<!--
+  ===== 화면 8-6w · 발산 · 투표 마침 — 결과 기다리기 =====
+  보는 사람 : 모두 (각자)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:55%"></i></div><span class="ib-pct">55%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>01:40</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds done"><i>2</i>순위 보기</span><b class="dl"></b><span class="ds done"><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds done"><i>4</i>AI 검증</span><b class="dl"></b><span class="ds cur"><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>투표를 마쳤어요</h3><p>모두 투표하면 결과가 열려요. 잠시만 기다려 주세요.</p></div>
+      </div>
+  
+      <div class="center" style="flex:1;display:flex;align-items:center;justify-content:center">
+        <div class="panel" style="text-align:center;max-width:520px">
+          <div class="avatar" style="width:72px;height:72px;font-size:var(--fs-h1);margin:0 auto 14px">✓</div><p class="lead">내 표는 저장됐어요</p><p class="hint">누가 어디에 투표했는지는 공개되지 않아요</p>
+          <div class="muted t-sm wait-count" style="margin-top:18px">현재 <b style="color:var(--key)">3 / 4</b>명 투표 완료</div>
+          <div class="quiet" style="margin-top:8px">모두 마치면 결과 화면으로 자동 이동해요 · 진행자가 먼저 넘길 수도 있어요</div>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

@@ -66,8 +66,8 @@ app.get("/api/health", (req, res) => {
   const body = { ok: true };
   if (!isProd) {
     body.store = store.kind;
-    // 실제 LLM 호출은 아직 미구현이므로 키가 있어도 'mock-pending'으로 정직 표기
-    body.ai = process.env.ANTHROPIC_API_KEY ? "mock-pending" : "mock";
+    // 실호출은 OpenRouter로 나간다. 키가 있으면 'live', 없으면 목업 폴백.
+    body.ai = process.env.OPENROUTER_API_KEY ? "live" : "mock";
     body.time = new Date().toISOString();
   }
   res.json(body);
@@ -102,7 +102,7 @@ app.patch("/api/sessions/:id", h(async (req, res) => {
   const b = req.body || {};
   const patch = {};
   for (const k of PATCHABLE) if (k in b) patch[k] = b[k];
-  if ("phase" in patch) patch.phase = Math.min(3, Math.max(0, Number(patch.phase) || 0));
+  if ("phase" in patch) patch.phase = Math.min(4, Math.max(0, Number(patch.phase) || 0)); // 5단계(ice·idea·reality·analyze·report)
   if ("deadlineAt" in patch) { const n = Number(patch.deadlineAt); if (Number.isFinite(n)) patch.deadlineAt = n; else delete patch.deadlineAt; }
   const s = await store.update(req.params.id, patch);
   if (!s) return res.status(404).json({ error: "session not found" });

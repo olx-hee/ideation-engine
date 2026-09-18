@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>방 코드로 입장 · IdeationEngine</title>
+<meta name="robots" content="noindex">
+<style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;font:14px/1.6 "Noto Sans KR",sans-serif;color:#626280;background:#FAFAFE}</style>
+<script>
+  // 초대 링크 /s/{방 코드} → 방 코드 입장 화면(2)으로
+  (function () {
+    var m = location.pathname.match(/\/s\/([0-9A-Za-z]{6})/);
+    var to = '/screens/02-join-code/index.html' + (m ? '?code=' + m[1].toUpperCase() : '');
+    location.replace(to);
+  })();
+</script>
+</head>
+<body><p>방으로 들어가는 중이에요… <a id="fallback" href="/screens/02-join-code/index.html">이동하지 않으면 눌러주세요</a></p></body>
+</html>

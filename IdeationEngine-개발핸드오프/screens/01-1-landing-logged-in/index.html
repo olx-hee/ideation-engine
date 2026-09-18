@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1-1 랜딩 (로그인 상태) · 프로필 팝오버 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="01-1-landing-logged-in">
+<!--
+  ===== 화면 1-1 · 랜딩 (로그인 상태) · 프로필 팝오버 =====
+  보는 사람 : 로그인한 회원
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+
+    <div class="landing" style="height:100%;display:flex;flex-direction:column">
+  
+      <div class="appbar clear"><span></span><span class="pbtn open"><span class="avatar">노</span><span class="nm">노형원</span>▴</span></div>
+  
+      <div class="abody">
+    
+        <div class="center dim">
+      
+          <div class="hero-logo"><svg class="appicon" width="64" height="64" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</div>
+      <p class="slogan">노형원님, 오늘 회의를 시작해볼까요?</p>
+      
+          <div class="cta"><button class="btn lg" data-action="needLogin" data-go="../04-session-create/index.html">＋ 세션 만들기</button><button class="btn ghost lg" data-action="joinOrRejoin" data-go="../02-join-code/index.html">→ 코드로 입장</button></div>
+    
+        </div>
+    
+        <div class="pop">
+      
+          <div class="ph"><span class="avatar">노</span>
+            <div>
+              <div class="nm">노형원</div>
+              <div class="em">hyeongwon@example.com</div>
+            </div><span class="plan-free" style="margin-left:auto">FREE</span>
+          </div>
+      
+          <div class="pb">
+            <div class="pk">내 프로필</div>
+        
+            <div class="t-sm" style="margin-bottom:8px">맡고 싶은 역할 · <b>개발·구현</b></div>
+        
+            <div class="chips" style="gap:6px"><span class="sk on">✓ 프론트엔드</span><span class="sk on">✓ 백엔드</span><span class="sk on">✓ 발표·피칭</span></div>
+          </div>
+      
+          <div class="menu">
+        
+            <div class="mi hover" data-go="../A3-profile-edit/index.html">프로필 수정 <span class="muted">›</span></div>
+        
+            <div class="mi" data-go="../A4-session-history/index.html">지난 세션 기록 <span class="badge key">6</span></div>
+        
+            <div class="mi" data-go="../A5-account-settings/index.html">계정 설정 <span class="muted">›</span></div>
+        
+            <div class="mi" style="color:var(--key-700);font-weight:500" data-go="../A5-account-settings/index.html"><svg class="lk" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg> Pro로 업그레이드 <span class="muted">›</span></div>
+        
+            <div class="mi out" data-action="logout" data-go="../01-landing/index.html">로그아웃</div>
+      
+          </div>
+    
+        </div>
+  
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

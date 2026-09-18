@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4 세션 만들기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="04-session-create">
+<!--
+  ===== 화면 4 · 세션 만들기 =====
+  보는 사람 : 진행자 (로그인 회원)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+
+    <div class="appbar"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="pbtn" data-go="../01-1-landing-logged-in/index.html"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    <div class="abody">
+      <div class="page" style="padding-left:120px;padding-right:120px">
+  
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+    
+          <div><p class="lead">세션 만들기</p><p class="hint">주제만 쓰면 바로 시작할 수 있어요. 방법론은 AI가 상황 보고 제안해요.</p></div>
+    <span style="display:flex;align-items:center;gap:8px"><span class="plan-free">FREE</span><span class="t-sm muted">무료 플랜 사용 중</span><a class="t-sm" style="color:var(--key);font-weight:700;text-decoration:none" data-go="../A5-account-settings/index.html">업그레이드 →</a></span>
+  
+        </div>
+  
+        <div class="card" style="margin-top:22px">
+          <div class="lbl">이번 회의에서 정할 것 (주제)</div><input class="inp" value="교내 해커톤에서 만들 서비스 아이디어 정하기">
+        </div>
+  
+        <div class="grid2" style="margin-top:14px;align-items:stretch">
+    
+          <div class="card">
+      
+            <div class="cardt">세션 시간 <span class="limit">무료 최대 30분</span></div>
+      
+            <div class="chips"><span class="chip">10분</span><span class="chip">20분</span><span class="chip on">30분</span><span class="chip lock">60분<span class="pro"><svg class="lk" viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>PRO</span></span><span class="chip lock">90분<span class="pro"><svg class="lk" viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>PRO</span></span><span class="chip lock">제한 없음<span class="pro"><svg class="lk" viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>PRO</span></span></div>
+      
+            <div class="custom"><span class="t-sm muted">직접 입력</span><input class="mini" type="number" min="1" max="30" value="30" aria-label="세션 시간(분)"><span class="t-sm">분</span><span class="t-cap muted" style="margin-left:auto">1 ~ 30분까지</span></div>
+      
+            <div class="upsell"><svg class="lk" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span>30분 넘는 세션(60분·90분·제한 없음)은 <b>Pro</b> 전용이에요</span><a data-go="../A5-account-settings/index.html">Pro 알아보기 →</a></div>
+    
+          </div>
+    
+          <div class="stack" style="gap:14px">
+      
+            <div class="card">
+        
+              <div class="cardt">참여 인원 <span class="limit">나 포함</span></div>
+        
+              <div style="display:flex;align-items:center;gap:14px">
+          <span class="stepper"><span>−</span><b>4</b><span>＋</span></span><span class="t-body">명</span>
+          <span class="chips" style="margin-left:auto;gap:6px"><span class="chip">2</span><span class="chip">3</span><span class="chip on">4</span><span class="chip">5</span><span class="chip">6</span></span>
+        </div>
+        <p class="t-cap muted" style="margin-top:10px">대기실에 "3 / 4명 입장"처럼 표시돼요</p>
+      
+            </div>
+      
+            <div class="card" style="flex:1">
+              <div class="cardt">공모전 주제·심사기준 <span class="badge">선택</span></div><input class="inp t-sm" placeholder="예: 지역문제 · 심사=창의성/실현성">
+            </div>
+    
+          </div>
+  
+        </div>
+  
+        <div class="pagefoot" style="border-top:none;height:auto;margin-top:24px"><button class="btn lg" style="width:100%" data-action="createSession" data-go="../05-lobby-host/index.html">세션 만들고 방 코드 받기 →</button></div>
+
+      </div>
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

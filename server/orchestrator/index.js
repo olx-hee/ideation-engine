@@ -3,8 +3,9 @@
    ('다른 모델 섞기' fanout은 품질 반증되어 기본 경로에서 제거 — 창의모드용으로 registry에만 보존)
    B(임의 요청 분해)는 P4 — 여기서는 고정 목업 스텁만 둔다(설계 §9 과설계 금지). */
 
-import { ROUTING, IDEA_QUALITY, FALLBACK, CONCEPT_LENSES, VERIFY } from "./registry.js";
+import { ROUTING, IDEA_QUALITY, FALLBACK, CONCEPT_LENSES, VERIFY, REALITY } from "./registry.js";
 import { callModel } from "./adapter.js";
+import { braveSearch, BRAVE_ON } from "./search.js";
 import { makeMeter } from "./meter.js";
 
 // "컨셉명: X\n요약..." → {title, summary}. 형식이 흔들려도 첫 줄=제목, 나머지=요약으로 폴백.
@@ -18,6 +19,17 @@ function parseConcept(text = "") {
   }
   const lines = t.split("\n").filter((l) => l.trim());
   return { title: (lines[0] || "컨셉").replace(/\*\*/g, "").slice(0, 40).trim(), summary: lines.slice(1).join(" ").trim() || t };
+}
+
+// 입력(pool/content) 지문 — 같은 kind라도 입력이 다르면 캐시를 분리한다.
+// (F-10: 캐시 키가 kind만 보면, 같은 세션에서 아이디어를 바꿔 다시 호출해도 옛 결과가 나온다.)
+function poolSig(pool = [], content = null) {
+  const s = (Array.isArray(pool) ? pool : [])
+    .map((p) => (typeof p === "string" ? p : (p && (p.title || p.text)) || "")).join("|") + "|" + (content || "");
+  if (!s.replace(/\|/g, "")) return "";
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return "#" + h.toString(36);
 }
 
 // 세션별 상태(P1: 인메모리). meter + 이미 기록한 kind(멱등) + 최근접근(LRU).
@@ -41,7 +53,7 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
 
   // 멱등(S1 이중과금 차단): 같은 세션·같은 kind(+품질모드 여부) 재호출은 '실호출 없이' 캐시 반환.
   // StrictMode·재전송으로 두 번 들어와도 callModel(=실 API·크레딧)을 다시 치지 않는다.
-  const cacheKey = quality ? `${kind}#q` : kind;
+  const cacheKey = `${kind}${quality ? "#q" : ""}${poolSig(pool, content)}`;
   if (entry.last.has(cacheKey)) {
     return { ...entry.last.get(cacheKey), deduped: true, meter: entry.meter.summary() };
   }
@@ -69,6 +81,38 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
     entry.meter.record({ purpose: "verify", kind, role: VERIFY.role, model: VERIFY.model, tier: VERIFY.tier, usageTokens: r.usageTokens });
     result = { kind, mode: "verify", model: VERIFY.model, tier: VERIFY.tier, issues: r.text, deduped: false };
   }
+  // [현실성 패스] 발산 아이디어에 실현가능성·"왜 아직 없나"·수요를 붙임(뻔함·공상 배제, 보류도 보존).
+  //   ③⑤는 아직 LLM '추정' — 다음 단계에서 시중검색(Brave)으로 실측 라벨을 덧붙일 자리.
+  else if (kind === "reality") {
+    // 아이디어별로 따로 호출해 1:1 배열로 돌려준다.
+    // (F-01: 한 번에 묶어 받으면 프론트 텍스트 분할이 어긋나 4개 중 1개만 표시됐음)
+    const ideas = (pool || []).map((p) => (typeof p === "string" ? p : (p.title || p.text || ""))).filter(Boolean).slice(0, 6);
+    const list = ideas.length ? ideas : [content || "(아이디어 없음)"];
+    const analyses = [];
+    for (const idea of list) {
+      const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "reality", prompt: `목표: ${goal}\n\n[검토할 아이디어]\n${idea}` });
+      entry.meter.record({ purpose: "verify", kind, role: REALITY.role, model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
+      analyses.push({ idea, text: r.text });
+    }
+    result = { kind, mode: "reality", model: REALITY.model, tier: REALITY.tier, analyses, marketChecked: false, deduped: false };
+  }
+  // [시중검색 게이트] 각 아이디어를 Brave로 실제 검색 → 결과를 근거로 이미있음/유사/공백 판정(생성≠검증 독립).
+  //   검색결과는 <<<데이터>>>로 격리해 LLM에 전달(인젝션 방지). LLM 추정(reality ③⑤)을 실측으로 보강.
+  else if (kind === "market") {
+    const ideas = (pool || []).map((p) => (typeof p === "string" ? p : (p.title || p.text || ""))).filter(Boolean).slice(0, 6);
+    const sources = [];
+    for (const idea of ideas) {
+      const results = await braveSearch(`${idea} ${goal}`, { top: 3 });
+      sources.push({ idea, results });
+      entry.meter.record({ purpose: "route", kind, role: "시중검색", model: "Brave-Search", tier: "small", usageTokens: 0 });
+    }
+    const block = sources.map((s, i) =>
+      `아이디어 ${i + 1}: ${s.idea}\n<<<데이터: 검색결과>>>\n${s.results.map((r) => `- ${r.title} | ${r.url}\n  ${r.snippet}`).join("\n") || "  (결과 없음)"}\n<<<끝>>>`
+    ).join("\n\n");
+    const r = await callModel({ model: REALITY.model, tier: REALITY.tier, kind: "market", prompt: block });
+    entry.meter.record({ purpose: "verify", kind, role: "시중검색 판정", model: REALITY.model, tier: REALITY.tier, usageTokens: r.usageTokens });
+    result = { kind, mode: "market", brave: BRAVE_ON, labels: r.text, sources, deduped: false };
+  }
   // 발산 품질모드: Self-Refine(초안→비평→수정) — 같은 강모델을 3패스. rematch 품질 1위, Grok 채택.
   else if (kind === "idea" && quality) {
     const q = IDEA_QUALITY;
@@ -81,7 +125,15 @@ export async function orchestrate({ sessionId, kind, goal = "", context = null, 
     result = { kind, mode: "self-refine", model: q.model, tier: q.tier, text: rev.text, draft: draft.text, critique: crit.text, passes: q.passes, deduped: false };
   } else {
     // 단일 역할(기본) — idea 포함 모든 kind가 단일 모델 1콜.
-    const r = await callModel({ model: route.model, tier: route.tier, kind, prompt: goal });
+    // 분석·보고서는 '제출된 아이디어'를 프롬프트에 넣어 실제 세션 기반으로 생성(F-09).
+    const poolText = (pool || [])
+      .map((p) => (typeof p === "string" ? p : (p.title || p.text || "")))
+      .filter(Boolean)
+      .map((t, i) => `${i + 1}. ${t}`)
+      .join("\n");
+    const usePool = (kind === "analyze" || kind === "report") && poolText;
+    const prompt = usePool ? `목표: ${goal}\n\n[제출된 아이디어]\n${poolText}` : goal;
+    const r = await callModel({ model: route.model, tier: route.tier, kind, prompt });
     entry.meter.record({ purpose: "generate", kind, role: route.role, model: route.model, tier: route.tier, usageTokens: r.usageTokens });
     result = { kind, mode: "single", role: route.role, model: route.model, tier: route.tier, text: r.text, deduped: false };
   }

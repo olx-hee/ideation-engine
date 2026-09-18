@@ -1,0 +1,76 @@
+/* ─────────────────────────────────────────────
+   shell.css — 실제 페이지로 쓰기 위한 추가 스타일
+   (디자인 목업에는 없던 부분: 화면 맞춤, 입력칸, 토스트, 개발용 내비)
+   ───────────────────────────────────────────── */
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--app-bg);scroll-snap-type:none;overflow:hidden}
+
+/* 1280×800 기준으로 만든 화면을 창 크기에 맞춰 통째로 확대/축소 (app.js가 zoom 계산) */
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--page)}
+.stage .board{border-radius:0;box-shadow:none;border:none;flex:none}
+body.fill .stage{background:var(--app-bg)}
+
+/* 목업의 <div class="inp">를 실제 입력칸으로 바꾼 것 — 모양은 그대로 */
+input.inp,textarea.inp,textarea.ta,input.rin,input.bare,input.mini{font:inherit;color:var(--ink);outline:none}
+input.inp,textarea.inp,textarea.ta,input.rin{display:block;min-width:0;width:100%}
+textarea{resize:none}
+.inp::placeholder,.ta::placeholder,.rin::placeholder{color:var(--faint);opacity:1}
+input.inp:focus,textarea.inp:focus,input.rin:focus,textarea.ta:focus{border-color:var(--key);box-shadow:0 0 0 3px var(--key-100)}
+label.inp.pw{display:flex;align-items:center;gap:8px;cursor:text}
+label.inp.pw .bare{flex:1;min-width:0;border:none;background:transparent;padding:0;letter-spacing:.15em}
+label.inp.pw .eye{cursor:pointer;letter-spacing:0}
+input.mini{outline:none}
+.codebox input{font-family:var(--mono);font-size:var(--fs-h1);font-weight:700;width:52px;height:64px;border:1px solid var(--line);border-radius:12px;text-align:center;background:var(--soft);color:var(--ink);outline:none;text-transform:uppercase;padding:0}
+.codebox input.f{border-color:var(--key-400);color:var(--key-700);background:var(--key-50)}
+.codebox input:focus{border:2px solid var(--key);background:var(--panel)}
+
+/* 누를 수 있는 것들 */
+button,[data-go],[data-action],.chip,.sk,.toggle,.check,.rb,.rbtn,.seg span,.stepper span,.arw span,.ri,.pbtn,.railbtn,.tg,.hint2,.res7,.cb,.mi,.nav a,.nc-top,.mx{cursor:pointer}
+.chip.lock{cursor:not-allowed}
+.btn.is-loading{opacity:.6;pointer-events:none}
+.btn:focus-visible,[data-go]:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+.btn.disabled,.btn[disabled]{cursor:not-allowed}
+
+/* 채팅은 실제로 스크롤 (최신 말풍선이 아래) */
+.msgs{justify-content:flex-start;overflow-y:auto;scrollbar-width:thin}
+.msgs>:first-child{margin-top:auto}
+
+/* 토스트 */
+.toasts{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:1000;pointer-events:none}
+.toast{background:#1B1B2F;color:#fff;font-size:13px;padding:10px 16px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:ie-in .18s ease-out;max-width:520px}
+.toast.error{background:#BE123C}
+@keyframes ie-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* 9 파트 나누기 · 배치 · 보고서 */
+.sel9{position:relative}
+.menu9{position:absolute;top:calc(100% + 4px);left:0;z-index:20;display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:4px;min-width:150px}
+.menu9>div{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;font-size:13px;font-weight:400;color:var(--ink)}
+.menu9>div:hover{background:var(--soft)}
+.ptab.marking .pr9,.ptab.marking .sm9>div{cursor:pointer}
+.ptab.marking .pr9:hover,.ptab.marking .sm9>div:hover{background:var(--key-50)}
+.pill9.mk{margin-left:8px}
+textarea.ta9{display:block;width:100%;font:inherit;color:var(--ink);outline:none}
+textarea.ta9:focus{border-color:var(--key);box-shadow:0 0 0 3px var(--key-100)}
+
+/* 보고서: PDF로 저장 = A4 2쪽만 인쇄 */
+.printonly{display:none}
+@media print{
+  @page{size:A4 portrait;margin:0}
+  body.printing{overflow:visible;background:#fff}
+  body.printing>*{display:none!important}
+  body.printing>.printonly{display:block}
+  .printonly .a4{transform:none;box-shadow:none;page-break-after:always;break-after:page}
+  .printonly .a4:last-child{page-break-after:auto;break-after:auto}
+}
+
+/* 개발용 화면 이동 바 (주소 뒤에 ?dev=0 을 붙이면 숨김) */
+.devnav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:999;display:flex;align-items:center;gap:2px;background:rgba(27,27,47,.88);color:#fff;border-radius:999px;padding:4px;font:12px/1 "Noto Sans KR",sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.devnav a{color:#fff;text-decoration:none;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.devnav a:hover{background:rgba(255,255,255,.14)}
+.devnav .cur{padding:7px 12px;color:#C7D2FE;font-family:"JetBrains Mono",monospace}
+.devnav .mock{padding:3px 8px;margin-left:4px;border-radius:999px;background:#F59E0B;color:#1B1B2F;font-weight:700}
+
+/* 약관 팝업: 실제 스크롤 */
+.mb{overflow-y:auto;padding-bottom:18px}
+.mb::after,.mb .sbtrack{display:none}
