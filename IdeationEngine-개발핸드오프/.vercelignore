@@ -1,0 +1,9 @@
+# 배포에 올리지 않는 것 (화면과 상관없는 파일 · 계정 정보)
+_generator/
+_tools/
+_작업메모/
+_미리보기/
+design/
+__pycache__/
+.vercel/
+.env*

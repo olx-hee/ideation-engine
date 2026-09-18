@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3 프로필 만들기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="03-profile-create">
+<!--
+  ===== 화면 3 · 프로필 만들기 =====
+  보는 사람 : 로그인한 회원 (가입 직후 · 프로필 없이 입장하려던 사람)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+
+    <div class="appbar"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="pbtn" data-go="../01-1-landing-logged-in/index.html"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    <div class="abody">
+      <div class="page" style="padding-top:28px">
+  
+        <div><p class="lead">먼저 프로필을 만들어 주세요</p><p class="hint">처음 한 번만 작성하면, 다음 세션부터는 바로 시작할 수 있어요.</p></div>
+  
+        <div class="cols" style="grid-template-columns:1fr 1.75fr;gap:16px;margin-top:18px">
+    
+          <div class="stack" style="gap:12px">
+      
+            <div class="card">
+              <div class="lbl">닉네임</div><input class="inp" value="노형원">
+            </div>
+      
+            <div class="card">
+              <div class="lbl">한 줄 강점 <span class="opt">— 선택</span></div><input class="inp" placeholder="예: 발표 자료를 빠르게 잘 만들어요">
+            </div>
+      
+            <div class="card">
+              <div class="lbl">이번에 맡고 싶은 역할</div>
+              <div class="chips"><span class="chip">자료조사</span><span class="chip">발표·기획</span><span class="chip">문서정리</span><span class="chip on">개발·구현</span><span class="chip">디자인</span></div>
+            </div>
+    
+          </div>
+    
+          <div class="card">
+      
+            <div class="lbl">할 수 있는 것 <span class="opt">— 여러 개 선택</span></div>
+            <div class="grp">
+              <div class="gl">개발</div>
+              <div class="chips"><span class="sk on">✓ 프론트엔드</span><span class="sk on">✓ 백엔드</span><span class="sk">데이터</span><span class="sk">인프라</span><span class="sk">AI/ML</span></div>
+            </div>
+            <div class="grp">
+              <div class="gl">디자인 <span style="font-weight:400;color:var(--faint)">· 만드는 결과물 기준</span></div>
+              <div class="chips"><span class="sk on">✓ PPT 디자인</span><span class="sk">웹 디자인</span><span class="sk">앱 디자인</span><span class="sk">영상·모션</span><span class="sk">브랜딩·그래픽</span></div>
+            </div>
+            <div class="grp">
+              <div class="gl">기획 <span style="font-weight:400;color:var(--faint)">· 무엇을 설계하는 기획인지 기준</span></div>
+              <div class="chips"><span class="sk">비즈니스 모델 기획</span><span class="sk on">✓ 기술 설계 기획</span><span class="sk">서비스 기획</span><span class="sk">프로젝트 관리</span><span class="sk">사업계획서·제안서</span></div>
+            </div>
+            <div class="grp">
+              <div class="gl">발표·기타</div>
+              <div class="chips"><span class="sk on">✓ 발표·피칭</span><span class="sk">마케팅·홍보</span><span class="sk">리서치·사용자 조사</span><span class="sk">문서 정리</span><span class="sk">논문</span></div>
+            </div>
+      
+            <div class="whybox" style="margin-top:14px">🔎 디자인은 <b>결과물 형태</b>(PPT·웹·앱·영상·브랜딩)로, 기획은 <b>설계 대상</b>(비즈니스 모델=수익·타깃·시장성 / 기술 설계=시스템 구조·기술 스택 / 서비스=기능 명세·화면 흐름)으로 나눴어요. 해커톤 팀에서 자주 나오는 <b>프로젝트 관리·사업계획서·발표 영상</b>도 넣었어요.</div>
+    
+          </div>
+  
+        </div>
+  
+        <div class="pagefoot" style="height:72px"><span class="note">※ AI가 프로필을 학습하는 게 아니라, 각도 배분의 참고 맥락으로만 씁니다.</span><button class="btn lg" data-action="saveProfile">프로필 저장 →</button></div>
+
+      </div>
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

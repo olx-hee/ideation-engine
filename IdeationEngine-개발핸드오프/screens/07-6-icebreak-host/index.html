@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7-6 아이스브레이킹 · 진행자 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="07-6-icebreak-host" data-stage="icebreak">
+<!--
+  ===== 화면 7-6 · 아이스브레이킹 · 진행자 =====
+  보는 사람 : 진행자 (7-1~7-5 인터뷰를 마친 뒤)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이스브레이킹</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:20%"></i></div><span class="ib-pct">20%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">진행자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>01:48</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="hbody">
+  
+      <div class="side2">
+    
+        <div class="sc2"><h4>인터뷰 진행 <small>답 내용은 비공개</small></h4>
+      
+          <div class="pr"><span class="nm2">노형원 (나)</span><span class="st done">완료</span></div>
+          <div class="pr"><span class="nm2">이세민</span><span class="st done">완료</span></div>
+          <div class="pr"><span class="nm2">김승희</span><span class="st done">완료</span></div>
+          <div class="pr"><span class="nm2">박상진</span>
+            <div class="bar"><i style="width:80%"></i></div><span class="st">4 / 5</span>
+          </div>
+        </div>
+    
+        <div class="sc2"><h4>최근 소식 × 팀 반응</h4>
+      
+          <div class="rx">
+            <div class="rx-t"><span class="c">시장</span>단톡방 중고거래</div>
+            <div class="stack3"><i class="s-new" style="width:25.0%"></i><i class="s-heard" style="width:50.0%"></i><i class="s-know" style="width:25.0%"></i></div>
+          </div>
+          <div class="rx">
+            <div class="rx-t"><span class="c">기술</span>온디바이스 AI</div>
+            <div class="stack3"><i class="s-new" style="width:75.0%"></i><i class="s-heard" style="width:0.0%"></i><i class="s-know" style="width:25.0%"></i></div>
+          </div>
+          <div class="rx">
+            <div class="rx-t"><span class="c">규제</span>학생 정보 동의 강화</div>
+            <div class="stack3"><i class="s-new" style="width:100.0%"></i><i class="s-heard" style="width:0.0%"></i><i class="s-know" style="width:0.0%"></i></div>
+          </div>
+      
+          <div class="lg3"><span><i class="s-new"></i>처음 들어요</span><span><i class="s-heard"></i>들어봤어요</span><span><i class="s-know"></i>잘 알아요</span></div>
+      <p style="margin-top:12px">온디바이스 AI를 잘 아는 사람이 1명 있어요. 발산 때 설명을 부탁해 보세요.</p>
+        </div>
+    <p class="note" style="padding:0 4px;display:flex;gap:6px"><svg class="ico" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span>진행자도 답 원문은 볼 수 없어요.</span></p>
+  
+      </div>
+  
+      <div class="hmain">
+    
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+      
+          <div><p style="font-size:var(--fs-h2);font-weight:700">발산 재료 11개 · 비슷한 것끼리 묶었어요</p><p class="hint">재료는 전부 발산으로 넘어가요. 먼저 이야기할 묶음만 표시하세요.</p></div>
+      <button class="btn ghost sm" data-action="regroup">다시 묶기</button>
+        </div>
+    
+        <div class="grps">
+      
+          <div class="gp on">
+            <div class="gp-h"><b>흩어진 학교 정보</b><span class="ai2">AI 추천</span><span class="tg on">먼저 보기 ✓</span></div>
+            <div class="gp-d">묶으면 "캠퍼스 정보를 한곳에서" 방향이 돼요</div>
+            <div class="mrow">과제 공지가 메일·LMS·단톡으로 흩어짐<span class="cnt">2명</span></div>
+            <div class="mrow">시험기간 열람실 빈자리 찾기<span class="cnt">1명</span></div>
+            <div class="mrow">학교 앞 카페 콘센트 자리 경쟁<span class="cnt">1명</span></div>
+          </div>
+      
+          <div class="gp on">
+            <div class="gp-h"><b>AI를 직접 써보고 싶음</b><span class="tg on">먼저 보기 ✓</span></div>
+            <div class="gp-d">동기가 가장 많이 겹치고, 최근 소식과도 이어져요</div>
+            <div class="mrow">AI 기능을 직접 넣어보고 싶음<span class="cnt">3명</span></div>
+            <div class="mrow">온디바이스 AI로 서버 없이 시연<span class="cnt">1명</span></div>
+            <div class="mrow">온디바이스 AI를 잘 아는 사람이 있음<span class="cnt">1명</span></div>
+          </div>
+      
+          <div class="gp">
+            <div class="gp-h"><b>돈·정산의 신뢰</b><span class="tg">먼저 보기</span></div>
+            <div class="gp-d">최근 시장 변화와 실제 경험이 맞닿아 있어요</div>
+            <div class="mrow">단톡방 공동구매 정산을 한 사람이 떠안음<span class="cnt">1명</span></div>
+            <div class="mrow">팀플 회비 누가 냈는지 헷갈림<span class="cnt">1명</span></div>
+          </div>
+      
+          <div class="gp">
+            <div class="gp-h"><b>우리 팀의 조건</b></div>
+            <div class="gp-d">주제가 아니라 범위를 정하는 재료예요</div>
+            <div class="mrow">웹 화면과 발표 자료는 자신 있음<span class="cnt">2명</span></div>
+            <div class="mrow av"><span class="avoid">피할 것</span>앱 개발 · 서버가 무거운 방향<span class="cnt">2명</span></div>
+            <div class="mrow">피그마 수정 내역 추적이 어려움<span class="cnt">1명</span></div>
+          </div>
+    
+        </div>
+    
+        <div class="hfoot"><button class="btn ghost" data-action="prevStage">이전 단계</button><span class="note" style="flex:1">늦게 낸 답도 재료에 추가돼요</span><button class="btn lg" data-action="nextStage" data-go="../07-7-diverge-materials/index.html">발산 시작 →</button></div>
+  
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

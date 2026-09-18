@@ -1,0 +1,67 @@
+/* tokens.css — 색 · 글자 크기 · 폰트 · 그림자 변수 (docs/06-디자인-토큰.md) */
+:root{
+  
+  color-scheme:light;
+  
+  /* ── Key color: Indigo 600 #4F46E5 기준 스케일 ── */
+  --key-50:#EEF2FF;
+  --key-100:#E0E7FF;
+  --key-200:#C7D2FE;
+  --key-300:#A5B4FC;
+  --key-400:#818CF8;
+  
+  --key-500:#6366F1;
+  --key-600:#4F46E5;
+  --key-700:#4338CA;
+  --key-800:#3730A3;
+  --key-900:#312E81;
+  --key-950:#1E1B4B;
+  
+  --key:var(--key-600);
+  
+  /* ── 뉴트럴 (살짝 인디고 톤) ── */
+  --page:#E4E5F1;
+  --app-bg:#FAFAFE;
+  --panel:#FFFFFF;
+  --soft:#F5F5FB;
+  --line:#E2E3EF;
+  --line2:#EDEEF6;
+  
+  --ink:#1B1B2F;
+  --muted:#626280;
+  --faint:#9A9AB5;
+  
+  /* ── 의미 색 ── */
+  --ok:#059669;
+  --ok-soft:#E7F6EF;
+  --ok-line:#B7E2CD;
+  
+  --warn:#B45309;
+  --warn-soft:#FBF1E2;
+  --warn-line:#ECCFA0;
+  
+  --bad:#BE123C;
+  --bad-soft:#FBE9ED;
+  --bad-line:#EEC0CB;
+  
+  --shadow:0 1px 2px rgba(30,27,75,.05),0 8px 24px rgba(30,27,75,.08);
+  
+  --board-shadow:0 2px 6px rgba(30,27,75,.06),0 24px 60px rgba(30,27,75,.14);
+  
+  --pop-shadow:0 6px 14px rgba(30,27,75,.10),0 24px 48px rgba(30,27,75,.18);
+  
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  
+  --sans:"Noto Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;
+  
+  /* ── 글자 크기 8단계 ── */
+  --fs-display:36px;
+  --fs-h1:24px;
+  --fs-h2:18px;
+  --fs-h3:16px;
+  --fs-body:14px;
+  --fs-sm:13px;
+  --fs-cap:12px;
+  --fs-label:11px;
+  
+}

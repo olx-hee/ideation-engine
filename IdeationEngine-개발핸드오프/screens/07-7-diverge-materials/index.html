@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7-7 발산 시작 — 재료 보기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="07-7-diverge-materials" data-stage="diverge.write">
+<!--
+  ===== 화면 7-7 · 발산 시작 — 재료 보기 =====
+  보는 사람 : 모두
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:25%"></i></div><span class="ib-pct">25%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>19:58</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dbody">
+  
+      <div class="matpanel">
+    
+        <div style="display:flex;align-items:baseline;gap:10px"><b style="font-size:var(--fs-body)">아이스브레이킹에서 모인 재료 11개</b><span class="t-cap muted">이름 없음</span></div>
+    
+        <div class="fg">
+      
+          <div class="fgc">
+            <div class="h">흩어진 학교 정보<em>먼저 보기</em></div>
+            <div class="mrow" style="border-top:none;padding:4px 0">과제 공지가 메일·LMS·단톡으로 흩어짐</div>
+            <div class="mrow" style="border-top:none;padding:4px 0">시험기간 열람실 빈자리 찾기</div>
+            <div class="mrow" style="border-top:none;padding:4px 0">학교 앞 카페 콘센트 자리 경쟁</div>
+          </div>
+      
+          <div class="fgc">
+            <div class="h">AI를 직접 써보고 싶음<em>먼저 보기</em></div>
+            <div class="mrow" style="border-top:none;padding:4px 0">AI 기능을 직접 넣어보고 싶음</div>
+            <div class="mrow" style="border-top:none;padding:4px 0">온디바이스 AI로 서버 없이 시연</div>
+            <div class="mrow" style="border-top:none;padding:4px 0">온디바이스 AI를 잘 아는 사람이 있음</div>
+          </div>
+    
+        </div>
+    
+        <div class="rest">
+      <b>돈·정산의 신뢰</b>
+          <div><span class="pill2">단톡방 공동구매 정산 떠안기</span><span class="pill2">팀플 회비 누가 냈는지 헷갈림</span></div>
+      <b>우리 팀의 조건</b>
+          <div><span class="pill2">웹 화면·발표 자료 자신 있음</span><span class="pill2"><span class="avoid">피할 것</span>앱·무거운 서버</span><span class="pill2">피그마 수정 내역 추적</span></div>
+    
+        </div>
+  
+      </div>
+  
+      <div><p class="lead">아이디어 발산</p><p class="hint">재료 하나에서 출발해도, 묶음을 섞어도, 자유롭게 떠올려도 좋아요.</p></div>
+  
+      <div class="comp-row" style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px"><input class="inp" style="border:none" placeholder="아이디어를 입력하세요"><button class="btn" data-action="submitIdea" data-go="../08-1-idea-write/index.html">제출</button></div>
+  
+      <div class="empty">아직 올라온 아이디어가 없어요</div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

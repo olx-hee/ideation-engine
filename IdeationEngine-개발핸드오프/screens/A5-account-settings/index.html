@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A5 계정 설정 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="A5-account-settings">
+<!--
+  ===== 화면 A5 · 계정 설정 =====
+  보는 사람 : 로그인 회원
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="appbar"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="pbtn" data-go="../01-1-landing-logged-in/index.html"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    <div class="abody">
+      <div class="mypage">
+  
+        <div class="side">
+    
+          <div class="me"><span class="avatar">노</span>
+            <div><b>노형원</b><span>hyeongwon@example.com</span></div>
+          </div>
+    
+          <div class="nav"><a class="" data-go="../A3-profile-edit/index.html">👤 프로필 수정</a><a class="" data-go="../A4-session-history/index.html">🗂️ 지난 세션 기록<span class="badge key">6</span></a><a class="on" data-go="../A5-account-settings/index.html">⚙️ 계정 설정</a></div>
+    
+          <div class="planmini"><b>현재 플랜 <span class="plan-free">FREE</span></b>세션 최대 30분<br><a style="color:var(--key);font-weight:700" data-action="upgrade"><svg class="lk" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg> Pro로 업그레이드 →</a></div>
+  
+        </div>
+  
+        <div class="mpmain">
+
+          <div class="mphead">
+            <div><p class="lead">계정 설정</p><p class="hint">로그인 정보와 요금제를 관리해요</p></div>
+          </div>
+
+          <div class="setgrid">
+  
+            <div class="stack" style="gap:16px">
+    
+              <div class="sc"><h4>로그인 정보</h4>
+      
+                <div class="sr">
+                  <div>
+                    <div class="sk2">이메일</div>
+                    <div class="sv">hyeongwon@example.com</div>
+                  </div><button class="btn ghost sm" data-action="changeEmail">변경</button>
+                </div>
+      
+                <div class="sr">
+                  <div>
+                    <div class="sk2">비밀번호</div>
+                    <div class="sv">마지막 변경 3개월 전</div>
+                  </div><button class="btn ghost sm" data-action="changePassword">변경</button>
+                </div>
+      
+                <div class="sr">
+                  <div style="display:flex;gap:8px;align-items:center"><span class="gmark"></span>Google</div><span class="badge ok">연결됨</span>
+                </div>
+      
+                <div class="sr">
+                  <div>💬 카카오</div><button class="btn ghost sm" data-action="connect">연결하기</button>
+                </div>
+    
+              </div>
+    
+              <div class="sc"><h4>알림</h4>
+      
+                <div class="sr"><span>세션 초대 알림</span><span class="toggle on"></span></div>
+      
+                <div class="sr"><span>보고서 완성 알림</span><span class="toggle on"></span></div>
+      
+                <div class="sr"><span>새 기능·이벤트 소식</span><span class="toggle"></span></div>
+    
+              </div>
+  
+            </div>
+  
+            <div class="stack" style="gap:16px">
+    
+              <div class="sc" style="padding-bottom:18px"><h4 style="display:flex;justify-content:space-between;align-items:center">요금제 <span class="plan-free">FREE 사용 중</span></h4>
+      
+                <ul class="feat">
+                  <li>✓ 세션 최대 30분</li>
+                  <li>✓ 프로필·지난 세션 기록</li>
+                  <li class="no"><svg class="lk" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg> 60분 · 90분 · 제한 없음 세션</li>
+                </ul>
+      
+                <div class="plancard">
+                  <div class="pk">UPGRADE</div>
+                  <div class="pn">Pro</div>
+        
+                  <ul>
+                    <li>✓ 30분 넘는 세션 (60분 · 90분 · 제한 없음)</li>
+                    <li>✓ 그 외 혜택 — 미정</li>
+                  </ul>
+        
+                  <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-sm" style="color:var(--key-200)">가격 미정</span><button class="btn" data-action="upgrade">Pro로 업그레이드 →</button></div>
+      
+                </div>
+    
+              </div>
+    
+              <div class="sc" style="padding-bottom:6px"><h4>계정 관리</h4>
+      
+                <div class="sr"><span>로그아웃</span><button class="btn ghost sm" data-action="logout" data-go="../01-landing/index.html">로그아웃</button></div>
+      
+                <div class="sr">
+                  <div>
+                    <div class="sv" style="color:var(--bad)">회원 탈퇴</div>
+                    <div class="sk2">세션 기록이 모두 삭제되고 복구할 수 없어요</div>
+                  </div><button class="btn danger sm" data-action="withdraw" data-go="../01-landing/index.html">탈퇴</button>
+                </div>
+    
+              </div>
+  
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

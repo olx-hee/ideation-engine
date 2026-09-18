@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1 랜딩 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="01-landing">
+<!--
+  ===== 화면 1 · 랜딩 =====
+  보는 사람 : 누구나 (로그인 전)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+
+    <div class="landing" style="height:100%;display:flex;flex-direction:column">
+  
+      <div class="appbar clear"><span></span><span class="pbtn" data-go="../A1-login/index.html"><span class="avatar guest">👤</span>로그인 전 ▾</span></div>
+  
+      <div class="abody">
+        <div class="center">
+    
+          <div class="hero-logo"><svg class="appicon" width="64" height="64" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</div>
+    <p class="slogan">회의 진행자가 없어도, <b>첫 회의에서 주제를 정한다</b></p>
+    <p class="muted t-sm" style="margin-top:6px">대학생 해커톤·공모전 팀을 위한 오프라인 아이디어 세션</p>
+    
+          <div class="cta"><button class="btn lg" data-action="needLogin" data-go="../04-session-create/index.html">＋ 세션 만들기 <span class="r">진행자</span></button><button class="btn ghost lg" data-go="../02-join-code/index.html">→ 코드로 입장 <span class="r">팀원</span></button></div>
+    
+          <div class="acct"><span class="note">세션을 만들거나 방에 들어가려면 로그인이 필요해요</span>
+      
+            <div style="display:flex;gap:8px"><button class="btn soft" data-go="../A1-login/index.html">로그인</button><button class="btn text" data-go="../A2-signup/index.html">회원가입</button></div>
+          </div>
+  
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

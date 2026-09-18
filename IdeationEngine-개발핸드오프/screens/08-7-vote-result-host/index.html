@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8-7 발산 · 투표 결과 · 주제 확정 (진행자 · 참가자는 보기 전용) · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-7-vote-result-host" data-stage="diverge.result">
+<!--
+  ===== 화면 8-7 · 발산 · 투표 결과 · 주제 확정 (진행자 · 참가자는 보기 전용) =====
+  보는 사람 : 모두 (진행자만 확정 · 재투표 버튼)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:65%"></i></div><span class="ib-pct">65%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">진행자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>00:45</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds done"><i>2</i>순위 보기</span><b class="dl"></b><span class="ds done"><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds done"><i>4</i>AI 검증</span><b class="dl"></b><span class="ds done"><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>투표 결과가 나왔어요. 이제 아이디어 주인을 공개해요</h3><p>4명이 8표를 썼어요. 확정할 주제를 고르면 파트 나누기로 넘어가요.</p></div>
+      </div>
+  
+      <div class="two" style="grid-template-columns:minmax(0,1fr) 320px">
+        <div class="panel2 detail lift" style="padding:0 22px 14px">
+          <div class="listh"><span>확정할 주제를 골라주세요 · 기본은 1위</span><span>표 수</span></div>
+          <div class="res7 top"><span class="radio on"></span><span class="num n1">1</span>
+            <div>
+              <div class="rt">과제 공지와 마감을 한곳에 모아 알려주는 웹</div>
+              <div class="own"><i>노</i>노형원 님의 1순위</div>
+            </div><span class="grade go"><i></i>바로 해볼 만해요</span>
+            <div class="vbar"><i style="width:100%"></i></div><span class="vc">3표</span>
+          </div>
+          <div class="res7 top"><span class="radio"></span><span class="num">2</span>
+            <div>
+              <div class="rt">관심 있는 학교 행사·특강 소식만 골라 알려주는 웹</div>
+              <div class="own"><i>김</i>김승희 님의 1순위</div>
+            </div><span class="grade go"><i></i>바로 해볼 만해요</span>
+            <div class="vbar"><i style="width:67%"></i></div><span class="vc">2표</span>
+          </div>
+          <div class="res7"><span class="radio"></span><span class="num">3</span>
+            <div>
+              <div class="rt">팀플 회의가 끝나면 할 일을 정리해 주는 서비스</div>
+              <div class="own"><i>이</i>이세민 님의 2순위</div>
+            </div><span class="grade go"><i></i>바로 해볼 만해요</span>
+            <div class="vbar"><i style="width:33%"></i></div><span class="vc">1표</span>
+          </div>
+          <div class="res7"><span class="radio"></span><span class="num">3</span>
+            <div>
+              <div class="rt">시험기간에만 여는 열람실·카페 빈자리·콘센트 제보판</div>
+              <div class="own"><span class="aitag">AI가 모음</span>이세민 님 1순위 · 박상진 님 3순위의 좋은 점</div>
+            </div><span class="grade go"><i></i>바로 해볼 만해요</span>
+            <div class="vbar"><i style="width:33%"></i></div><span class="vc">1표</span>
+          </div>
+          <div class="res7"><span class="radio"></span><span class="num">3</span>
+            <div>
+              <div class="rt">중고 전공책을 같은 학과 안에서만 사고파는 게시판</div>
+              <div class="own"><i>김</i>김승희 님의 2순위</div>
+            </div><span class="grade go"><i></i>바로 해볼 만해요</span>
+            <div class="vbar"><i style="width:33%"></i></div><span class="vc">1표</span>
+          </div>
+          <div class="more" style="margin-top:8px;padding:0">표를 받지 못한 아이디어 9개도 주인과 함께 기록에 남아요</div>
+          <div class="lockline" style="margin-top:auto;padding-top:10px"><svg class="ico" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>아이디어 주인만 공개했어요. 댓글 쓴 사람과 누가 어디에 투표했는지는 끝까지 익명이에요.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="sc2"><h4>1위와 "회의 후 할 일 정리"는 같은 숨은 공통점에서 나왔어요</h4><p>둘 다 팀플에서 "누가 무엇을 했는지"가 한곳에 남지 않는 문제를 풀어요. 파트를 나눌 때 할 일 정리 기능을 범위에 넣을지 이야기해 보세요.</p><p style="margin-top:6px;color:var(--faint)">숨은 공통점 1 · 참고용 · 합칠지는 팀이 정해요</p></div>
+          <div class="sc2"><h4>팀장 정하기</h4><p>파트 배치를 고치고 확정할 사람이에요. 안 고르면 진행자가 팀장이에요.</p>
+            <div class="sel9" style="margin-top:8px"><span class="av9">노</span>노형원 (진행자)<span style="margin-left:auto;color:var(--faint)">▾</span></div>
+          </div>
+          <div class="sc2"><h4>동점이 있을 때</h4><p>3위 동점 3개는 그대로 두거나, 한 번 더 투표를 열 수 있어요. 다시 투표해도 누가 어디에 투표했는지는 익명이에요.</p><button class="btn ghost sm" style="margin-top:10px;width:100%" data-action="revote">동점만 다시 투표</button></div><p class="note" style="margin-top:auto">확정하면 모두의 화면이 파트 나누기로 넘어가요.</p><button class="btn block lg" data-action="confirmTopic">1위로 확정하고 파트 나누기 →</button>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

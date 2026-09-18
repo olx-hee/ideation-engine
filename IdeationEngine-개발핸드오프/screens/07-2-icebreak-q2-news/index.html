@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7-2 아이스브레이킹 · 질문 2 최근 소식 카드 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="07-2-icebreak-q2-news" data-stage="icebreak">
+<!--
+  ===== 화면 7-2 · 아이스브레이킹 · 질문 2 최근 소식 카드 =====
+  보는 사람 : 팀원
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js + ../../assets/js/icebreak-chat.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이스브레이킹</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:6%"></i></div><span class="ib-pct">6%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>08:05</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+    <div class="ibody">
+      <div class="chat">
+        <div class="ch-h"><b>AI와 1:1 인터뷰</b>
+          <div class="ch-prog"><i style="width:40%"></i></div><span class="ch-n">2 / 5</span><span class="lockchip"><svg class="ico" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="10" height="7" rx="1.6"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>나만 보는 대화</span>
+        </div>
+  
+        <div class="msgs">
+          <div class="b ai ">요즘 '캠퍼스 생활 서비스' 주변 소식이에요. 모르는 분야여도 괜찮아요, 들어봤는지 눌러주세요.</div>
+          <div class="news">
+            <div class="nc">
+              <div class="nc-top"><span class="ncat">시장</span><span class="ndate">[날짜]</span></div>
+              <div class="nt">[예시] 대학가 중고거래가 앱 밖 단톡방으로 이동</div>
+              <div class="ne"><b>쉽게 말하면</b>거래는 늘었는데 믿을 장치가 없어요</div>
+              <div class="nteam"><b>우리 팀에게</b>신뢰·정산을 돕는 도구가 틈새일 수 있어요</div>
+              <div class="nsrc"><span>출처 [기사·매체]</span><a data-action="explain">이게 뭐예요?</a></div>
+              <div class="rbs"><span class="rb">처음 들어요</span><span class="rb on">들어봤어요</span><span class="rb">잘 알아요</span></div>
+            </div>
+            <div class="nc on">
+              <div class="nc-top"><span class="ncat">기술</span><span class="ndate">[날짜]</span></div>
+              <div class="nt">[예시] 폰 안에서 도는 온디바이스 AI 모델 무료 공개</div>
+              <div class="ne"><b>쉽게 말하면</b>서버 없이도 요약 같은 AI 기능을 넣을 수 있어요</div>
+              <div class="nteam"><b>우리 팀에게</b>백엔드가 약해도 AI 시연이 가능해요</div>
+              <div class="nsrc"><span>출처 [공식 블로그]</span><a data-action="explain">이게 뭐예요?</a></div>
+              <div class="rbs"><span class="rb on">처음 들어요</span><span class="rb">들어봤어요</span><span class="rb">잘 알아요</span></div>
+            </div>
+            <div class="nc">
+              <div class="nc-top"><span class="ncat">규제</span><span class="ndate">[날짜]</span></div>
+              <div class="nt">[예시] 학생 개인정보 동의 절차 강화</div>
+              <div class="ne"><b>쉽게 말하면</b>학번·시간표를 쓰면 동의 화면이 더 분명해야 해요</div>
+              <div class="nteam"><b>우리 팀에게</b>학생 정보를 쓰면 동의 흐름도 기능이에요</div>
+              <div class="nsrc"><span>출처 [기관 보도자료]</span><a data-action="explain">이게 뭐예요?</a></div>
+              <div class="rbs"><span class="rb on">처음 들어요</span><span class="rb">들어봤어요</span><span class="rb">잘 알아요</span></div>
+            </div>
+          </div>
+          <div class="b me ">온디바이스 AI가 뭐예요?</div>
+          <div class="b ai explain"><b>온디바이스 AI</b>는 인터넷 서버를 거치지 않고 폰이나 노트북 안에서 바로 도는 AI예요. 빠르고, 개인정보가 밖으로 나가지 않아요.</div>
+        </div>
+        <div class="comp">
+          <div class="comp-row"><input class="inp" placeholder="카드에서 반응을 눌러주세요 · 모르는 말은 &#x27;이게 뭐예요?&#x27;"><span class="skip" data-action="skip">넘어가기</span><button class="btn" data-action="sendMessage">보내기</button></div>
+        </div>
+      </div>
+      <div class="side2">
+        <div class="sc2"><h4>오늘 나눌 이야기</h4>
+          <div class="tp done"><i>1</i>최근 불편했던 순간</div>
+          <div class="tp cur"><i>2</i>요즘 이 주제 주변에서 바뀐 것</div>
+          <div class="tp "><i>3</i>그 변화와 내 경험</div>
+          <div class="tp "><i>4</i>요즘 쓰는 서비스와 아쉬운 점</div>
+          <div class="tp "><i>5</i>해보고 싶은 것 · 피하고 싶은 것</div>
+        </div>
+        <div class="sc2"><h4>최근 소식 출처</h4><p>세션 주제로 최근 기사·공식 자료를 검색해, 검색된 내용만 쉬운 말로 요약했어요. 검색이 안 되는 날엔 질문 2·3은 건너뛰어요.</p><hr><h4>내가 물어본 말</h4><span class="asked">온디바이스 AI</span></div>
+      </div>
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/icebreak-chat.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

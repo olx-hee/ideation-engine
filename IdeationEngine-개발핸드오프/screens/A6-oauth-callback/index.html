@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A6 소셜 로그인 처리 중 (콜백) · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="A6-oauth-callback">
+<!--
+  ===== 화면 A6 · 소셜 로그인 처리 중 (콜백) =====
+  보는 사람 : 로그인하려는 사람
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+
+    <div class="appbar"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="pbtn"><span class="avatar guest">👤</span>로그인 전 ▾</span></div>
+
+    <div class="abody">
+      <div class="center">
+        <div class="panel" style="text-align:center;max-width:520px">
+  
+          <div class="avatar" style="width:72px;height:72px;font-size:var(--fs-h1);margin:0 auto 14px">G</div>
+  <p class="lead">로그인 처리 중이에요</p><p class="hint">Google 계정을 확인하고 있어요. 잠시만요.</p>
+  
+          <div class="muted t-sm" style="margin-top:18px">처음 가입이면 약관 동의(A2)로, 아니면 원래 가려던 화면으로 가요</div>
+  
+          <div class="quiet" style="margin-top:8px">5초가 지나도 안 넘어가면 <u>다시 시도</u>를 눌러주세요</div>
+
+        </div>
+      </div>
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

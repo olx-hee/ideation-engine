@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8-2 발산 · AI 추천에서 고르기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="08-2-idea-recommend" data-stage="diverge.write">
+<!--
+  ===== 화면 8-2 · 발산 · AI 추천에서 고르기 =====
+  보는 사람 : 모두 (각자)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">아이디어 발산</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:25%"></i></div><span class="ib-pct">25%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">참가자 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>03:40</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds cur"><i>1</i>내 아이디어</span><b class="dl"></b><span class="ds "><i>2</i>순위 보기</span><b class="dl"></b><span class="ds "><i>3</i>서로 댓글</span><b class="dl"></b><span class="ds "><i>4</i>AI 검증</span><b class="dl"></b><span class="ds "><i>5</i>투표</span></div>
+  
+      <div class="dvh">
+        <div><h3>AI가 추천한 아이디어에서 골라주세요</h3><p>인터뷰에서 나눈 이야기를 바탕으로 골랐어요. 문장은 자유롭게 고쳐도 돼요.</p></div>
+      </div>
+  
+      <div class="two" style="grid-template-columns:minmax(0,1fr) 340px">
+        <div style="display:flex;flex-direction:column">
+          <div class="recs">
+            <div class="rec on">
+              <div><b>학교 행사·특강 소식 중 관심 있는 것만 골라 알려주는 웹</b><p>추천 이유 · "중요한 공지를 자주 놓친다"고 했어요</p></div>
+              <div class="seg"><span class="on">1순위</span><span class="">2</span><span class="">3</span></div>
+            </div>
+            <div class="rec on">
+              <div><b>중고 전공책을 같은 학과 안에서만 사고파는 게시판</b><p>추천 이유 · "학기마다 책값이 부담"이라고 했어요</p></div>
+              <div class="seg"><span class="">1</span><span class="on">2순위</span><span class="">3</span></div>
+            </div>
+            <div class="rec">
+              <div><b>팀플 회비를 누가 냈는지 링크 하나로 확인하는 웹</b><p>추천 이유 · 최근 소식 "단톡방 거래 증가"를 들어봤어요</p></div>
+              <div class="seg"><span class="">1</span><span class="">2</span><span class="">3</span></div>
+            </div>
+            <div class="rec on">
+              <div><b>디자인 수정 요청을 한 화면에 모아 보는 팀플 도구</b><p>추천 이유 · "피그마에서 누가 어디를 고쳤는지 모르겠다"고 했어요</p></div>
+              <div class="seg"><span class="">1</span><span class="">2</span><span class="on">3순위</span></div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:12px"><button class="btn ghost sm" data-action="moreRecs">다른 추천 더 보기</button><span class="quiet">인터뷰 원문은 다른 사람에게 보이지 않아요</span></div>
+        </div>
+        <div class="panel2" style="padding:18px 20px;display:flex;flex-direction:column"><b style="font-size:var(--fs-body)">내 순위</b><p class="t-cap muted" style="margin:2px 0 10px">팀에는 내 아이디어로 보여요</p>
+          <ul class="mine">
+            <li><span class="num n1">1</span>학교 행사·특강 소식 중 관심 있는 것만 골라 알려주는 웹</li>
+            <li><span class="num n2">2</span>중고 전공책을 같은 학과 안에서만 사고파는 게시판</li>
+            <li><span class="num">3</span>디자인 수정 요청을 한 화면에 모아 보는 팀플 도구</li>
+          </ul><button class="btn block" style="margin-top:auto" data-action="submitIdeas" data-go="../08-3-idea-board/index.html">이 순서로 제출</button>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>

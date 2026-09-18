@@ -1,0 +1,52 @@
+# 1차 전달 문서의 내용 (이미 백엔드에 전달함 — 고치지 않기)
+# 2차~6차를 쓸 때 "이 모양으로 쓰면 된다"는 예시. handoff.py가 이 SPEC으로 만든 문서가 기존 1차 문서와 글자 하나까지 같은지 확인한다.
+READY = True
+
+SPEC = dict(
+    phase='1차',
+    title='백엔드 1차 전달 — 화면 1 · 1-1 · 2 (랜딩 · 로그인 상태 랜딩 · 방 코드 입장)',
+    intro='이번에 만들 범위와 **끝났다고 볼 수 있는 기준**이에요. 화면 폴더: `screens/01-landing`, `screens/01-1-landing-logged-in`, `screens/02-join-code` (각 README에 화면 설명).',
+    rules=[
+        '**게스트 입장 없음** — 회원가입 → 로그인 → 프로필 작성(닉네임·맡고 싶은 역할·스킬 1개 이상)이 끝나야 방에 들어갈 수 있어요.',
+        '**로그인 유지** — 액세스 토큰(본문, 약 1시간) + 리프레시 토큰(httpOnly 쿠키, "로그인 상태 유지" 체크 시 30일). 401이면 프론트가 `POST /auth/refresh` 후 재시도.',
+        '**초대 링크 = 방 코드** — 방 코드는 대문자·숫자 6자리, 링크는 `https://ideationengine.app/s/{방 코드}`. 별도 초대 토큰 없음.',
+        '**재접속 허용** — 이미 참가자면 코드로 다시 들어와도 에러 없이 `rejoined: true`와 **현재 단계**를 돌려줘요. 랜딩(1-1)은 `/me`의 `activeSession`으로 "세션으로 돌아가기"를 보여줘요.',
+    ],
+    rules_after='자세한 표는 [01-백엔드-한눈에-보기.md](01-백엔드-한눈에-보기.md)의 "3-1 로그인 유지"와 "3-2 방 코드 · 초대 링크 · 재접속", 공통 형식은 [02-API-공통-규칙.md](02-API-공통-규칙.md).',
+    api_intro='화면 3개가 직접 부르는 건 refresh · logout · me · lookup · join 이에요. 하지만 **회원만 입장**이라 가입·로그인·프로필이 있어야 테스트가 되고, 입장하려면 방이 있어야 해서 함께 넣었어요.',
+    ids=['auth.signup', 'auth.login', 'auth.refresh', 'auth.logout', 'auth.me', 'meta.skills', 'profile.update',
+         'session.create', 'session.lookup', 'session.join', 'session.get'],
+    why={'auth.signup': '회원만 입장 → 가입 필요', 'auth.login': '로그인 (A1)', 'auth.refresh': '로그인 유지 · 랜딩 자동 로그인',
+         'auth.logout': '1-1 로그아웃', 'auth.me': '1-1 팝오버 · 재접속(activeSession)', 'meta.skills': '프로필 화면 칩 목록',
+         'profile.update': '입장 조건(프로필) 채우기', 'session.create': '입장 테스트용 방 만들기 (대신 테스트 방을 DB에 직접 넣어도 됨)',
+         'session.lookup': '2 방 찾기', 'session.join': '2 입장 · 재접속', 'session.get': '재접속 후 화면 복구'},
+    events_intro='실시간(WebSocket)은 이번 범위에서 **선택**이에요. 입장·재접속 때 대기실에 보낼 이벤트만 미리 정해 두었어요.',
+    events=['participant.joined', 'participant.online'],
+    done_intro='프론트의 `assets/js/config.js`에서 `useMock: false`, `baseUrl`을 서버 주소로 바꾸고 확인해요.',
+    scenarios=[
+        ('회원가입(A2) → 프로필 작성(3)', '1-1로 이동, 팝오버에 내 이름·이메일·FREE·역할·스킬'),
+        ('"로그인 상태 유지" **체크** 후 로그인 → 브라우저를 완전히 닫았다 열고 랜딩(1)', '자동으로 1-1'),
+        ('"로그인 상태 유지" **체크 안 함** → 브라우저 닫았다 열기', '로그인 전 랜딩(1)'),
+        ('액세스 토큰 만료(서버에서 1분으로 줄여 테스트) 후 1-1 새로고침', '사용자 모르게 refresh → 정상 표시'),
+        ('로그아웃 → 뒤로 가기로 1-1', '랜딩(1)으로 돌아감, refresh도 401'),
+        ('로그인 안 한 상태로 2번에 코드 입력 → 입장', '로그인 화면 → 로그인 → 코드가 채워진 채 돌아와 자동 입장'),
+        ('프로필 없는 회원이 입장', '409 PROFILE_REQUIRED → 프로필 만들기 → 저장 → 돌아와 자동 입장'),
+        ('초대 링크 `/s/7K2X9M` 열기 (웹 서버 리라이트 설정 후)', '2번 화면에 코드가 채워져 있음'),
+        ('소문자 `7k2x9m`로 입장', '정상 입장 (대소문자 무시)'),
+        ('틀린 코드 · 끝난 방', '"없는 방 코드" 안내 (404)'),
+        ('인원이 가득 찬 방에 새 사람', '409 SESSION_FULL 안내'),
+        ('이미 시작한 방에 새 사람', '409 SESSION_STARTED 안내'),
+        ('**재접속**: 대기실에 들어갔던 사람이 같은 코드로 다시 입장', '200 `rejoined:true` → 대기실(6), 참가자 수 그대로'),
+        ('**재접속**: 시작된(가득 찬) 방의 참가자가 코드로 다시 입장', '에러 없이 현재 단계 화면으로 (예: 7-1)'),
+        ('**재접속**: 참가 중인 회원이 1-1을 열기', '"↩ 세션으로 돌아가기" → 누르면 현재 단계 화면'),
+        ('진행자가 자기 방 코드로 입장', 'role=host → 진행자 화면(5 또는 7-6)'),
+        ('같은 사람이 입장 버튼을 빠르게 두 번', '참가자 1명만 생김'),
+        ('내보내진 사람이 다시 입장', '403 KICKED 안내'),
+    ],
+    front=[
+        '401 → `/auth/refresh` 한 번 → 원래 요청 재시도: `assets/js/api.js`',
+        '로그인 필요 시 돌아올 곳(returnTo) 저장·복귀, 단계 → 화면 이동: `assets/js/app.js` (`requireLogin`, `returnTo`, `stageScreen`)',
+        '방 코드 6칸 · 초대 링크 해석 · 자동 입장 · 재접속 이동: `screens/02-join-code/screen.js`',
+        '재접속 버튼: `screens/01-1-landing-logged-in/screen.js`',
+    ],
+)

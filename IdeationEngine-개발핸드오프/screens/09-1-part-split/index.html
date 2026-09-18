@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>9-1 파트 나누기 — 후보 찾기 · IdeationEngine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/shell.css">
+</head>
+<body data-screen="09-1-part-split" data-stage="team.split team.questions">
+<!--
+  ===== 화면 9-1 · 파트 나누기 — 후보 찾기 =====
+  보는 사람 : 모두 (각자)
+  설명·API  : README.md (같은 폴더)
+  동작      : screen.js + ../../assets/js/team.js
+  크기      : 1280×800 기준 보드를 창에 맞춰 확대/축소 (assets/js/app.js · fit)
+-->
+<main class="stage">
+<div class="board">
+    <div class="ibar">
+  
+      <div class="ib-l"><span class="applogo"><svg class="appicon" width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#4F46E5"/><rect x="8.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="3.4" height="14" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="9" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="14.3" width="8.0" height="3.4" rx="0.7" fill="#FFFFFF"/><rect x="14.1" y="19.6" width="9.8" height="3.4" rx="0.7" fill="#FFFFFF"/></svg>IdeationEngine</span><span class="ib-topic">교내 해커톤 서비스 아이디어</span></div>
+  
+      <div class="ib-c">
+        <div class="ib-stage">파트 나누기 · 보고서</div>
+        <div class="ib-row"><span class="ib-lbl">전체</span>
+          <div class="ib-track"><i style="width:70%"></i></div><span class="ib-pct">70%</span>
+        </div>
+      </div>
+  
+      <div class="ib-r"><span class="rolebadge">팀원 화면</span><span class="timer"><svg class="ico" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="9" r="5.5"/><path d="M8 6v3l2 1.5M6.5 1.8h3"/></svg> <b>09:30</b></span><span class="pbtn"><span class="avatar">노</span><span class="nm">노형원</span>▾</span></div>
+
+    </div>
+
+    <div class="dvp">
+      <div class="dsteps"><span class="ds done"><i>1</i>주제 확정</span><b class="dl"></b><span class="ds cur"><i>2</i>파트 나누기</span><b class="dl"></b><span class="ds "><i>3</i>겹친 후보 질문</span><b class="dl"></b><span class="ds "><i>4</i>배치 초안</span><b class="dl"></b><span class="ds "><i>5</i>팀장 확정</span><b class="dl"></b><span class="ds "><i>6</i>보고서</span></div>
+  
+      <div class="dvh">
+        <div><h3>주제를 파트로 나누고, 파트마다 맡을 수 있는 사람을 찾았어요</h3><p>프로필 스킬로 파트마다 후보를 찾았어요. 후보가 겹친 파트는 그 사람들에게만 추가 질문을 해서 정해요.</p></div><span class="aside" data-host hidden><button class="btn sm" data-action="advanceTeam">추가 질문 시작 →</button></span>
+      </div>
+  
+      <div class="p9grid">
+        <div class="p9main">
+          <div class="p9top"><span class="l">확정된 주제</span><b>과제 공지와 마감을 한곳에 모아 알려주는 웹</b><span class="r">노형원 님의 1순위 · 3표<span class="pill9">구현 가능성 상</span></span></div>
+          <div class="panel2 ptab roomy" style="--cols:minmax(0,1fr) 120px 250px">
+            <div class="ph9"><span>파트 · 하는 일</span><span>필요한 스킬</span><span>후보 (프로필 기준)</span></div>
+            <div class="pg9">결과를 좌우하는 파트</div>
+            <div class="pr9 "><span class="pn">화면 만들기<small>공지 목록 · 마감 알림 화면</small></span><span class="skl">프론트엔드</span><span class="cand"><i class="av9">노</i><i class="av9">이</i><span class="pill9 k">겹침 · 추가 질문</span></span></div>
+            <div class="pr9 "><span class="pn">서버 · 공지 모으기<small>게시판 글 가져오기 · 알림 보내기</small></span><span class="skl">백엔드</span><span class="cand"><i class="av9">박</i><span class="q9">1명 · 바로 배정</span></span></div>
+            <div class="pr9 "><span class="pn">발표 · 시연<small>문제 정의 · 시연 흐름 · 질의응답</small></span><span class="skl">발표·피칭</span><span class="cand"><i class="av9">노</i><i class="av9">이</i><span class="pill9 k">겹침 · 추가 질문</span></span></div>
+            <div class="pg9">보통 파트</div>
+            <div class="pr9 "><span class="pn">화면 디자인<small>화면 분위기 · 컴포넌트 스타일</small></span><span class="skl">웹 디자인</span><span class="cand"><i class="av9">이</i><i class="av9">김</i><span class="pill9 k">겹침 · 추가 질문</span></span></div>
+            <div class="pr9 "><span class="pn">발표 자료<small>장표 구성 · 시각화</small></span><span class="skl">PPT 디자인</span><span class="cand"><i class="av9">김</i><span class="q9">1명 · 바로 배정</span></span></div>
+            <div class="pr9 "><span class="pn">기획 · 범위 관리<small>기능 범위 · 진행 조율</small></span><span class="skl">서비스 기획</span><span class="cand"><i class="av9">노</i><span class="q9">1명 · 바로 배정</span></span></div>
+            <div class="pr9 out"><span class="pn">메일·LMS 자동 연동<small>AI 검증에서 나온 팀에 없는 스킬</small></span><span class="skl">외부 API 연동</span><span class="cand"><span class="bad9">후보 없음</span><span class="q9">→ 링크 붙여넣기로 대신하기 제안</span></span></div>
+            <div class="pg9">작은 일 · 스킬 없이 누구나</div>
+            <div class="pr9 "><span class="pn">작은 일 6개<small>경쟁 서비스 조사 · 예시 공지 · 기능 테스트 · 인터뷰 · 제출 문서 · 회의록</small></span><span class="skl">누구나</span><span class="cand"><span class="q9">분량이 비슷해지게 나눠요</span></span></div>
+          </div>
+        </div>
+        <div class="p9side">
+          <div class="sc2 me9"><h4>내가 후보인 파트</h4>
+            <div class="mine9"><span class="pill9 k">겹침</span>화면 만들기</div>
+            <div class="mine9"><span class="pill9 k">겹침</span>발표 · 시연</div>
+            <div class="mine9"><span class="pill9">바로 배정</span>기획 · 범위 관리</div><p style="margin-top:6px">겹친 2개는 다음 화면에서 질문 2개씩 드려요. 다른 사람은 이 화면에서 바로 배치로 넘어가요.</p>
+          </div>
+          <div class="sc2"><h4>이렇게 맡겨요</h4>
+            <ol class="oll">
+              <li>파트마다 <b>가장 잘할 사람</b>이 맡아요. 원하는 역할보다 실력이 먼저예요</li>
+              <li>후보가 겹치면 <b>그 사람들에게만</b> 추가 질문으로 가려요</li>
+              <li>중요한 파트가 한 사람에게 <b>몰려도 괜찮아요</b></li>
+              <li>대신 <b>작은 일</b>을 나머지 사람에게 나눠, 모두 <b>비슷한 분량</b>이 되게 해요</li>
+              <li>AI 배치는 초안이고, <b>확정은 팀장</b>이 해요</li>
+            </ol>
+          </div><p class="note" style="margin-top:auto">프로필의 "할 수 있는 것"으로만 찾았어요. 이름은 AI에 보내지 않아요.</p>
+        </div>
+      </div>
+
+    </div>
+</div>
+</main>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/endpoints.js"></script>
+<script src="../../assets/js/mock.js"></script>
+<script src="../../assets/js/screens.js"></script>
+<script src="../../assets/js/app.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/team.js"></script>
+<script src="screen.js"></script>
+</body>
+</html>
