@@ -31,5 +31,9 @@
         }
       ]
     }
-  ]
+  ],
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "installCommand": null
 }
