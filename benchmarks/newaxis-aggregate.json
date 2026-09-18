@@ -1,0 +1,227 @@
+{
+  "ranAt": "2026-09-18T15:52:25.140Z",
+  "reps": 3,
+  "task": "#8 AI가 모은 아이디어 (전략 비교: naive vs constrained)",
+  "sources": [
+    {
+      "id": "s1",
+      "title": "장보기 시간과 비용을 줄이는 소분 정기배송",
+      "praise": "한곳에 모이면 편하다",
+      "concern": "구독료가 부담될 수 있다"
+    },
+    {
+      "id": "s2",
+      "title": "자취생끼리 남는 식재료를 나누는 나눔 게시판",
+      "praise": "돈 안 들이고 재료를 아낄 수 있다",
+      "concern": "아무도 안 올리면 빈 게시판이 된다"
+    }
+  ],
+  "rows": [
+    {
+      "model": "Solar-Pro4",
+      "strategy": "naive",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 100,
+      "addressesConcernPct": 0,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.13,
+      "costPerCall": 0.000088,
+      "samples": [
+        {
+          "titles": [
+            "소분 정기배송 + 나눔 게시판 연계형 자취생 식재료 공유 플랫폼",
+            "동네 기반 공동구매 소분 배송 & 남는 재료 교환 허브"
+          ],
+          "improvements": [
+            "s1의 정기배송으로 기본 식재료를 안정적으로 공급해 '아무도 안 올리는 빈 게시판' 문제를 해결하고, s2의 나눔 게시판을 결",
+            "s1의 '한곳에 모이면 편하다'는 장점을 살려 동네/건물 단위로 공동구매 소분 배송을 조직해 배송비와 구독료를 분담한다. s2"
+          ],
+          "overlap": 0.17
+        }
+      ]
+    },
+    {
+      "model": "Solar-Pro4",
+      "strategy": "constrained",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 100,
+      "addressesConcernPct": 100,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.26,
+      "costPerCall": 0.000084,
+      "samples": [
+        {
+          "titles": [
+            "소분 정기배송 + 나눔 게시판 연동형 식재료 순환 서비스"
+          ],
+          "improvements": [
+            "구독료 부담을 줄이기 위해 나눔 게시판에서 남는 식재료를 인증·반납하면 다음 달 소분 배송 구독료를 할인해주는 크레딧 제도를 "
+          ],
+          "overlap": 0.25
+        }
+      ]
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "strategy": "naive",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 67,
+      "addressesConcernPct": 33,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.15,
+      "costPerCall": 0.000178,
+      "samples": [
+        {
+          "titles": [
+            "장보기 시간과 비용을 줄이는 소분 정기배송 서비스의 구독료 부담을 완화하기 위해, 자취생 커뮤니티 내에서 소분 정기배송 서비스를 공동 구독하고 식재료를 나누는 시스템",
+            "자취생을 위한 식재료 나눔 게시판에 소분 정기배송 서비스의 재고를 연동하여 활성화"
+          ],
+          "improvements": [
+            "s1의 '한곳에 모이면 편하다'와 s2의 '돈 안 들이고 재료를 아낄 수 있다'는 장점을 결합하여, 소분 정기배송 서비스를 자",
+            "s2의 '아무도 안 올리면 빈 게시판이 된다'는 아쉬운 점을 보완하기 위해, s1의 소분 정기배송 서비스에서 남은 재고나 유통"
+          ],
+          "overlap": 0.24
+        }
+      ]
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "strategy": "constrained",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 100,
+      "addressesConcernPct": 33,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.15,
+      "costPerCall": 0.0001,
+      "samples": [
+        {
+          "titles": [
+            "소분 나눔 정기모임: 장보기 공동구매와 식재료 나눔을 결합한 지역 기반 서비스"
+          ],
+          "improvements": [
+            "s1의 '구독료 부담'을 줄이기 위해 정기 구독 대신 필요할 때마다 참여하는 공동구매 모임 형태를 도입했고, s2의 '빈 게시"
+          ],
+          "overlap": 0.15
+        }
+      ]
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "strategy": "naive",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 67,
+      "validSrcPct": 100,
+      "addressesConcernPct": 50,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.03,
+      "costPerCall": 0.000681,
+      "samples": [
+        {
+          "titles": [
+            "식재료 공동 구매 플랫폼",
+            "AI 기반 맞춤형 식재료 소분 및 레시피 추천 서비스"
+          ],
+          "improvements": [
+            "s1의 '한곳에 모이면 편하다'는 장점을 살려, 여러 자취생들이 필요한 식재료를 함께 구매하여 대량 구매 할인을 받고, s2의",
+            "s1의 '장보기 시간과 비용을 줄이는' 장점을 극대화하여, AI가 사용자의 식습관과 선호도를 분석해 필요한 식재료를 소분하여 "
+          ],
+          "overlap": 0.03
+        },
+        {
+          "bad": true,
+          "raw": "{\n  \"ideas\": [\n    {\n      \"title\": \"소분 식재료 교환 플랫폼\",\n      \"sourceIds\": [\n        \"s1\",\n        \"s2\"\n      ],\n      \"improvement\": \"s1의 '소분'"
+        }
+      ]
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "strategy": "constrained",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 100,
+      "addressesConcernPct": 33,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.13,
+      "costPerCall": 0.001204,
+      "samples": [
+        {
+          "titles": [
+            "식재료 소분 정기배송 및 나눔 연계 플랫폼"
+          ],
+          "improvements": [
+            "s1의 '구독료 부담' 문제를 해결하기 위해, 정기배송 이용자가 남는 소분 식재료를 s2의 나눔 게시판에 등록하면 다음 달 구"
+          ],
+          "overlap": 0.2
+        }
+      ]
+    },
+    {
+      "model": "Llama-3.3",
+      "strategy": "naive",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 100,
+      "addressesConcernPct": 67,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.14,
+      "costPerCall": 0.000107,
+      "samples": [
+        {
+          "titles": [
+            "장보기 시간과 비용을 줄이는 소분 정기배송 서비스에 나눔 게시판 기능 통합",
+            "지역 커뮤니티 기반의 식재료 나눔 및 공동 구매 플랫폼"
+          ],
+          "improvements": [
+            "구독자들이 남는 식재료를 나눌 수 있는 게시판을 만들어서, 구독료의 부담을 줄이고 재료의 낭비를 줄일 수 있다.",
+            "지역 커뮤니티를 기반으로 한 플랫폼에서 식재료를 나누고 공동 구매를 할 수 있는 기능을 만들어서, 구독료의 부담을 줄이고 재료"
+          ],
+          "overlap": 0.29
+        }
+      ]
+    },
+    {
+      "model": "Llama-3.3",
+      "strategy": "constrained",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "schemaPct": 100,
+      "validSrcPct": 100,
+      "addressesConcernPct": 67,
+      "addedDetailPct": 100,
+      "avgTitleOverlap": 0.15,
+      "costPerCall": 0.000133,
+      "samples": [
+        {
+          "titles": [
+            "소분 정기배송과 나눔 게시판의 결합",
+            "지역 커뮤니티 기반의 재료 나눔과 소분 배송"
+          ],
+          "improvements": [
+            "구독료 부담을 줄이기 위해, 나눔 게시판에서 인기 있는 재료를 소분 정기배송으로 제공하고, 구독자들이 직접 나눔 게시판에 재료",
+            "지역 커뮤니티를 기반으로 하여, 자취생들이 직접 재료를 나눌 수 있는 오프라인 모임을 조직하고, 이 모임에서 나눈 재료를 소분"
+          ],
+          "overlap": 0.09
+        }
+      ]
+    }
+  ]
+}
