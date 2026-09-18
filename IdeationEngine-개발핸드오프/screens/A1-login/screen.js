@@ -7,7 +7,7 @@ App.action('login', async () => {
   const body = { email: email.value.trim(), password: pw.value, remember };
   if (!body.email || !body.password) { App.toast('이메일과 비밀번호를 입력해 주세요'); return false; }
   const r = await api.call('auth.login', {}, body);
-  App.save({ remember, accessToken: r.accessToken, user: r.user });
+  App.setLogin(r, remember);
   App.go(App.returnTo(App.screen('01-1-landing-logged-in')));
   return false;
 });

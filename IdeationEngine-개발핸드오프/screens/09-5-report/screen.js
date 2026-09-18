@@ -36,13 +36,13 @@ App.action('savePdf', async () => {
 
 /* ── 서버 데이터로 A4 2쪽 그리기 ── */
 let report = null;
-const av = (n) => `<i class="av9">${esc(n[0])}</i>`;
+const av = (n) => n ? `<i class="av9">${esc(n[0])}</i>` : '';   // 담당 없는 파트(후보 없음)는 아바타 없이
 const kv = (k, v) => `<div class="pp-kv"><span>${esc(k)}</span><div>${v}</div></div>`;
 const GRADE = { go: '바로 해볼 만해요', fix: '보완하면 좋아요', re: '다시 생각해 봐요' };
 
 function page1(r) {
   const w = r.why, f = r.feasibility, p = r.parts;
-  const part = (x) => `<div class="pp-part"><span>${esc(x.name)}</span><span class="pp-who">${av(x.assignee)}${esc(x.assignee)}</span></div>`;
+  const part = (x) => `<div class="pp-part${x.assignee ? '' : ' out'}"><span>${esc(x.name)}</span><span class="pp-who">${av(x.assignee)}${esc(x.assignee || '담당 없음')}</span></div>`;
   const top = Math.max(...r.votes.ranks.map(x => x.votes), 1);
   const vote = (x) => `<div class="pp-vote${x.rank === 1 ? ' top' : ''}"><i>${x.rank}</i><span>${esc(x.title)}` +
     `<small>${esc(x.owner || (x.tieCount ? `동점 ${x.tieCount}개` : ''))}</small></span>` +
@@ -71,7 +71,7 @@ function page1(r) {
 }
 
 function page2(r) {
-  const card = (t) => `<div class="pp-card">${av(t.nickname)}<div><b>${esc(t.nickname)}${t.lead ? `<small>${esc(t.lead)}</small>` : ''}</b>` +
+  const card = (t) => `<div class="pp-card">${av(t.nickname)}<div><b>${esc(t.nickname || '팀 전체')}${t.lead ? `<small>${esc(t.lead)}</small>` : ''}</b>` +
     `<p>${esc(t.text)}</p></div></div>`;
   const stage = (s) => `<div class="pp-stage"><span class="pp-sn${s.current ? ' now' : ''}">${s.no}</span><div>` +
     `<div class="pp-st">${esc(s.name)}${s.current ? ' <span class="pill9 k">지금 단계</span>' : ''}</div>` +
@@ -82,7 +82,7 @@ function page2(r) {
     `<small>이 순서로 함께 진행해요 · 단계마다 팀이 만들 것과 각자 맡는 일</small></div>` +
     r.workflow.stages.map(stage).join('') + '</div>' +
     `<div class="pp-sec" style="margin-top:12px"><div class="pp-h"><i>06</i>내내 하는 일</div><div class="pp-always">` +
-    r.workflow.always.map(a => `<span>${esc(a.text)}</span><b>${esc(a.nickname)}</b>`).join('') + '</div></div>' +
+    (r.workflow.always || []).map(a => `<span>${esc(a.text)}</span><b>${esc(a.nickname || '')}</b>`).join('') + '</div></div>' +
     `<div class="pp-note">팀장이 확정한 배치로 AI가 만든 초안이에요. 단계별 일은 회의에서 고칠 수 있어요.<br>` +
     `끝까지 익명으로 남는 것: ${esc(r.anonymous.join(' · '))}</div>`;
 }

@@ -16,7 +16,12 @@
     state: loadState(),
     /** 액션 등록: 버튼에 data-action="name" 이 있으면 클릭 시 실행. false를 돌려주면 data-go 이동을 취소 */
     action(name, fn) { this.actions[name] = fn; },
-    go(href) { location.href = href; },
+    /** 지금 보고 있는 화면으로의 이동은 무시한다 — 서버가 WebSocket 연결 직후 보내는 stage.changed(현재 단계 동기화)를
+        받고 "그 단계의 화면"으로 가면 자기 자신이라 무한 새로고침이 됐다(8-6 · 9-1). */
+    go(href) {
+      try { if (new URL(href, location.href).href === location.href) return; } catch (e) { /* 이상한 href면 그냥 이동 */ }
+      location.href = href;
+    },
     screen(key) { return '../' + key + '/index.html'; },
     /** 상태 저장. 로그인 유지(remember)면 localStorage(브라우저를 닫아도 남음), 아니면 sessionStorage(탭을 닫으면 사라짐) */
     save(patch) {
@@ -28,7 +33,13 @@
       } catch (e) {}
     },
     /** 이 브라우저의 로그인·세션 정보 지우기 (서버 로그아웃은 api.call('auth.logout')) */
-    logoutLocal() { this.save({ accessToken: null, user: null, sessionId: null, role: null, participantId: null }); },
+    logoutLocal() { this.save({ accessToken: null, user: null, sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false }); },
+    /** 로그인·가입·소셜 로그인 성공 공통 — 이전 사람의 세션 정보(sessionId·역할·방 코드·로그인 유지)가
+        같은 브라우저에 남아 새 계정에 섞이지 않게, 세션 관련 값은 전부 비우고 시작한다. */
+    setLogin(r, remember) {
+      this.save({ remember: !!remember, accessToken: r.accessToken, user: r.user,
+        sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
+    },
     /** 소셜 로그인 시작 — Google 동의 화면으로 이동. state를 세션에 저장해두고 A6(콜백)에서 대조한다.
         redirect_uri는 항상 이 사이트의 /oauth/callback — Google Cloud Console에 등록한 값과 정확히 같아야 한다. */
     startOAuth(provider) {
@@ -329,6 +340,14 @@
     hostBarEl.innerHTML = `<span>${HOSTBAR_STAGES[stageId]} <b data-n>– / –</b>명</span><button class="btn" data-next>다음 단계 →</button>`;
     ($('.board') || document.body).appendChild(hostBarEl);
     hostBarEl.querySelector('[data-next]').addEventListener('click', () => advance(false));
+    seedProgress(stageId);
+  }
+  /* 막대의 첫 숫자 — 이벤트(ideas.submitted 등)가 오기 전에도 지금 값을 보여준다. 조회가 없는 단계(댓글·검증)는 이벤트를 기다린다. */
+  async function seedProgress(stageId) {
+    try {
+      if (stageId === 'diverge.write') { const b = await api.call('idea.board'); App.progress(b.submittedCount, b.memberCount); }
+      else if (stageId === 'diverge.vote') { const v = await api.call('vote.state'); App.progress(v.votedCount, v.memberCount); }
+    } catch (e) { /* 막대 숫자는 부가 정보 — 실패해도 진행을 막지 않는다 */ }
   }
   async function advance(force) {
     try { await api.call('session.advance', {}, { from: stageNow, force }); }

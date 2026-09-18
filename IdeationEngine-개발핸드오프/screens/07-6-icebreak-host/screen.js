@@ -71,15 +71,27 @@ function renderOverview(r) {
   const hint = App.$$('.sc2 p').find(p => p.textContent.includes('발산 때') || p.textContent.includes('있어요'));
   if (hint && r.hint) hint.textContent = r.hint;
 }
+/* 재료 묶기(LLM)는 몇 초 걸린다 — 그동안 HTML의 디자인 예시(노형원·온디바이스 AI…)가 실데이터처럼 보이지 않게
+   8-5·9-1과 같은 안내를 띄우고, 응답이 오면 걷는다. */
+function pending(on) {
+  App.$('.tdim')?.remove();
+  if (!on) return;
+  const dim = document.createElement('div'); dim.className = 'tdim';
+  dim.innerHTML = '<div class="tdlg" style="text-align:center"><div class="avatar" style="width:72px;height:72px;font-size:var(--fs-h1);margin:0 auto 14px">AI</div><h3>재료를 묶는 중이에요</h3><p>팀원들의 인터뷰 답을 발산 재료로 정리하고 있어요</p><p class="quiet">몇 초면 끝나요</p></div>';
+  (App.$('.board') || document.body).appendChild(dim);
+}
+if (!IE_CONFIG.useMock) pending(true);
 let lastOverview = null;   // 다시 묶기 응답엔 progress·newsReactions가 없어서, 지워버리지 않고 마지막 값을 이어 쓴다
 async function load() {
   let r;
   try { r = await api.call('ice.overview'); }
   catch (e) {
+    pending(false);
     if (e.code === 'FORBIDDEN') { App.go(App.screen('07-1-icebreak-q1-discomfort')); return; }   // 참가자가 잘못 들어온 경우
     throw e;
   }
   if (r) { lastOverview = r; renderOverview(r); }
+  pending(false);
 }
 if (!IE_CONFIG.useMock) App.run(null, load);
 

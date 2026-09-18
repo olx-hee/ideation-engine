@@ -13,7 +13,7 @@ App.action('retry', async () => { App.go(App.screen('A1-login')); return false; 
   const redirectUri = location.origin + '/oauth/callback';
   async function finishOAuth(body) {
     const r = await api.call('auth.oauth', { provider }, body);
-    App.save({ accessToken: r.accessToken, user: r.user });
+    App.setLogin(r, false);
     App.go(App.returnTo(App.screen('01-1-landing-logged-in')));
   }
   function askAgreements() {
@@ -43,7 +43,10 @@ App.action('retry', async () => { App.go(App.screen('A1-login')); return false; 
     if (err.code === 'AGREEMENT_REQUIRED') {
       const agreements = await askAgreements();
       if (!agreements) { App.go(App.screen('A1-login')); return; }
-      try { await finishOAuth({ code, redirectUri, agreements }); }
+      // code는 1회용이라 이미 위에서 써버렸다 — 재시도는 서버가 돌려준 pendingToken으로 이어간다
+      // (code를 또 보내면 구글이 invalid_grant로 거절함).
+      const pendingToken = err.details && err.details.pendingToken;
+      try { await finishOAuth(pendingToken ? { pendingToken, agreements } : { code, redirectUri, agreements }); }
       catch (err2) { App.toast(err2.message || '가입에 실패했어요', 'error'); App.go(App.screen('A1-login')); }
       return;
     }

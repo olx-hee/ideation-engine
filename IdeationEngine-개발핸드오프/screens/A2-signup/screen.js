@@ -66,7 +66,7 @@ App.action('signup', async () => {
     } else if (err && err.code === 'EMAIL_TAKEN') markInvalid('email');
     throw err;   // App.run이 (고친) 구체적인 메시지로 토스트를 띄운다
   }
-  App.save({ accessToken: r.accessToken, user: r.user });
+  App.setLogin(r, false);
   App.go(App.withReturnTo(App.screen('03-profile-create')));
   return false;
 });

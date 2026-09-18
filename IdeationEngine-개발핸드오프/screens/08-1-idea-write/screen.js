@@ -13,8 +13,9 @@ if (!IE_CONFIG.useMock) load();
 App.action('submitIdeas', async () => {
   const ideas = rows.map(r => r.value.trim()).filter(Boolean).map((text, i) => ({ rank: i + 1, text, source: 'own' }));
   if (!ideas.length) { App.toast('아이디어를 1개 이상 적어주세요'); rows[0].focus(); return false; }
-  await api.call('idea.submit', {}, { ideas });
+  const r = await api.call('idea.submit', {}, { ideas });
   App.save({ draftIdeas: [] });
+  App.progress(r.submittedCount, r.memberCount);   // 진행자 막대(T2)는 남의 제출 이벤트만 받으므로 내 제출은 여기서 반영
   App.toast('제출했어요. 모두 내면 순위표가 열려요');
 });
 

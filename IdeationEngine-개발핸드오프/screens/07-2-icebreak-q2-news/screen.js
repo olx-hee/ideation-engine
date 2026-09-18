@@ -35,7 +35,12 @@ function renderNews(r) {
     el.querySelectorAll('.rb').forEach((b, n) => b.classList.toggle('on', pick === n));
     wrap.appendChild(el);
   });
-  if (r.fallback) App.toast('최근 소식을 찾지 못해 질문 2·3은 건너뛰어요');
+  if (r.fallback) {   // 검색 결과가 없어도 서버는 질문 2·3을 그대로 물어본다 — 카드만 없다고 알려주고 채팅은 이어간다
+    App.toast('최근 소식을 찾지 못해 카드 없이 질문을 이어가요');
+    const inp = App.$('.comp input'); if (inp) inp.placeholder = '답을 입력해 주세요';
+    const empty = wrap && !wrap.querySelector('.nc');
+    if (empty) wrap.insertAdjacentHTML('beforeend', '<p class="quiet" style="padding:12px">이 주제로 찾은 최근 소식이 없어요. 아는 변화가 있으면 채팅으로 바로 답해 주세요.</p>');
+  }
 }
 if (!IE_CONFIG.useMock) {
   const asked = App.$('.asked'); if (asked) asked.textContent = '아직 없어요';   // HTML의 예시("온디바이스 AI")는 목업용 — 실제로 물어본 게 없으면 비워둔다

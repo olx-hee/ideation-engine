@@ -56,7 +56,7 @@
   async function checkNewsIfPastQ1(step) {
     if (newsReady || newsChecked || !isQ1Screen() || !step || step < 2) return;
     newsChecked = true;
-    try { const r = await api.call('ice.news'); if (r && r.ready) { newsReady = true; maybeGoToNews(); } }
+    try { const r = await api.call('ice.news'); if (r && r.ready && (r.cards || []).length) { newsReady = true; maybeGoToNews(); } }
     catch (e) { newsChecked = false; }
   }
   App.chat = { bubble, label, render, scrollDown, hostLink };

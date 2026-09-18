@@ -56,10 +56,10 @@ App.action('upgrade', async () => {
   if (IE_CONFIG.useMock) { App.toast('결제창 주소를 받았어요 (목업)'); return false; }
   location.href = r.checkoutUrl; return false;
 });
-App.action('logout', async () => { await api.call('auth.logout'); App.save({ accessToken: null, user: null }); });
+App.action('logout', async () => { await api.call('auth.logout'); App.logoutLocal(); });
 App.action('withdraw', async () => {
   if (!(await App.confirm('정말 탈퇴할까요?', '세션 기록이 모두 삭제되고 복구할 수 없어요.', '탈퇴'))) return false;
   const password = prompt('확인을 위해 비밀번호를 입력해 주세요'); if (!password) return false;
   await api.call('account.withdraw', {}, { password });
-  App.save({ accessToken: null, user: null });
+  App.logoutLocal();
 });

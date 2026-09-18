@@ -65,8 +65,11 @@ function renderCandidate(r) {
       box.appendChild(el);
     });
   }
-  v.querySelectorAll('h6 small, .sech small').forEach(s => {
-    if (s.textContent.includes('아쉬운 점') && r.comments) s.textContent = `아쉬운 점 ${r.comments.concern} · 좋은 점 ${r.comments.praise}`;
+  // "익명 댓글 아쉬운 점 N · 좋은 점 M" — <b>익명 댓글</b> 뒤의 텍스트 노드라 small이 아니다(예시 숫자 3·2가 그대로 남던 곳)
+  v.querySelectorAll('.sech').forEach(sec => {
+    if (!r.comments || !sec.textContent.includes('아쉬운 점')) return;
+    const txt = [...sec.childNodes].find(n => n.nodeType === 3 && n.nodeValue.includes('아쉬운 점'));
+    if (txt) txt.nodeValue = `아쉬운 점 ${r.comments.concern} · 좋은 점 ${r.comments.praise}`;
   });
 }
 function renderAiIdea(r) {
@@ -163,9 +166,12 @@ async function toggleVote(cb) {
   if (on && checked().length >= MAX_VOTES) { App.toast(`한 사람당 ${MAX_VOTES}표까지예요. 다른 표를 먼저 빼주세요`); return; }
   const set = (v) => { cb.classList.toggle('on', v); cb.textContent = v ? '✓' : ''; paintDots(); syncVoteButton(); };
   set(on);
-  try { await api.call('vote.save', {}, { ids: checked().map(c => c.closest('.ri').dataset.id) }); }
-  catch (err) { set(!on); App.toast(err.message, 'error'); }
+  // 표를 빠르게 두 번 누르면 vote.save가 동시에 두 번 나가 서버에서 겹쳤다(중복 키) — 저장은 한 번에 하나씩 순서대로 보낸다
+  const ids = checked().map(c => c.closest('.ri').dataset.id);
+  saving = saving.then(() => api.call('vote.save', {}, { ids })).catch((err) => { set(!on); App.toast(err.message, 'error'); });
+  await saving;
 }
+let saving = Promise.resolve();
 rail.addEventListener('click', (e) => { const cb = e.target.closest('.cb'); if (cb) toggleVote(cb); });
 App.action('voteCurrent', async () => { const cb = current()?.querySelector('.cb'); if (cb) await toggleVote(cb); return false; });
 App.action('finishVote', async () => {
