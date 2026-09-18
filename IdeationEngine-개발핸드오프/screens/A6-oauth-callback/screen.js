@@ -14,7 +14,8 @@ App.action('retry', async () => { App.go(App.screen('A1-login')); return false; 
   async function finishOAuth(body) {
     const r = await api.call('auth.oauth', { provider }, body);
     App.setLogin(r, false);
-    App.go(App.returnTo(App.screen('01-1-landing-logged-in')));
+    // 이메일/비밀번호 가입(A2)과 똑같이: 처음 가입이면 프로필 만들기로 바로, 기존 사용자면 원래 가려던 곳으로.
+    App.go(r.isNewUser ? App.withReturnTo(App.screen('03-profile-create')) : App.returnTo(App.screen('01-1-landing-logged-in')));
   }
   function askAgreements() {
     return new Promise((resolve) => {
