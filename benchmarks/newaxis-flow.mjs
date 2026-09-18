@@ -25,7 +25,7 @@ const CANDIDATES = [
   { k: "Llama-3.3",     slug: "meta-llama/llama-3.3-70b-instruct" },
   { k: "Mistral-Med-3", slug: "mistralai/mistral-medium-3" },
 ];
-const REPS = 2;
+const REPS = 3; // 2026-09-19 2차: 2→3회로 늘려 표본 보강
 
 async function timedCall(slug, messages, maxTok = 900) {
   const t0 = Date.now();
@@ -57,6 +57,11 @@ JSON만 출력: {"materials":[{"text":"...","avoid":false}]}`;
 const MAT_CASES = [
   { id: "id1", identify: ["김민준", "인하대", "컴퓨터공학과"],
     answer: "저는 인하대 컴퓨터공학과 3학년 김민준이에요. 자취를 하는데 장 볼 때마다 재료가 많이 남아서 아까워요. 특히 채소가 이틀이면 시들어서 버리게 돼요. 편의점 소분 채소도 일반 마트보다 비싸서 잘 안 사요." },
+  // 2026-09-19 2차 추가: 다른 종류의 식별정보(전화번호·SNS계정)로도 avoid를 잡는지
+  { id: "id2", identify: ["010-2345-6789", "@minjun_kim", "카톡"],
+    answer: "궁금한 거 있으면 010-2345-6789로 연락하거나 인스타 @minjun_kim으로 카톡 주세요. 저는 배달 앱을 하루에 3번은 켜봐요. 리뷰 이벤트 때문에 배달비가 아까운데도 시켜요. 포장 쓰레기가 많이 나오는 것도 신경 쓰여요." },
+  // 2026-09-19 2차 추가: 식별정보가 전혀 없는 '깨끗한' 답 — 과잉 avoid(오탐)로 유용성이 떨어지는지 확인
+  { id: "clean", identify: [], answer: "요즘 스터디 카페 자리 잡기가 너무 힘들어요. 시험 기간엔 아침 일찍 가야 자리가 있어요. 콘센트 있는 자리는 특히 빨리 차서 노트북 쓰는 사람은 더 힘들어요." },
 ];
 
 /* ── #5 재료 묶기 (3주제를 심어둠: 시간/소통/비용) ─────────────────────────── */
@@ -118,7 +123,7 @@ const Q_CASE = { part: "화면 만들기 — 소분 식재료 정기배송 신�
 const out = [];
 for (const c of CANDIDATES) {
   const lat = []; let cost = 0, calls = 0, fail = 0, firstErr = null;
-  const M = { n: 0, schema: 0, avoidHit: 0, avoidLeak: 0, grounded: 0 };
+  const M = { n: 0, schema: 0, avoidHit: 0, avoidLeak: 0, grounded: 0, idN: 0, idSchema: 0, cleanN: 0, cleanSchema: 0, overFlag: 0 };
   const G = { n: 0, schema: 0, validIds: 0, coverage: 0, purity: [] };
   const R = { n: 0, schema: 0, count4: 0, diverse: 0, grounded: 0, nameLeak: 0 };
   const H = { n: 0, schema: 0, capOk: 0, crossGroup: 0, foundLink: 0 };
@@ -133,18 +138,26 @@ for (const c of CANDIDATES) {
       calls++; cost += res.cost;
       if (!res.ok) { fail++; firstErr = firstErr || res.err; continue; }
       lat.push(res.ms); M.n++;
+      const isClean = cs.identify.length === 0;
+      if (isClean) M.cleanN++; else M.idN++;
       const p = parseJson(res.text);
       const ok = p && Array.isArray(p.materials) && p.materials.length >= 2 && p.materials.every((m) => typeof m.text === "string" && typeof m.avoid === "boolean");
       if (!ok) continue; M.schema++;
+      if (isClean) M.cleanSchema++; else M.idSchema++;
       const avoidItems = p.materials.filter((m) => m.avoid);
-      const hit = avoidItems.some((m) => cs.identify.some((tok) => m.text.includes(tok)));
-      if (hit) M.avoidHit++;
-      const leak = p.materials.filter((m) => !m.avoid).some((m) => cs.identify.some((tok) => m.text.includes(tok)));
-      if (leak) M.avoidLeak++;
+      if (isClean) {
+        // 식별정보가 전혀 없는 답인데 뭔가를 avoid로 표시하면 오탐(과잉 필터 = 유용성 저하)
+        if (avoidItems.length > 0) M.overFlag++;
+      } else {
+        const hit = avoidItems.some((m) => cs.identify.some((tok) => m.text.includes(tok)));
+        if (hit) M.avoidHit++;
+        const leak = p.materials.filter((m) => !m.avoid).some((m) => cs.identify.some((tok) => m.text.includes(tok)));
+        if (leak) M.avoidLeak++;
+      }
       const nonAvoid = p.materials.filter((m) => !m.avoid);
       const grounded = nonAvoid.length > 0 && nonAvoid.every((m) => words(m.text).some((w) => cs.answer.includes(w)));
       if (grounded) M.grounded++;
-      if (r === 0) samples.push({ task: "#4", n: p.materials.length, avoid: avoidItems.length, sample: p.materials.slice(0, 2).map((m) => `${m.avoid ? "[avoid]" : ""}${m.text}`) });
+      if (r === 0) samples.push({ task: "#4", case: cs.id, n: p.materials.length, avoid: avoidItems.length, sample: p.materials.slice(0, 2).map((m) => `${m.avoid ? "[avoid]" : ""}${m.text}`) });
     }
     // #5
     {
@@ -237,7 +250,10 @@ for (const c of CANDIDATES) {
           I.schema++;
           const sents = (p.text.split(/(?<=[.!?])\s+|\n+/).filter((s) => s.trim().length > 1)).length;
           if (sents <= 4) I.sentOk++;
-          if (!/^[-*\d]/.test(p.text.trim()) && !p.text.includes("\n-")) I.notList++;
+          // 2026-09-19 2차 수정: "1위 아이디어는..." 처럼 숫자로 시작하는 정상 문장을 목록으로 오탐하던 버그.
+          // 실제 목록 마커(줄 시작 "- "·"* "·"1. "·"1) " 뒤에 공백)만 잡도록 좁힘.
+          const LIST_RE = /(^|\n)\s*(?:[-*•]|\d{1,2}[.)])\s+\S/;
+          if (!LIST_RE.test(p.text)) I.notList++;
           const mentions = words(p.text);
           const hitTop = words(INSIGHT_CASE.top1).some((w) => mentions.includes(w));
           const hitLinked = words(INSIGHT_CASE.linked).some((w) => mentions.includes(w));
@@ -258,9 +274,12 @@ for (const c of CANDIDATES) {
         if (ok) {
           Q.schema++;
           if (p.choice.options.length === 4) Q.fourOpts++;
-          const topicWords = words(Q_CASE.topic);
-          const exWords = words(p.write.example);
-          if (topicWords.some((w) => exWords.includes(w)) && p.write.example.trim().length > 5) Q.exampleGrounded++;
+          // 2026-09-19 2차 수정: 정확 토큰 일치라 "자취" vs "자취생"처럼 한국어 접사가 붙으면
+          // 의미상 관련 있어도 놓쳤다. 부분 문자열 포함(2자 이상)으로 완화 + part 텍스트도 함께 인정.
+          const keyWords = [...words(Q_CASE.topic), ...words(Q_CASE.part)].filter((w) => w.length >= 2);
+          const grounded = keyWords.some((w) => p.write.example.includes(w));
+          if (grounded && p.write.example.trim().length > 5) Q.exampleGrounded++;
+          if (r === 0) samples.push({ task: "#12-check", grounded, example: p.write.example.slice(0, 60) });
           if (r === 0) samples.push({ task: "#12", choice: p.choice.text, example: p.write.example });
         }
       }
@@ -271,7 +290,7 @@ for (const c of CANDIDATES) {
     model: c.k, slug: c.slug, calls, fail, firstErr,
     p50: pctile(lat, 50), p95: pctile(lat, 95),
     costPerCall: calls ? +(cost / calls).toFixed(6) : 0,
-    "#4_재료뽑기": { schemaPct: pct(M.schema, M.n), avoidHitPct: pct(M.avoidHit, M.schema), avoidLeakPct: pct(M.avoidLeak, M.schema), groundedPct: pct(M.grounded, M.schema) },
+    "#4_재료뽑기": { schemaPct: pct(M.schema, M.n), avoidHitPct: pct(M.avoidHit, M.idSchema), avoidLeakPct: pct(M.avoidLeak, M.idSchema), overFlagPct: pct(M.overFlag, M.cleanSchema), groundedPct: pct(M.grounded, M.schema) },
     "#5_재료묶기": { schemaPct: pct(G.schema, G.n), validIdsPct: pct(G.validIds, G.schema), coveragePct: pct(G.coverage, G.schema), purityPct: G.purity.length ? Math.round((G.purity.reduce((a, b) => a + b, 0) / G.purity.length) * 100) : 0 },
     "#6_아이디어추천": { schemaPct: pct(R.schema, R.n), count4Pct: pct(R.count4, R.schema), diversePct: pct(R.diverse, R.schema), groundedPct: pct(R.grounded, R.schema), nameLeak: R.nameLeak },
     "#9_숨은공통점": { schemaPct: pct(H.schema, H.n), capOkPct: pct(H.capOk, H.schema), crossGroupPct: pct(H.crossGroup, H.schema), foundLinkPct: pct(H.foundLink, H.schema) },
@@ -280,7 +299,7 @@ for (const c of CANDIDATES) {
     samples,
   };
   out.push(row);
-  console.log(`${c.k.padEnd(14)} #4 ${String(row["#4_재료뽑기"].schemaPct).padStart(3)}%/${String(row["#4_재료뽑기"].avoidHitPct).padStart(3)}%  #5 ${String(row["#5_재료묶기"].purityPct).padStart(3)}%  #6 ${String(row["#6_아이디어추천"].diversePct).padStart(3)}%  #9 ${String(row["#9_숨은공통점"].foundLinkPct).padStart(3)}%  #10 ${String(row["#10_인사이트카드"].mentionsBothPct).padStart(3)}%  #12 ${String(row["#12_겹친질문"].exampleGroundedPct).padStart(3)}%  p95 ${row.p95}ms  $${row.costPerCall}${row.fail ? `  실패${row.fail}` : ""}`);
+  console.log(`${c.k.padEnd(14)} #4 avoid잡음${String(row["#4_재료뽑기"].avoidHitPct).padStart(3)}%/과잉${String(row["#4_재료뽑기"].overFlagPct).padStart(3)}%  #5 ${String(row["#5_재료묶기"].purityPct).padStart(3)}%  #6 ${String(row["#6_아이디어추천"].diversePct).padStart(3)}%  #9 ${String(row["#9_숨은공통점"].foundLinkPct).padStart(3)}%  #10 ${String(row["#10_인사이트카드"].notListPct).padStart(3)}%  #12 ${String(row["#12_겹친질문"].exampleGroundedPct).padStart(3)}%  p95 ${row.p95}ms  $${row.costPerCall}${row.fail ? `  실패${row.fail}` : ""}`);
 }
 
 fs.writeFileSync("benchmarks/newaxis-flow.json", JSON.stringify({

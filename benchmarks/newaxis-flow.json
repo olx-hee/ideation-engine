@@ -1,6 +1,6 @@
 {
-  "ranAt": "2026-09-18T15:46:35.976Z",
-  "reps": 2,
+  "ranAt": "2026-09-18T16:17:43.529Z",
+  "reps": 3,
   "tasks": [
     "#4 재료 뽑기",
     "#5 재료 묶기",
@@ -13,16 +13,17 @@
     {
       "model": "Flash-Lite",
       "slug": "google/gemini-2.5-flash-lite",
-      "calls": 12,
+      "calls": 24,
       "fail": 0,
       "firstErr": null,
-      "p50": 1067,
-      "p95": 2508,
-      "costPerCall": 0.000076,
+      "p50": 1093,
+      "p95": 2423,
+      "costPerCall": 0.000068,
       "#4_재료뽑기": {
         "schemaPct": 100,
-        "avoidHitPct": 0,
+        "avoidHitPct": 50,
         "avoidLeakPct": 0,
+        "overFlagPct": 0,
         "groundedPct": 100
       },
       "#5_재료묶기": {
@@ -36,7 +37,7 @@
         "count4Pct": 100,
         "diversePct": 100,
         "groundedPct": 100,
-        "nameLeak": 0
+        "nameLeak": 1
       },
       "#9_숨은공통점": {
         "schemaPct": 100,
@@ -47,22 +48,43 @@
       "#10_인사이트카드": {
         "schemaPct": 100,
         "sentOkPct": 100,
-        "notListPct": 0,
+        "notListPct": 100,
         "mentionsBothPct": 100
       },
       "#12_겹친질문": {
         "schemaPct": 100,
         "fourOptsPct": 100,
-        "exampleGroundedPct": 50
+        "exampleGroundedPct": 67
       },
       "samples": [
         {
           "task": "#4",
+          "case": "id1",
           "n": 3,
           "avoid": 0,
           "sample": [
             "자취를 하는데 장 볼 때마다 재료가 많이 남아서 아까워요.",
             "특히 채소가 이틀이면 시들어서 버리게 돼요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "id2",
+          "n": 4,
+          "avoid": 1,
+          "sample": [
+            "[avoid]궁금한 거 있으면 010-2345-6789로 연락하거나 인스타 @minjun_kim으로 카톡 주세요.",
+            "저는 배달 앱을 하루에 3번은 켜봐요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "clean",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "스터디 카페 자리 잡기가 너무 힘들어요.",
+            "시험 기간엔 아침 일찍 가야 자리가 있어요."
           ]
         },
         {
@@ -71,7 +93,7 @@
           "coverage": 1,
           "titles": [
             "업무/학습 관리",
-            "팀 협업 및 소통",
+            "협업 및 소통",
             "소비 및 지출 관리"
           ]
         },
@@ -79,17 +101,17 @@
           "task": "#6",
           "n": 4,
           "titles": [
-            "남은 채소 활용 레시피 추천 봇",
-            "소분 채소 대체재 추천 서비스",
-            "채소 시들음 방지 팁 및 관리 알림",
-            "남은 채소 교환/나눔 플랫폼"
+            "남은 채소 활용 레시피 큐레이션 앱",
+            "채소 보관법 및 활용 팁 챗봇",
+            "소분 채소 구독 서비스 (소규모)",
+            "냉장고 파먹기 챌린지 커뮤니티 플랫폼"
           ]
         },
         {
           "task": "#9",
           "n": 1,
           "items": [
-            "A+C:소분"
+            "A+C:시간과 비용 절약"
           ]
         },
         {
@@ -97,32 +119,38 @@
           "text": "1위 아이디어 '장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송'과 '바쁜 시험기간용 저가 소분 식재료 구독'은 시간 부족과 비용 부담이라는 같은 뿌리에서 "
         },
         {
+          "task": "#12-check",
+          "grounded": true,
+          "example": "요리 초보 학생 자취생인데, 식재료 양이 너무 많아 남기는 경우가 많아요. 소량으로 딱 필요한 만큼만 배송되"
+        },
+        {
           "task": "#12",
-          "choice": "학생 자취생들이 소분 식재료 정기배송 서비스를 이용할 때 가장 중요하게 생각하는 요소는 무엇인가요?",
-          "example": "소량 포장된 식재료를 활용하여 남는 식재료 없이 요리할 수 있도록 돕고, 간편 조리 키트 형태로 제공되어 요리 시간을 단축해주면 좋겠습니다."
+          "choice": "학생 자취 생활에서 소분 식재료 정기배송 서비스 이용 시 가장 중요하게 생각하는 점은 무엇인가요?",
+          "example": "요리 초보 학생 자취생인데, 식재료 양이 너무 많아 남기는 경우가 많아요. 소량으로 딱 필요한 만큼만 배송되는 점은 좋지만, 가끔은 1인분보다 더 적은 양이 필요할 때도 있어요. 이런 경우를 위한 옵션이 추가되면 좋겠습니다."
         }
       ]
     },
     {
       "model": "Gemini-2.5-F",
       "slug": "google/gemini-2.5-flash",
-      "calls": 12,
+      "calls": 24,
       "fail": 0,
       "firstErr": null,
-      "p50": 1713,
-      "p95": 2885,
-      "costPerCall": 0.000505,
+      "p50": 1461,
+      "p95": 2736,
+      "costPerCall": 0.000481,
       "#4_재료뽑기": {
         "schemaPct": 100,
         "avoidHitPct": 100,
         "avoidLeakPct": 0,
+        "overFlagPct": 0,
         "groundedPct": 100
       },
       "#5_재료묶기": {
-        "schemaPct": 50,
+        "schemaPct": 100,
         "validIdsPct": 100,
         "coveragePct": 100,
-        "purityPct": 100
+        "purityPct": 96
       },
       "#6_아이디어추천": {
         "schemaPct": 100,
@@ -140,17 +168,18 @@
       "#10_인사이트카드": {
         "schemaPct": 100,
         "sentOkPct": 100,
-        "notListPct": 0,
+        "notListPct": 100,
         "mentionsBothPct": 100
       },
       "#12_겹친질문": {
         "schemaPct": 100,
         "fourOptsPct": 100,
-        "exampleGroundedPct": 0
+        "exampleGroundedPct": 67
       },
       "samples": [
         {
           "task": "#4",
+          "case": "id1",
           "n": 4,
           "avoid": 1,
           "sample": [
@@ -159,180 +188,23 @@
           ]
         },
         {
-          "task": "#5",
-          "groups": 3,
-          "coverage": 1,
-          "titles": [
-            "학업 및 과제 관리",
-            "팀 프로젝트 협업",
-            "생활비 및 소비"
-          ]
-        },
-        {
-          "task": "#6",
+          "task": "#4",
+          "case": "id2",
           "n": 4,
-          "titles": [
-            "시들지 않는 채소 보관함",
-            "AI 기반 레시피 추천 및 재료 소분 가이드",
-            "채소 신선도 예측 및 알림 서비스",
-            "남은 채소 공유 플랫폼"
+          "avoid": 1,
+          "sample": [
+            "[avoid]010-2345-6789로 연락하거나 인스타 @minjun_kim으로 카톡 주세요.",
+            "배달 앱을 하루에 3번은 켜봐요."
           ]
         },
-        {
-          "task": "#9",
-          "n": 1,
-          "items": [
-            "A+C:시간과 비용을 동시에 절약"
-          ]
-        },
-        {
-          "task": "#10",
-          "text": "1위 아이디어인 '장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송'과 '바쁜 시험기간용 저가 소분 식재료 구독'은 모두 시간 부족과 비용 부담이라는 공통된 "
-        },
-        {
-          "task": "#12",
-          "choice": "학생 자취생이 소분 식재료 정기배송 서비스를 이용할 때, 가장 중요하게 고려하는 요소는 무엇인가요?",
-          "example": "예시: '남은 재료 활용 레시피 추천', '친구와 함께 공동 구매 할인', '자취생 맞춤형 간편 조리 키트 제공'"
-        }
-      ]
-    },
-    {
-      "model": "Solar-Pro4",
-      "slug": "upstage/solar-pro4",
-      "calls": 12,
-      "fail": 0,
-      "firstErr": null,
-      "p50": 10516,
-      "p95": 21317,
-      "costPerCall": 0.000073,
-      "#4_재료뽑기": {
-        "schemaPct": 50,
-        "avoidHitPct": 100,
-        "avoidLeakPct": 0,
-        "groundedPct": 100
-      },
-      "#5_재료묶기": {
-        "schemaPct": 100,
-        "validIdsPct": 100,
-        "coveragePct": 100,
-        "purityPct": 100
-      },
-      "#6_아이디어추천": {
-        "schemaPct": 100,
-        "count4Pct": 100,
-        "diversePct": 100,
-        "groundedPct": 100,
-        "nameLeak": 0
-      },
-      "#9_숨은공통점": {
-        "schemaPct": 100,
-        "capOkPct": 100,
-        "crossGroupPct": 100,
-        "foundLinkPct": 100
-      },
-      "#10_인사이트카드": {
-        "schemaPct": 100,
-        "sentOkPct": 100,
-        "notListPct": 0,
-        "mentionsBothPct": 100
-      },
-      "#12_겹친질문": {
-        "schemaPct": 100,
-        "fourOptsPct": 100,
-        "exampleGroundedPct": 50
-      },
-      "samples": [
-        {
-          "task": "#5",
-          "groups": 3,
-          "coverage": 1,
-          "titles": [
-            "일정 및 마감 관리",
-            "팀 협업 및 소통",
-            "생활비 및 소비 부담"
-          ]
-        },
-        {
-          "task": "#6",
-          "n": 4,
-          "titles": [
-            "채소 수명 예측 & 공유 장보기 리스트 React 앱",
-            "냉장고 채소 상태 트래킹 대시보드",
-            "소분 채소 가격 비교 & 대체 재료 추천 도구",
-            "자취생 채소 교환 & 나눔 게시판"
-          ]
-        },
-        {
-          "task": "#9",
-          "n": 1,
-          "items": [
-            "A+C:시간과 비용 부담을 동시에 완화하는 소분/정기배송 기반"
-          ]
-        },
-        {
-          "task": "#10",
-          "text": "1위를 차지한 장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송은 바쁜 시험기간용 저가 소분 식재료 구독과 시간 부족과 비용 부담이라는 같은 뿌리에서 뻗어 나"
-        },
-        {
-          "task": "#12",
-          "choice": "학생 자취생의 소분 식재료 정기배송 신청 화면에서, 배송 주기와 수량을 선택할 때 가장 우선적으로 고려해야 할 항목은 무엇입니까?",
-          "example": "주 1회 배송에 채소 2종·단백질 1종만 소분 선택하고, 주말에만 조리하는 일정에 맞춰 냉장 보관 기간이 짧은 품목은 제외했다."
-        }
-      ]
-    },
-    {
-      "model": "DeepSeek-V3.2",
-      "slug": "deepseek/deepseek-v3.2",
-      "calls": 12,
-      "fail": 0,
-      "firstErr": null,
-      "p50": 3237,
-      "p95": 9739,
-      "costPerCall": 0.000132,
-      "#4_재료뽑기": {
-        "schemaPct": 100,
-        "avoidHitPct": 0,
-        "avoidLeakPct": 0,
-        "groundedPct": 100
-      },
-      "#5_재료묶기": {
-        "schemaPct": 100,
-        "validIdsPct": 100,
-        "coveragePct": 100,
-        "purityPct": 100
-      },
-      "#6_아이디어추천": {
-        "schemaPct": 100,
-        "count4Pct": 100,
-        "diversePct": 100,
-        "groundedPct": 100,
-        "nameLeak": 0
-      },
-      "#9_숨은공통점": {
-        "schemaPct": 100,
-        "capOkPct": 100,
-        "crossGroupPct": 100,
-        "foundLinkPct": 100
-      },
-      "#10_인사이트카드": {
-        "schemaPct": 100,
-        "sentOkPct": 100,
-        "notListPct": 0,
-        "mentionsBothPct": 100
-      },
-      "#12_겹친질문": {
-        "schemaPct": 100,
-        "fourOptsPct": 100,
-        "exampleGroundedPct": 50
-      },
-      "samples": [
         {
           "task": "#4",
+          "case": "clean",
           "n": 3,
           "avoid": 0,
           "sample": [
-            "자취를 하는데 장 볼 때마다 재료가 많이 남아서 아까워요.",
-            "특히 채소가 이틀이면 시들어서 버리게 돼요."
+            "요즘 스터디 카페 자리 잡기가 너무 힘들어요.",
+            "시험 기간엔 아침 일찍 가야 자리가 있어요."
           ]
         },
         {
@@ -341,126 +213,57 @@
           "coverage": 1,
           "titles": [
             "학업 및 시간 관리",
-            "팀 프로젝트 협업",
-            "생활비 절감"
+            "팀 프로젝트 협업 문제",
+            "소비 및 지출 관리"
           ]
         },
         {
           "task": "#6",
           "n": 4,
           "titles": [
-            "채소 소분 및 관리 앱",
-            "공동 구매 및 재료 공유 플랫폼",
-            "채소 신선도 알림 서비스",
-            "요리 레시피 매칭 앱"
+            "시든 채소 구출 챌린지 앱",
+            "편의점 소분 채소 가격 비교 봇",
+            "남은 재료 기반 레시피 추천 및 공유 플랫폼",
+            "채소 신선도 예측 및 관리 React 대시보드"
           ]
         },
         {
           "task": "#9",
           "n": 1,
           "items": [
-            "A+C:시간과 비용을 동시에 절감하는 식재료 소분 서비스"
+            "A+C:시간과 비용 절감"
           ]
         },
         {
           "task": "#10",
-          "text": "1위 아이디어와 연결된 아이디어는 모두 '시간 부족과 비용 부담'이라는 공통의 문제를 해결하려는 접근에서 나왔습니다. 장보기 시간과 비용을 줄이는 소분 정기배송과"
+          "text": "1위 아이디어인 '장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송'과 '바쁜 시험기간용 저가 소분 식재료 구독'은 모두 시간 부족과 비용 부담이라는 공통된 "
+        },
+        {
+          "task": "#12-check",
+          "grounded": true,
+          "example": "현재는 1인 가구에 맞춰진 소분 식재료가 부족한 것 같습니다. 1인분 양에 딱 맞고, 한 끼 식사를 간편하게"
         },
         {
           "task": "#12",
-          "choice": "소분 식재료 정기배송 화면에서 학생 사용자가 가장 우선적으로 확인해야 할 정보는 무엇인가요?",
-          "example": "소분으로 낭비를 줄이고 정기배송으로 장보기 시간을 절약할 수 있어 학업에 집중하기에 유리합니다."
+          "choice": "학생 자취 생활에 맞춰 소분 식재료 정기배송 서비스를 이용할 때, 가장 중요하게 고려하는 요소는 무엇인가요?",
+          "example": "현재는 1인 가구에 맞춰진 소분 식재료가 부족한 것 같습니다. 1인분 양에 딱 맞고, 한 끼 식사를 간편하게 해결할 수 있는 밀키트 종류가 더 많아지면 좋겠습니다."
         }
       ]
     },
     {
-      "model": "Llama-3.3",
-      "slug": "meta-llama/llama-3.3-70b-instruct",
-      "calls": 12,
-      "fail": 0,
-      "firstErr": null,
-      "p50": 5365,
-      "p95": 18825,
-      "costPerCall": 0.000061,
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "calls": 24,
+      "fail": 1,
+      "firstErr": "AbortError: This operation was aborted [TIMEOUT40s]",
+      "p50": 2836,
+      "p95": 28546,
+      "costPerCall": 0.000056,
       "#4_재료뽑기": {
-        "schemaPct": 50,
-        "avoidHitPct": 0,
+        "schemaPct": 89,
+        "avoidHitPct": 17,
         "avoidLeakPct": 0,
-        "groundedPct": 100
-      },
-      "#5_재료묶기": {
-        "schemaPct": 50,
-        "validIdsPct": 100,
-        "coveragePct": 100,
-        "purityPct": 100
-      },
-      "#6_아이디어추천": {
-        "schemaPct": 100,
-        "count4Pct": 100,
-        "diversePct": 100,
-        "groundedPct": 100,
-        "nameLeak": 0
-      },
-      "#9_숨은공통점": {
-        "schemaPct": 100,
-        "capOkPct": 100,
-        "crossGroupPct": 100,
-        "foundLinkPct": 100
-      },
-      "#10_인사이트카드": {
-        "schemaPct": 100,
-        "sentOkPct": 100,
-        "notListPct": 50,
-        "mentionsBothPct": 100
-      },
-      "#12_겹친질문": {
-        "schemaPct": 100,
-        "fourOptsPct": 100,
-        "exampleGroundedPct": 100
-      },
-      "samples": [
-        {
-          "task": "#6",
-          "n": 4,
-          "titles": [
-            "자취생을 위한 채소 관리 앱",
-            "소분 채소 구매 플랫폼",
-            "채소 유통기한 관리 시스템",
-            "자취생을 위한 식재료 공유 플랫폼"
-          ]
-        },
-        {
-          "task": "#9",
-          "n": 2,
-          "items": [
-            "A+C:비용 절감",
-            "A+C:시간 절약"
-          ]
-        },
-        {
-          "task": "#10",
-          "text": "투표 결과 1위는 장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송 아이디어였습니다. 이 아이디어는 바쁜 시험기간용 저가 소분 식재료 구독 아이디어와 공통점을"
-        },
-        {
-          "task": "#12",
-          "choice": "학생 자취 생활의 소분 식재료 정기배송 신청 화면에서 가장 중요한 요소는 무엇일까요?",
-          "example": "배송일정을 설정하는 기능은 학생들이 자취 생활에서 식재료를 효율적으로 관리할 수 있도록 도와주기 때문에 중요합니다."
-        }
-      ]
-    },
-    {
-      "model": "Mistral-Med-3",
-      "slug": "mistralai/mistral-medium-3",
-      "calls": 12,
-      "fail": 0,
-      "firstErr": null,
-      "p50": 2106,
-      "p95": 5386,
-      "costPerCall": 0.000348,
-      "#4_재료뽑기": {
-        "schemaPct": 100,
-        "avoidHitPct": 100,
-        "avoidLeakPct": 0,
+        "overFlagPct": 0,
         "groundedPct": 100
       },
       "#5_재료묶기": {
@@ -491,16 +294,377 @@
       "#12_겹친질문": {
         "schemaPct": 100,
         "fourOptsPct": 100,
-        "exampleGroundedPct": 50
+        "exampleGroundedPct": 67
       },
       "samples": [
         {
           "task": "#4",
-          "n": 4,
-          "avoid": 1,
+          "case": "id1",
+          "n": 3,
+          "avoid": 0,
           "sample": [
             "자취를 하는데 장 볼 때마다 재료가 많이 남아서 아까워요.",
             "특히 채소가 이틀이면 시들어서 버리게 돼요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "id2",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "저는 배달 앱을 하루에 3번은 켜봐요.",
+            "리뷰 이벤트 때문에 배달비가 아까운데도 시켜요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "clean",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "요즘 스터디 카페 자리 잡기가 너무 힘들어요.",
+            "시험 기간엔 아침 일찍 가야 자리가 있어요."
+          ]
+        },
+        {
+          "task": "#5",
+          "groups": 3,
+          "coverage": 1,
+          "titles": [
+            "학업 일정 및 마감 관리",
+            "팀 프로젝트 협업 및 소통",
+            "생활비 및 소비 부담"
+          ]
+        },
+        {
+          "task": "#6",
+          "n": 4,
+          "titles": [
+            "채소 신선도 예측 & 레시피 매칭 React 앱",
+            "편의점 소분 채소 가격 비교 & 대체 재료 추천 웹",
+            "채소 소분 보관 가이드 & 타이머 알림 React 위젯",
+            "자취생 재료 공유 & 나눔 매칭 React 페이지"
+          ]
+        },
+        {
+          "task": "#9",
+          "n": 1,
+          "items": [
+            "A+C:시간과 비용 부담을 동시에 해결하는 소분/구독 방식"
+          ]
+        },
+        {
+          "task": "#10",
+          "text": "1위를 차지한 장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송은 바쁜 시험기간용 저가 소분 식재료 구독과 같은 뿌리에서 자라난 아이디어입니다. 두 아이디어 "
+        },
+        {
+          "task": "#12-check",
+          "grounded": false,
+          "example": "주 1회 소량 배송으로 신선도를 유지하고, 냉장고 공간이 좁으므로 냉동보다 냉장 위주의 채소·단백질 구성으로"
+        },
+        {
+          "task": "#12",
+          "choice": "학생 자취생의 소분 식재료 정기배송 신청 화면에서, 배송 주기 및 식재료 구성을 선택할 때 가장 우선적으로 확인해야 할 정보는 무엇입니까?",
+          "example": "주 1회 소량 배송으로 신선도를 유지하고, 냉장고 공간이 좁으므로 냉동보다 냉장 위주의 채소·단백질 구성으로 선택한다."
+        }
+      ]
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "slug": "deepseek/deepseek-v3.2",
+      "calls": 24,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 3276,
+      "p95": 11427,
+      "costPerCall": 0.000125,
+      "#4_재료뽑기": {
+        "schemaPct": 100,
+        "avoidHitPct": 50,
+        "avoidLeakPct": 0,
+        "overFlagPct": 0,
+        "groundedPct": 100
+      },
+      "#5_재료묶기": {
+        "schemaPct": 100,
+        "validIdsPct": 100,
+        "coveragePct": 100,
+        "purityPct": 100
+      },
+      "#6_아이디어추천": {
+        "schemaPct": 33,
+        "count4Pct": 100,
+        "diversePct": 100,
+        "groundedPct": 100,
+        "nameLeak": 0
+      },
+      "#9_숨은공통점": {
+        "schemaPct": 100,
+        "capOkPct": 100,
+        "crossGroupPct": 100,
+        "foundLinkPct": 100
+      },
+      "#10_인사이트카드": {
+        "schemaPct": 100,
+        "sentOkPct": 100,
+        "notListPct": 100,
+        "mentionsBothPct": 100
+      },
+      "#12_겹친질문": {
+        "schemaPct": 100,
+        "fourOptsPct": 100,
+        "exampleGroundedPct": 33
+      },
+      "samples": [
+        {
+          "task": "#4",
+          "case": "id1",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "자취를 하는데 장 볼 때마다 재료가 많이 남아서 아까워요.",
+            "특히 채소가 이틀이면 시들어서 버리게 돼요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "id2",
+          "n": 4,
+          "avoid": 1,
+          "sample": [
+            "[avoid]궁금한 거 있으면 010-2345-6789로 연락하거나 인스타 @minjun_kim으로 카톡 주세요.",
+            "저는 배달 앱을 하루에 3번은 켜봐요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "clean",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "요즘 스터디 카페 자리 잡기가 너무 힘들어요.",
+            "시험 기간엔 아침 일찍 가야 자리가 있어요."
+          ]
+        },
+        {
+          "task": "#5",
+          "groups": 3,
+          "coverage": 1,
+          "titles": [
+            "학업 및 과제 관리",
+            "팀 프로젝트 협업",
+            "생활비 및 구독 관리"
+          ]
+        },
+        {
+          "task": "#9",
+          "n": 1,
+          "items": [
+            "A+C:시간 절감과 비용 절감을 동시에 추구하는 식재료 관련 "
+          ]
+        },
+        {
+          "task": "#10",
+          "text": "1위 아이디어와 연결된 아이디어는 모두 '시간 부족과 비용 부담'이라는 같은 뿌리에서 나왔습니다. 장보기 효율화와 저가 식재료 구독은 바쁜 현대인에게 실질적인 도"
+        },
+        {
+          "task": "#12-check",
+          "grounded": true,
+          "example": "예: 예산 제약이 큰 학생을 위한 저렴한 구독 플랜 옵션, 요리 초보자를 위한 간단한 레시피 추천 연동, 학"
+        },
+        {
+          "task": "#12",
+          "choice": "소분 식재료 정기배송 신청 화면에서 학생 사용자의 편의성을 고려할 때, 가장 중요한 UI/UX 원칙은 무엇인가요?",
+          "example": "예: 예산 제약이 큰 학생을 위한 저렴한 구독 플랜 옵션, 요리 초보자를 위한 간단한 레시피 추천 연동, 학업 일정에 맞춘 유연한 배송 일정 조정 기능 등이 필요할 수 있습니다."
+        }
+      ]
+    },
+    {
+      "model": "Llama-3.3",
+      "slug": "meta-llama/llama-3.3-70b-instruct",
+      "calls": 24,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 3197,
+      "p95": 11948,
+      "costPerCall": 0.000077,
+      "#4_재료뽑기": {
+        "schemaPct": 78,
+        "avoidHitPct": 0,
+        "avoidLeakPct": 0,
+        "overFlagPct": 0,
+        "groundedPct": 100
+      },
+      "#5_재료묶기": {
+        "schemaPct": 100,
+        "validIdsPct": 100,
+        "coveragePct": 100,
+        "purityPct": 100
+      },
+      "#6_아이디어추천": {
+        "schemaPct": 100,
+        "count4Pct": 100,
+        "diversePct": 100,
+        "groundedPct": 100,
+        "nameLeak": 2
+      },
+      "#9_숨은공통점": {
+        "schemaPct": 100,
+        "capOkPct": 100,
+        "crossGroupPct": 100,
+        "foundLinkPct": 100
+      },
+      "#10_인사이트카드": {
+        "schemaPct": 100,
+        "sentOkPct": 100,
+        "notListPct": 100,
+        "mentionsBothPct": 100
+      },
+      "#12_겹친질문": {
+        "schemaPct": 100,
+        "fourOptsPct": 100,
+        "exampleGroundedPct": 100
+      },
+      "samples": [
+        {
+          "task": "#4",
+          "case": "id1",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "재료가 많이 남아서 아까워요",
+            "채소가 이틀이면 시들어서 버리게 돼요"
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "id2",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "배달 앱을 하루에 3번은 켜봐요.",
+            "리뷰 이벤트 때문에 배달비가 아까운데도 시켜요."
+          ]
+        },
+        {
+          "task": "#5",
+          "groups": 3,
+          "coverage": 1,
+          "titles": [
+            "시간 관리",
+            "팀플 및 커뮤니케이션",
+            "쇼핑 및 구독"
+          ]
+        },
+        {
+          "task": "#6",
+          "n": 4,
+          "titles": [
+            "자취생을 위한 채소 관리 앱",
+            "소분 채소 구매 플랫폼",
+            "자취생을 위한 레시피 추천 서비스",
+            "자취생을 위한 식재료 공유 플랫폼"
+          ]
+        },
+        {
+          "task": "#9",
+          "n": 1,
+          "items": [
+            "A+C:시간과 비용 절약"
+          ]
+        },
+        {
+          "task": "#10",
+          "text": "1위 아이디어인 '장보기 시간과 비용을 한 번에 줄여주는 소분 정기배송'과 '바쁜 시험기간용 저가 소분 식재료 구독' 아이디어는 모두 시간 부족과 비용 부담이라는"
+        },
+        {
+          "task": "#12-check",
+          "grounded": true,
+          "example": "학생들은 자취 생활을 하면서 혼자 식사를 준비해야 하기 때문에 소분 식재료가 필요합니다."
+        },
+        {
+          "task": "#12",
+          "choice": "소분 식재료 정기배송 신청 화면에서 어떤 정보를 입력해야 할까요?",
+          "example": "학생들은 자취 생활을 하면서 혼자 식사를 준비해야 하기 때문에 소분 식재료가 필요합니다."
+        }
+      ]
+    },
+    {
+      "model": "Mistral-Med-3",
+      "slug": "mistralai/mistral-medium-3",
+      "calls": 24,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 1827,
+      "p95": 3789,
+      "costPerCall": 0.000323,
+      "#4_재료뽑기": {
+        "schemaPct": 100,
+        "avoidHitPct": 100,
+        "avoidLeakPct": 0,
+        "overFlagPct": 0,
+        "groundedPct": 100
+      },
+      "#5_재료묶기": {
+        "schemaPct": 100,
+        "validIdsPct": 100,
+        "coveragePct": 100,
+        "purityPct": 100
+      },
+      "#6_아이디어추천": {
+        "schemaPct": 100,
+        "count4Pct": 100,
+        "diversePct": 100,
+        "groundedPct": 67,
+        "nameLeak": 0
+      },
+      "#9_숨은공통점": {
+        "schemaPct": 100,
+        "capOkPct": 100,
+        "crossGroupPct": 100,
+        "foundLinkPct": 100
+      },
+      "#10_인사이트카드": {
+        "schemaPct": 100,
+        "sentOkPct": 100,
+        "notListPct": 100,
+        "mentionsBothPct": 67
+      },
+      "#12_겹친질문": {
+        "schemaPct": 100,
+        "fourOptsPct": 100,
+        "exampleGroundedPct": 33
+      },
+      "samples": [
+        {
+          "task": "#4",
+          "case": "id1",
+          "n": 4,
+          "avoid": 1,
+          "sample": [
+            "[avoid]저는 인하대 컴퓨터공학과 3학년 김민준이에요.",
+            "자취를 하는데 장 볼 때마다 재료가 많이 남아서 아까워요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "id2",
+          "n": 4,
+          "avoid": 1,
+          "sample": [
+            "배달 앱을 하루에 3번은 켜봐요.",
+            "리뷰 이벤트 때문에 배달비가 아까운데도 시켜요."
+          ]
+        },
+        {
+          "task": "#4",
+          "case": "clean",
+          "n": 3,
+          "avoid": 0,
+          "sample": [
+            "요즘 스터디 카페 자리 잡기가 너무 힘들어요.",
+            "시험 기간엔 아침 일찍 가야 자리가 있어요."
           ]
         },
         {
@@ -509,7 +673,7 @@
           "coverage": 1,
           "titles": [
             "시간 관리 및 계획 수립",
-            "팀 커뮤니케이션",
+            "팀원 간 소통 및 협업",
             "경제적 부담"
           ]
         },
@@ -517,27 +681,32 @@
           "task": "#6",
           "n": 4,
           "titles": [
-            "시들기 전에 먹자! 채소 소진 알림 앱",
-            "남은 재료로 레시피 추천 서비스",
+            "시들기 전에 알림해주는 채소 관리 앱",
             "소분 채소 공유 플랫폼",
-            "채소 신선도 관리 AI"
+            "유통기한 임박 채소 할인 알림 시스템",
+            "자취생 맞춤형 레시피 추천 앱"
           ]
         },
         {
           "task": "#9",
           "n": 1,
           "items": [
-            "A+C:시간과 비용의 효율성"
+            "A+C:시간/비용 절약"
           ]
         },
         {
           "task": "#10",
-          "text": "장보기 시간과 비용을 절약하는 1위 아이디어와 시험기간용 저가 구독 아이디어는 모두 '시간 부족과 비용 부담'이라는 뿌리에서 시작된 해결책이다."
+          "text": "1위 아이디어와 구독형 식재료 아이디어는 모두 바쁜 일상 속에서 시간과 비용을 동시에 절약하고자 하는 공통된 욕구에서 비롯되었다. 소분 배송이라는 형태는 효율성을"
+        },
+        {
+          "task": "#12-check",
+          "grounded": false,
+          "example": "예를 들어, 간단한 가입 절차와 저렴한 가격대를 강조하는 디자인을 제안할 수 있습니다."
         },
         {
           "task": "#12",
-          "choice": "소분 식재료 정기배송 신청 화면에서 학생 자취생을 위해 가장 필수적으로 포함해야 할 기능은 무엇입니까?",
-          "example": "예산에 맞게 주문량을 조절하고, 배송 주기를 자취생의 생활 패턴에 맞춰 설정하며, 보관 공간이 제한적임을 고려해야 한다."
+          "choice": "소분 식재료 정기배송 화면에서 학생 자취생이 가장 우선적으로 고려해야 할 기능은 무엇입니까?",
+          "example": "예를 들어, 간단한 가입 절차와 저렴한 가격대를 강조하는 디자인을 제안할 수 있습니다."
         }
       ]
     }
