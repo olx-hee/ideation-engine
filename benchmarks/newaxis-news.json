@@ -1,0 +1,187 @@
+{
+  "ranAt": "2026-09-18T15:49:17.720Z",
+  "reps": 3,
+  "task": "#2 최근 소식 카드 3장",
+  "rows": [
+    {
+      "model": "Flash-Lite",
+      "slug": "google/gemini-2.5-flash-lite",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 1826,
+      "p95": 1937,
+      "schemaPct": 100,
+      "catCoverPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "costPerCall": 0.000185,
+      "samples": [
+        {
+          "case": "delivery",
+          "cats": [
+            "시장",
+            "기술",
+            "규제"
+          ],
+          "titles": [
+            "1인 가구 소분 식재료 배송 스타트업, 투자 유치 활발",
+            "저온 소포장 배송 기술, 중소업체도 접근 가능",
+            "소분 식품 위생 표시 기준 강화 예정"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Gemini-2.5-F",
+      "slug": "google/gemini-2.5-flash",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 3296,
+      "p95": 5409,
+      "schemaPct": 100,
+      "catCoverPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "costPerCall": 0.001185,
+      "samples": [
+        {
+          "case": "delivery",
+          "cats": [
+            "시장",
+            "기술",
+            "규제"
+          ],
+          "titles": [
+            "1인 가구용 소분 식재료 정기배송 스타트업 투자 유치",
+            "저온 소포장 배송 기술, 중소업체도 도입 가능",
+            "소분 식품 위생 표시 기준 강화 예고"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Solar-Pro4",
+      "slug": "upstage/solar-pro4",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 4324,
+      "p95": 7100,
+      "schemaPct": 100,
+      "catCoverPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "costPerCall": 0.000147,
+      "samples": [
+        {
+          "case": "delivery",
+          "cats": [
+            "시장",
+            "기술",
+            "규제"
+          ],
+          "titles": [
+            "1인 가구용 소분 식재료 정기배송 스타트업 3곳 투자 유치",
+            "저온 소포장 배송 기술, 중소업체도 도입 가능해져",
+            "소분 식품 위생 표시 기준 강화 예고"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "DeepSeek-V3.2",
+      "slug": "deepseek/deepseek-v3.2",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 11930,
+      "p95": 12806,
+      "schemaPct": 100,
+      "catCoverPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "costPerCall": 0.000272,
+      "samples": [
+        {
+          "case": "delivery",
+          "cats": [
+            "시장",
+            "기술",
+            "규제"
+          ],
+          "titles": [
+            "1인 가구용 소분 식재료 정기배송 스타트업 투자 유치 활발",
+            "저온 소포장 배송 기술의 접근성 향상",
+            "소분 식품 위생 표시 기준 강화 예고"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Llama-3.3",
+      "slug": "meta-llama/llama-3.3-70b-instruct",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 16273,
+      "p95": 23112,
+      "schemaPct": 100,
+      "catCoverPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "costPerCall": 0.000207,
+      "samples": [
+        {
+          "case": "delivery",
+          "cats": [
+            "시장",
+            "기술",
+            "규제"
+          ],
+          "titles": [
+            "1인 가구용 소분 식재료 정기배송 스타트업 3곳 투자 유치",
+            "저온 소포장 배송 기술, 중소업체도 도입 가능해져",
+            "소분 식품 위생 표시 기준 강화 예고"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "Mistral-Med-3",
+      "slug": "mistralai/mistral-medium-3",
+      "calls": 3,
+      "fail": 0,
+      "firstErr": null,
+      "p50": 4873,
+      "p95": 5605,
+      "schemaPct": 100,
+      "catCoverPct": 100,
+      "urlHallucPct": 0,
+      "linkCitedPct": 100,
+      "numHallucPct": 0,
+      "costPerCall": 0.000887,
+      "samples": [
+        {
+          "case": "delivery",
+          "cats": [
+            "시장",
+            "기술",
+            "규제"
+          ],
+          "titles": [
+            "1인 가구용 소분 식재료 정기배송 스타트업 투자 유치 증가",
+            "저온 소포장 배송 기술, 중소업체도 도입 가능",
+            "소분 식품 위생 표시 기준 강화 예고"
+          ]
+        }
+      ]
+    }
+  ]
+}
