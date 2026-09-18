@@ -13,8 +13,7 @@ App.action('login', async () => {
 });
 App.action('goSignup', async () => { App.go(App.withReturnTo(App.screen('A2-signup'))); return false; });
 App.action('oauth', async (el) => {
-  const provider = el.classList.contains('kakao') ? 'kakao' : 'google';
-  App.toast(`${provider === 'kakao' ? '카카오' : 'Google'} 로그인은 OAuth 앱 등록 후 연결돼요 (auth.oauth)`);
+  App.startOAuth(el.classList.contains('kakao') ? 'kakao' : 'google');
   return false;
 });
 App.action('resetPw', async () => {

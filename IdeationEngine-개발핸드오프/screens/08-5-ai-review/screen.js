@@ -22,7 +22,10 @@ function renderReview(r) {
 }
 document.addEventListener('ie:select', async (e) => {
   App.$('.detail .dt').textContent = App.text(e.detail.querySelector('.t'));
-  if (!IE_CONFIG.useMock) renderReview(await api.call('review.get', { ideaId: e.detail.dataset.ideaId }));
+  if (!IE_CONFIG.useMock) {
+    const r = await App.run(null, () => api.call('review.get', { ideaId: e.detail.dataset.ideaId }));
+    if (r) renderReview(r);
+  }
 });
 /* 검증 중(T3): review.list의 ready가 false면 안내를 띄우고, reviews.ready가 오면 걷는다 */
 function pending(r) {
@@ -64,7 +67,8 @@ function renderList(r) {
   App.$('.rail .ri')?.click();
 }
 async function load() {
-  const r = await api.call('review.list');
+  const r = await App.run(null, () => api.call('review.list'));
+  if (!r) return;
   pending(r);
   if (r.ready) renderList(r);
 }

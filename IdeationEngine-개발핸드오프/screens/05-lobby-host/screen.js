@@ -4,15 +4,18 @@ const linkInput = App.$('.card input.inp');
 if (App.state.code) codeEl.textContent = App.state.code;
 if (App.state.inviteUrl) linkInput.value = App.state.inviteUrl.replace(/^https?:\/\//, '');
 
-/* 실서버 모드: 방 코드·초대 링크·참여자 줄을 서버 값으로 (목업 모드는 HTML 예시 그대로) */
+/* 실서버 모드: 방 코드·초대 링크·참여자 줄을 서버 값으로 (목업 모드는 HTML 예시 그대로).
+   위의 App.state.code는 화면이 뜨자마자 깜빡임 없이 보여주는 임시 값일 뿐 — 다른 세션을
+   만들거나 복귀한 뒤라 브라우저에 예전 세션 코드가 남아 있을 수 있어서, 항상 서버 값으로
+   다시 덮어써야 한다(캐시가 있다고 요청을 건너뛰면 진행자가 낡은 초대 코드를 공유하게 됨). */
 async function load() {
-  if (!App.state.code) {                       // 재접속이라 브라우저에 저장된 값이 없을 때
-    const s = await api.call('session.get');
-    codeEl.textContent = s.code;
-    linkInput.value = (s.inviteUrl || '').replace(/^https?:\/\//, '');
-    App.save({ code: s.code, inviteUrl: s.inviteUrl });
-  }
-  renderRoster(await api.call('session.participants'));
+  const s = await App.run(null, () => api.call('session.get'));
+  if (!s) return;
+  codeEl.textContent = s.code;
+  linkInput.value = (s.inviteUrl || '').replace(/^https?:\/\//, '');
+  App.save({ code: s.code, inviteUrl: s.inviteUrl });
+  const r = await App.run(null, () => api.call('session.participants'));
+  if (r) renderRoster(r);
 }
 function renderRoster(r) {
   const rows = App.$$('.prow:not(.empty)');
@@ -32,7 +35,7 @@ function renderRoster(r) {
     list.insertBefore(el, empty);
   });
   if (empty) empty.hidden = (r.items || []).length >= r.maxMembers;
-  badge.textContent = `${(r.items || []).length} / ${r.maxMembers}`;
+  count(r.maxMembers);   // 배지뿐 아니라 "세션 시작하기" 버튼의 활성/비활성도 실제 인원수로 다시 맞춘다
 }
 if (!IE_CONFIG.useMock) load();
 
@@ -42,9 +45,9 @@ App.action('startSession', async () => { await api.call('session.start', {}, {})
 
 const list = App.$('.prow').parentElement;
 const badge = App.$('.badge.ok');
-function count() {
+function count(max) {
   const n = App.$$('.prow:not(.empty)').length;
-  const max = badge.textContent.split('/')[1].trim();
+  max = max || badge.textContent.split('/')[1].trim();
   badge.textContent = `${n} / ${max}`;
   const start = App.$('[data-action="startSession"]');
   if (start) { start.classList.toggle('disabled', n < 2); start.title = n < 2 ? '팀원이 1명 이상 들어와야 시작할 수 있어요' : ''; }   // 혼자면 시작 못 함
@@ -56,7 +59,7 @@ list.addEventListener('click', async (e) => {
   if (!row || row.classList.contains('empty') || row.querySelector('.badge.key')) return;
   const name = row.children[1].firstChild.textContent.trim();
   if (!(await App.confirm(`${name} 님을 내보낼까요?`, '내보낸 사람은 이 세션에 다시 들어올 수 없어요.', '내보내기'))) return;
-  const ok = await App.run(null, () => api.call('session.kick', { participantId: row.dataset.participantId || 'par_02' }));
+  const ok = await App.run(null, () => api.call('session.kick', { participantId: row.dataset.participantId }));
   if (ok !== false) { row.remove(); count(); }
 });
 

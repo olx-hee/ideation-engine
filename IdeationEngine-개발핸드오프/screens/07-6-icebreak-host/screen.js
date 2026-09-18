@@ -71,8 +71,8 @@ function renderOverview(r) {
   const hint = App.$$('.sc2 p').find(p => p.textContent.includes('발산 때') || p.textContent.includes('있어요'));
   if (hint && r.hint) hint.textContent = r.hint;
 }
-async function load() { renderOverview(await api.call('ice.overview')); }
-if (!IE_CONFIG.useMock) load();
+async function load() { const r = await api.call('ice.overview'); if (r) renderOverview(r); }
+if (!IE_CONFIG.useMock) App.run(null, load);
 
 App.action('regroup', async () => { const r = await api.call('ice.regroup', {}, {}); if (!IE_CONFIG.useMock) renderOverview(Object.assign({ progress: [], newsReactions: [] }, r)); App.toast('재료를 다시 묶었어요'); return false; });
 App.action('prevStage', async () => { await api.call('session.back', {}, { from: 'icebreak' }); App.toast('이전 단계로 돌아갔어요'); return false; });

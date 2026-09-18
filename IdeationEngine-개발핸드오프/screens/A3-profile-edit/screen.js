@@ -28,7 +28,8 @@ App.action('deleteAvatar', async () => {
 });
 async function load() {
   App.loadAccountSide();
-  const p = await api.call('profile.get');
+  const p = await App.run(null, () => api.call('profile.get'));
+  if (!p) return;
   await App.renderSkillChips(p);          // 역할 · 스킬 칩을 서버 목록으로
   nick.value = p.nickname; strength.value = p.strength || '';
   App.$$('.chips .chip').forEach(c => c.classList.toggle('on', App.text(c) === p.desiredRole));

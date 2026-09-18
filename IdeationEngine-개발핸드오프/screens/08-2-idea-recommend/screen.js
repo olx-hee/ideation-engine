@@ -4,6 +4,7 @@ recs.forEach((rec, i) => {
   rec.dataset.recId = rec.dataset.recId || 'rec_' + (i + 1);
   const on = rec.querySelector('.seg span.on'); if (on) rec.dataset.rank = parseInt(on.textContent, 10);
 });
+if (!IE_CONFIG.useMock) recs.forEach(rec => { rec.classList.remove('on'); delete rec.dataset.rank; });   // 실서버 모드: 디자인 예시로 미리 골라둔 순위를 지우고 시작 (안 지우면 목업 추천이 실제 제출로 나갈 수 있음)
 function paint() {
   const picks = [1, 2, 3].map(r => recs.find(x => +x.dataset.rank === r));
   App.$$('.mine li').forEach((li, i) => { li.lastChild.textContent = picks[i] ? App.text(picks[i].querySelector('b')) : '비어 있어요'; });
@@ -26,6 +27,7 @@ function renderRecs(items, append) {
   const box = App.$('.recs'), tpl = App.$('.rec');
   if (!box || !tpl) return;
   if (!append) box.innerHTML = '';
+  if (!append && !items.length) { box.innerHTML = '<div class="empty">추천할 아이디어가 아직 없어요. 아이디어를 직접 적어도 돼요</div>'; recs = []; paint(); return; }
   items.forEach(it => {
     const el = tpl.cloneNode(true);
     el.classList.remove('on');
@@ -40,7 +42,8 @@ function renderRecs(items, append) {
   paint();
 }
 async function load() {
-  const r = await api.call('idea.recommend');
+  const r = await App.run(null, () => api.call('idea.recommend'));
+  if (!r) return;
   nextCursor = r.nextCursor;
   renderRecs(r.items || [], false);
 }

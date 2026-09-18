@@ -18,8 +18,11 @@ function render() {
   const [q1, q2] = it.questions;
   const heads = App.$$('.qh');
   heads[0].innerHTML = `<i>Q1</i>${esc(q1.text)}`;
-  App.$('.opts9').innerHTML = q1.options.map(o =>
-    `<div class="opt9" data-value="${esc(o.value)}"><span class="radio"></span>${esc(o.label)}</div>`).join('');
+  const savedChoice = it.answer && it.answer.q1 && it.answer.q1.choice;
+  App.$('.opts9').innerHTML = q1.options.map(o => {
+    const on = o.value === savedChoice;
+    return `<div class="opt9${on ? ' on' : ''}" data-value="${esc(o.value)}"><span class="radio${on ? ' on' : ''}"></span>${esc(o.label)}</div>`;
+  }).join('');
   App.$$('.sub9')[0].textContent = q1.detailLabel;
   const detail = App.$('input.inp');
   detail.value = (it.answer && it.answer.q1 && it.answer.q1.detail) || '';

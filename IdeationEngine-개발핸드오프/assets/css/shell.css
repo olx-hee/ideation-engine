@@ -59,7 +59,7 @@ textarea.ta9:focus{border-color:var(--key);box-shadow:0 0 0 3px var(--key-100)}
   @page{size:A4 portrait;margin:0}
   body.printing{overflow:visible;background:#fff}
   body.printing>*{display:none!important}
-  body.printing>.printonly{display:block}
+  body.printing>.printonly{display:block!important}
   .printonly .a4{transform:none;box-shadow:none;page-break-after:always;break-after:page}
   .printonly .a4:last-child{page-break-after:auto;break-after:auto}
 }

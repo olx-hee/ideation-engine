@@ -9,6 +9,7 @@ let kind = 'idea', groupIndex = 0;
   if (el.classList.contains('rgl')) kind = ['idea', 'ai', 'thread'][groupIndex++] || kind;
   else if (el.classList.contains('ri')) { el.dataset.kind = kind; el.dataset.id = el.dataset.id || ({ idea: 'ide_', ai: 'aii_', thread: 'thr_' }[kind] + i); }
 });
+if (!IE_CONFIG.useMock) App.$$('.rail .cb.on').forEach(cb => { cb.classList.remove('on'); cb.textContent = ''; });   // 실서버 모드: 디자인 예시로 미리 체크된 표를 지우고 시작
 
 const current = () => App.$('.rail .ri.on');
 const checked = () => App.$$('.rail .ri .cb.on');
@@ -144,11 +145,16 @@ function renderThread(r, index) {
 }
 async function loadDetail(item) {
   const id = item.dataset.id;
-  if (item.dataset.kind === 'idea') renderCandidate(await api.call('vote.candidate', { ideaId: id }));
-  else if (item.dataset.kind === 'ai') renderAiIdea(await api.call('vote.aiIdea', { aiIdeaId: id }));
-  else {
+  if (item.dataset.kind === 'idea') {
+    const r = await App.run(null, () => api.call('vote.candidate', { ideaId: id }));
+    if (r) renderCandidate(r);
+  } else if (item.dataset.kind === 'ai') {
+    const r = await App.run(null, () => api.call('vote.aiIdea', { aiIdeaId: id }));
+    if (r) renderAiIdea(r);
+  } else {
     const list = App.$$('.rail .ri').filter(x => x.dataset.kind === 'thread');
-    renderThread(await api.call('vote.thread', { threadId: id }), list.indexOf(item) + 1);
+    const r = await App.run(null, () => api.call('vote.thread', { threadId: id }));
+    if (r) renderThread(r, list.indexOf(item) + 1);
   }
 }
 
@@ -216,7 +222,8 @@ function renderVote(r) {
   App.$('.rail .ri')?.click();   // 첫 줄 선택 → 오른쪽 본문도 서버 값으로
 }
 async function load() {
-  const r = await api.call('vote.state');
+  const r = await App.run(null, () => api.call('vote.state'));
+  if (!r) return;
   if (r.finished) { App.go(App.screen('08-6w-vote-wait')); return; }   // 이미 마쳤으면 대기 화면
   renderVote(r);
 }

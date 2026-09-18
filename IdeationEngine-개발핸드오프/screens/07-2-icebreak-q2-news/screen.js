@@ -37,7 +37,10 @@ function renderNews(r) {
   });
   if (r.fallback) App.toast('최근 소식을 찾지 못해 질문 2·3은 건너뛰어요');
 }
-if (!IE_CONFIG.useMock) api.call('ice.news').then(renderNews).catch(err => App.toast(err.message, 'error'));
+if (!IE_CONFIG.useMock) {
+  const asked = App.$('.asked'); if (asked) asked.textContent = '아직 없어요';   // HTML의 예시("온디바이스 AI")는 목업용 — 실제로 물어본 게 없으면 비워둔다
+  api.call('ice.news').then(renderNews).catch(err => App.toast(err.message, 'error'));
+}
 
 App.action('explain', async (el) => {
   const card = el.closest('.nc');

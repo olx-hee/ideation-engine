@@ -11,6 +11,9 @@ function renderBoard(r) {
   });
   App.$('.dvh .aside').textContent = r.submittedCount === r.memberCount ? `${r.memberCount}명 모두 제출했어요` : `${r.submittedCount} / ${r.memberCount}명 제출`;
 }
-async function load() { renderBoard(await api.call('idea.board')); }
+async function load() {
+  const r = await App.run(null, () => api.call('idea.board'));
+  if (r) renderBoard(r);
+}
 if (!IE_CONFIG.useMock) load();
 realtime.connect(App.sessionId(), (ev) => { if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.comment') App.go(App.screen('08-4-idea-comments')); });

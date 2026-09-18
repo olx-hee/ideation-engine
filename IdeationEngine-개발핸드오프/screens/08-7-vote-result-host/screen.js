@@ -12,7 +12,7 @@ applyRole();
 /* 팀장 고르기: 진행자 카드의 sel9를 실제 <select>로 (실서버 모드 · session.participants) */
 async function leaderSelect() {
   const box = App.$('.sel9'); if (!box || !isHost) return;
-  const r = await api.call('session.participants');
+  let r; try { r = await api.call('session.participants'); } catch (e) { return; }   // 실패하면 기본 표시(진행자)로 그냥 둠
   const sel = document.createElement('select'); sel.id = 'leaderSel'; sel.className = 'sel9'; sel.style.width = '100%';
   r.items.forEach(p => { const o = document.createElement('option'); o.value = p.participantId; o.textContent = p.nickname + (p.role === 'host' ? ' (진행자)' : ''); if (p.role === 'host') o.selected = true; sel.appendChild(o); });
   box.replaceWith(sel);
@@ -23,7 +23,13 @@ realtime.connect(App.sessionId(), (ev) => {
   if (ev.type === 'topic.confirmed' && !isHost) { App.toast(`주제가 "${ev.data.title}"(으)로 확정됐어요`); App.go(App.screen('09-1-part-split')); }
 });
 const confirmBtn = App.$('[data-action="confirmTopic"]');
+const revoteBtn = App.$('[data-action="revote"]');
 App.$$('.res7').forEach((r, i) => { r.dataset.id = r.dataset.id || 'idea_' + i; });
+// 실서버 모드: 진짜 결과가 올 때까지 확정·재투표를 막는다 — 안 그러면 화면의 예시 데이터(idea_0 등)로 잘못 확정될 수 있음
+if (isHost && !IE_CONFIG.useMock) {
+  confirmBtn.classList.add('disabled'); confirmBtn.title = '결과를 불러오는 중이에요';
+  if (revoteBtn) { revoteBtn.classList.add('disabled'); revoteBtn.title = '결과를 불러오는 중이에요'; }
+}
 
 document.addEventListener('ie:pick', (e) => { confirmBtn.textContent = `${App.text(e.detail.querySelector('.num'))}위로 확정하고 파트 나누기 →`; });
 
@@ -60,6 +66,8 @@ function renderResults(r) {
     box.insertBefore(row, anchor);
   });
   anchor.textContent = `표를 받지 못한 아이디어 ${r.unvotedCount}개도 주인과 함께 기록에 남아요`;
+  confirmBtn.classList.remove('disabled'); confirmBtn.title = '';
+  if (revoteBtn) { revoteBtn.classList.remove('disabled'); revoteBtn.title = ''; }
   applyRole();
 }
 let ties = [];   // 서버가 계산한 동점 후보 (동점 재투표에 사용)
@@ -72,9 +80,13 @@ function renderInsight(ins) {
   const ps = card.querySelectorAll('p'); if (ps[0]) ps[0].textContent = ins.body;
 }
 async function load() {
-  const r = await api.call('vote.results');
-  ties = (r.ties || []).flatMap(t => t.ids || []);
-  renderResults(r);
-  renderInsight(r.insight);
+  try {
+    const r = await api.call('vote.results');
+    ties = (r.ties || []).flatMap(t => t.ids || []);
+    renderResults(r);
+    renderInsight(r.insight);
+  } catch (err) {
+    App.toast(err.message || '투표 결과를 불러오지 못했어요. 새로고침해 주세요', 'error');
+  }
 }
 if (!IE_CONFIG.useMock) load();

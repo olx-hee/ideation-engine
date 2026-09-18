@@ -3,7 +3,8 @@ const search = App.$('.srch input');
 let role = 'all', timer;
 
 function render(r) {
-  const list = App.$('.slist'); list.querySelectorAll('.srow:not(.h)').forEach(n => n.remove());
+  const list = App.$('.slist'); list.querySelectorAll('.srow:not(.h), .empty').forEach(n => n.remove());
+  if (!r.items.length) list.insertAdjacentHTML('beforeend', '<div class="empty" style="margin-top:8px">아직 참여한 세션이 없어요</div>');
   r.items.forEach(it => {
     const row = document.createElement('div'); row.className = 'srow';
     const meta = `${it.myRole === 'host' ? '진행자' : '참가자'} · ${it.memberCount}명 · ${it.durationMin}분`;
@@ -15,7 +16,11 @@ function render(r) {
   });
   const chips = App.$$('.chips .chip'); chips[0].textContent = `전체 ${r.counts.all}`; chips[1].textContent = `진행자 ${r.counts.host}`; chips[2].textContent = `참가자 ${r.counts.participant}`;
 }
-async function load() { if (IE_CONFIG.useMock) return; render(await api.call('history.list', { query: { role, q: search.value.trim() } })); }
+async function load() {
+  if (IE_CONFIG.useMock) return;
+  const r = await App.run(null, () => api.call('history.list', { query: { role, q: search.value.trim() } }));
+  if (r) render(r);
+}
 if (!IE_CONFIG.useMock) App.loadAccountSide();
 
 document.addEventListener('ie:chip', (e) => {

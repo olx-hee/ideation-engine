@@ -3,7 +3,11 @@ const rows = App.$$('.rrow .rin');
 if (!IE_CONFIG.useMock) rows.forEach(r => { r.value = ''; });   // 실서버 모드: 디자인 예시 아이디어를 지우고 시작
 (App.state.draftIdeas || []).forEach((t, i) => { if (rows[i] && !rows[i].value) rows[i].value = t; });
 
-async function load() { const r = await api.call('idea.mine'); r.ideas.forEach(it => { if (rows[it.rank - 1]) rows[it.rank - 1].value = it.text; }); }
+async function load() {
+  const r = await App.run(null, () => api.call('idea.mine'));
+  if (!r) return;
+  r.ideas.forEach(it => { if (rows[it.rank - 1]) rows[it.rank - 1].value = it.text; });
+}
 if (!IE_CONFIG.useMock) load();
 
 App.action('submitIdeas', async () => {

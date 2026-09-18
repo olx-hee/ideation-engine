@@ -29,6 +29,24 @@
     },
     /** 이 브라우저의 로그인·세션 정보 지우기 (서버 로그아웃은 api.call('auth.logout')) */
     logoutLocal() { this.save({ accessToken: null, user: null, sessionId: null, role: null, participantId: null }); },
+    /** 소셜 로그인 시작 — Google 동의 화면으로 이동. state를 세션에 저장해두고 A6(콜백)에서 대조한다.
+        redirect_uri는 항상 이 사이트의 /oauth/callback — Google Cloud Console에 등록한 값과 정확히 같아야 한다. */
+    startOAuth(provider) {
+      if (provider !== 'google') { this.toast('카카오 로그인은 아직 준비 중이에요'); return; }
+      if (!cfg.googleClientId) { this.toast('Google 로그인이 아직 설정되지 않았어요'); return; }
+      const state = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2);
+      sessionStorage.setItem('ie.oauth.state', state);
+      sessionStorage.setItem('ie.oauth.provider', provider);
+      const params = new URLSearchParams({
+        client_id: cfg.googleClientId,
+        redirect_uri: location.origin + '/oauth/callback',
+        response_type: 'code',
+        scope: 'openid email profile',
+        state,
+        prompt: 'select_account',
+      });
+      location.href = 'https://accounts.google.com/o/oauth2/v2/auth?' + params.toString();
+    },
     /** 로그인 안 했으면 로그인 화면으로 보내고 false. returnTo = 로그인 후 돌아올 곳 (예: '../04-session-create/index.html') */
     requireLogin(returnTo) {
       if (this.state.accessToken) return true;
@@ -77,7 +95,10 @@
         console.error(err);
         if (err && (err.code === 'UNAUTHORIZED' || err.code === 'REFRESH_INVALID')) { this.logoutLocal(); this.requireLogin(); return false; }
         if (err && (err.code === 'NOT_PARTICIPANT' || err.code === 'KICKED')) { this.toast(err.message); this.go(this.screen('02-join-code')); return false; }
-        this.toast((err && err.message) || '문제가 생겼어요. 잠시 후 다시 시도해 주세요', 'error');
+        // VALIDATION은 message가 "입력값을 다시 확인해 주세요"처럼 뭉뚱그려 와서, 실제 이유는
+        // details.fields(예: {password: "비밀번호는 8자 이상이어야 해요"})에 있다 — 그걸 보여준다.
+        const fieldMsg = err && err.details && err.details.fields && Object.values(err.details.fields)[0];
+        this.toast(fieldMsg || (err && err.message) || '문제가 생겼어요. 잠시 후 다시 시도해 주세요', 'error');
         return false;
       } finally { el && el.classList.remove('is-loading'); }
     },

@@ -40,7 +40,7 @@ function render(a) {
   });
   const small = a.parts.filter(p => p.tier === 'small');
   if (small.length) tab.insertAdjacentHTML('beforeend', '<div class="pg9">작은 일</div><div class="sm9">' +
-    small.map(p => `<div data-part-id="${esc(p.partId)}"><span>${esc(p.name)}</span>${select(p)}</div>`).join('') + '</div>');
+    small.map(p => `<div data-part-id="${esc(p.partId)}"><span>${esc(p.name)}${markTag(p)}</span>${select(p)}</div>`).join('') + '</div>');
 
   const warn = App.$('.sc2.warn9');
   warn.hidden = !a.suggestion;
@@ -100,7 +100,12 @@ App.action('moveSuggestion', async () => {
   App.toast('작은 일을 옮겼어요');
   return false;
 });
-App.action('keepSuggestion', async () => { App.$('.sc2.warn9').hidden = true; return false; });
+App.action('keepSuggestion', async () => {
+  const warn = App.$('.sc2.warn9');
+  const r = await api.call('team.suggestion', { suggestionId: warn.dataset.suggestionId || 'sug_1' }, { accept: false });
+  if (IE_CONFIG.useMock) warn.hidden = true; else render(r);
+  return false;
+});
 App.action('revertAssign', async () => {
   if (!(await App.confirm('AI 초안으로 되돌릴까요?', '팀장이 바꾼 담당이 모두 AI 초안으로 돌아가요. 팀원이 표시한 파트는 남아요.', '되돌리기'))) return false;
   const r = await api.call('team.revert', {}, {});
@@ -109,7 +114,7 @@ App.action('revertAssign', async () => {
   return false;
 });
 App.action('confirmAssign', async () => {
-  if (!(await App.confirm('이대로 확정할까요?', '확정하면 모두에게 보고서가 열려요. 확정한 뒤에도 팀장은 담당을 다시 고칠 수 있어요.', '확정하기'))) return false;
+  if (!(await App.confirm('이대로 확정할까요?', '확정하면 모두에게 보고서가 열리고, 이 배치 초안 화면으로는 되돌아올 수 없어요. 확정한 뒤에도 담당은 보고서에서 다시 고칠 수 있어요.', '확정하기'))) return false;
   await api.call('team.confirm', {}, { version: (cur && cur.version) || 1 });
   App.go(App.screen('09-5-report'));
   return false;

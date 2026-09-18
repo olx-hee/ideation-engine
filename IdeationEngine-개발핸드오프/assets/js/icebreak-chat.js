@@ -66,28 +66,52 @@
     if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); $('[data-action="sendMessage"]')?.click(); }
   });
 
-  /* 실서버 모드: 화면을 열면 지금까지의 대화와 팀 진행을 서버에서 받아 다시 그린다 (새로고침 · 재접속 대비) */
-  function setProgressRow(nickname, step, done) {
-    const row = $$('.side2 .tr').find(r => r.firstElementChild.textContent.startsWith(nickname));
-    if (row) row.lastElementChild.textContent = done ? '완료' : step + ' / 5';
+  /* 실서버 모드: 화면을 열면 지금까지의 대화와 팀 진행을 서버에서 받아 다시 그린다 (새로고침 · 재접속 대비).
+     "팀 진행" 줄은 예시 4명(노형원·이세민·김승희·박상진)이 HTML에 그대로 박혀 있어서, 실제 참가자
+     이름·인원이 다르면 하나도 안 맞아 그대로 남아 있었다 — 응답으로 통째로 새로 그린다. */
+  function progressContainer() {
+    return $('.side2 .tr') && $('.side2 .tr').parentElement;
+  }
+  function renderProgress(items) {
+    const box = progressContainer();
+    if (!box) return;
+    box.querySelectorAll('.tr').forEach((el) => el.remove());
+    items.forEach((m) => {
+      const row = document.createElement('div'); row.className = 'tr';
+      const name = document.createElement('span'); name.textContent = m.nickname + (m.isMe ? ' (나)' : '');
+      const status = document.createElement('span'); status.textContent = m.done ? '완료' : m.step + ' / 5';
+      row.append(name, status); box.appendChild(row);
+    });
+  }
+  function patchProgressRow(nickname, step, done) {
+    const box = progressContainer();
+    if (!box) return;
+    const row = $$('.side2 .tr').find((r) => r.firstElementChild.textContent.replace(/\s*\(나\)$/, '') === nickname);
+    if (row) { row.lastElementChild.textContent = done ? '완료' : step + ' / 5'; return; }
+    const created = document.createElement('div'); created.className = 'tr';
+    const name = document.createElement('span'); name.textContent = nickname;
+    const status = document.createElement('span'); status.textContent = done ? '완료' : step + ' / 5';
+    created.append(name, status); box.appendChild(created);
   }
   async function restore() {
     const st = await App.run(null, () => api.call('ice.state'));
     if (st) {
       msgs.querySelectorAll('.b, .blab').forEach(x => x.remove());   // 말풍선만 지운다 (7-2의 소식 카드는 대화창 안에 있어서 남겨야 함)
       render({ messages: st.messages, step: st.step, done: st.done });
-      (st.topics || []).forEach((t, i) => { const tp = $$('.side2 .tp')[i]; if (tp && t) tp.textContent = t; });
+      (st.topics || []).forEach((t, i) => {   // tp.textContent = t 로 통째로 바꾸면 번호 배지(<i>)까지 지워져서, 배지는 남기고 글자만 바꾼다
+        const tp = $$('.side2 .tp')[i]; if (!tp || !t) return;
+        const badge = tp.querySelector('i');
+        tp.textContent = ''; if (badge) tp.appendChild(badge);
+        tp.appendChild(document.createTextNode(t));
+      });
     }
     const pr = await App.run(null, () => api.call('ice.progress'));
-    if (pr) (pr.items || []).forEach(m => setProgressRow(m.nickname, m.step, m.done));
+    if (pr) renderProgress(pr.items || []);
   }
   if (!IE_CONFIG.useMock) restore();
 
   realtime.connect(App.sessionId(), (ev) => {
-    if (ev.type === 'icebreak.progress') {
-      const row = $$('.side2 .tr').find(r => r.firstElementChild.textContent.startsWith(ev.data.nickname));
-      if (row) row.lastElementChild.textContent = ev.data.done ? '완료' : ev.data.step + ' / 5';
-    }
+    if (ev.type === 'icebreak.progress') patchProgressRow(ev.data.nickname, ev.data.step, ev.data.done);
     if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.write') App.go(App.screen('08-1-idea-write'));
   });
   scrollDown();

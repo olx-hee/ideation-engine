@@ -33,14 +33,14 @@ function render(a) {
   });
   const small = a.parts.filter(p => p.tier === 'small');
   if (small.length) tab.insertAdjacentHTML('beforeend', '<div class="pg9">작은 일 · 분량 맞추기</div><div class="sm9">' +
-    small.map(p => `<div data-part-id="${esc(p.partId)}"><span>${esc(p.name)}</span>${p.assignee ? Team.who9(p.assignee) : ''}</div>`).join('') + '</div>');
+    small.map(p => `<div data-part-id="${esc(p.partId)}"><span>${esc(p.name)}${marked.includes(p.partId) ? '<span class="pill9 mk">표시함</span>' : ''}</span>${p.assignee ? Team.who9(p.assignee) : ''}</div>`).join('') + '</div>');
 
   const [balance, , mine] = App.$$('.p9side .sc2');
   balance.querySelector('p').textContent = a.balance.note;
   balance.querySelectorAll('.mine9').forEach(n => n.remove());
   a.balance.smallTaskCounts.forEach(x => balance.insertAdjacentHTML('beforeend',
     `<div class="mine9"><span class="pill9">${x.count}개</span>${esc(x.nickname)} · ${esc(x.why)}</div>`));
-  const myParts = a.myParts && a.myParts.length ? a.myParts : a.parts.filter(p => p.assignee && p.assignee.isMe).map(p => p.name);
+  const myParts = a.myParts && a.myParts.length ? a.myParts.map(p => p.name) : a.parts.filter(p => p.assignee && p.assignee.isMe).map(p => p.name);
   mine.querySelector('h4').textContent = `내 파트 ${myParts.length}개`;
   mine.querySelector('p').textContent = myParts.join(' · ') || '맡은 파트가 없어요';
 }

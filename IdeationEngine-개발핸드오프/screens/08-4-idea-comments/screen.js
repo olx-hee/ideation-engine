@@ -2,6 +2,7 @@
 const [concern, praise] = App.$$('textarea.ta');
 App.$$('.rail .ri').forEach((r, i) => { r.dataset.ideaId = r.dataset.ideaId || 'ide_' + i; });
 let current = App.$('.rail .ri.on');
+if (!IE_CONFIG.useMock) { concern.value = ''; praise.value = ''; }   // 실서버 모드: 디자인 예시로 미리 써 있던 댓글을 지우고 시작 (안 지우면 목업 문장이 실제 댓글로 저장될 수 있음)
 
 function addComment(c) {
   const d = document.createElement('div'); d.className = 'cm' + (c.type === 'praise' ? ' plus' : '');
@@ -17,7 +18,8 @@ document.addEventListener('ie:select', async (e) => {
   App.$('.detail .dt').textContent = App.text(current.querySelector('.t'));
   concern.value = ''; praise.value = '';
   if (!IE_CONFIG.useMock) {
-    const r = await api.call('comment.list', { ideaId: current.dataset.ideaId });
+    const r = await App.run(null, () => api.call('comment.list', { ideaId: current.dataset.ideaId }));
+    if (!r) return;
     renderComments(r);
     if (r.mine) { concern.value = r.mine.concern || ''; praise.value = r.mine.praise || ''; }   // 이미 쓴 댓글은 고칠 수 있게
   }
@@ -69,7 +71,10 @@ function renderTargets(r) {
   renderQuota(r.quota);
   App.$('.rail .ri')?.click();   // 첫 줄 선택 → 오른쪽 댓글도 서버 값으로
 }
-async function load() { renderTargets(await api.call('comment.targets')); }
+async function load() {
+  const r = await App.run(null, () => api.call('comment.targets'));
+  if (r) renderTargets(r);
+}
 if (!IE_CONFIG.useMock) load();
 realtime.connect(App.sessionId(), (ev) => {
   if (ev.type === 'comments.progress') App.progress(ev.data.doneCount, ev.data.memberCount);   // 진행자 막대(T2)
