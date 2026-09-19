@@ -22,6 +22,9 @@ App.action('saveProfile', async () => {
   if (!App.requireLogin()) return false;
   await api.call('profile.update', {}, body);
   App.toast('프로필을 저장했어요');
-  App.go(App.returnTo(App.screen('01-1-landing-logged-in')));
+  // returnTo를 이어가지 않는다 — "세션 만들기"를 누르고 로그인하러 왔던 사람도, 계정 막 만든
+  // 사람도, 프로필을 막 끝낸 다음엔 항상 "만들기·참가하기 둘 다 고를 수 있는" 랜딩으로 보낸다
+  // (여기서 원래 의도로 바로 넘겨버리면 왜 갑자기 세션 만들기 화면인지 헷갈려 함).
+  App.go(App.screen('01-1-landing-logged-in'));
   return false;
 });

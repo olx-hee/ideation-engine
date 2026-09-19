@@ -38,6 +38,9 @@ function pending(r) {
 }
 /* 실서버 모드: 등급별 목록을 review.list로 그린다 ("N개 더 보기"로 4개씩) */
 function renderList(r) {
+  const total = (r.groups || []).reduce((n, g) => n + (g.items || []).length, 0);
+  App.$('.dvh h3').textContent = `AI가 아이디어 ${total}개의 실효성과 현실성을 살펴봤어요`;
+  App.$('.dvh p').textContent = `참고용 판단이에요. 등급이 낮아도 빼지 않고 ${total}개 모두 투표에 올라가요.`;
   const rail = App.$('.rail');
   const tplLabel = rail.querySelector('.rgl'), tplItem = rail.querySelector('.ri'), tplMore = rail.querySelector('.rmore');
   if (!tplLabel || !tplItem) return;

@@ -14,11 +14,13 @@ async function refreshCount() {
 if (!IE_CONFIG.useMock) {
   refreshCount();
   (async () => {
-    /* 내 프로필 카드(예시 "이세민")를 로그인한 사람으로 */
+    /* 내 프로필 카드(예시 "이세민 · 맡고 싶은 역할: 개발")를 로그인한 사람으로 — 이름이
+       <b> 태그가 아니라 "이름 · 맡고 싶은 역할: X" 한 줄 텍스트라서 통째로 다시 만든다
+       (예전엔 <b> 태그를 찾다가 못 찾아서 이름이 영영 안 바뀌는 버그였음). */
     const me = await App.run(null, () => api.call('auth.me'));
     if (!me) return;
-    const nameEl = App.$$('.panel b').find(b => b.textContent.trim().length && !b.textContent.includes('/'));
-    if (nameEl) nameEl.textContent = me.user.nickname;
+    const nameEl = App.$('.panel .card .t-sm');
+    if (nameEl) nameEl.textContent = `${me.user.nickname} · 맡고 싶은 역할: ${(me.profileSummary && me.profileSummary.desiredRole) || '미정'}`;
     App.$$('.panel .avatar').forEach(av => { av.textContent = (me.user.nickname || '?')[0]; });
     const chips = App.$('.panel .chips');
     if (chips && me.profileSummary) {
