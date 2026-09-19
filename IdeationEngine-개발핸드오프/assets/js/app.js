@@ -17,9 +17,15 @@
     /** 액션 등록: 버튼에 data-action="name" 이 있으면 클릭 시 실행. false를 돌려주면 data-go 이동을 취소 */
     action(name, fn) { this.actions[name] = fn; },
     /** 지금 보고 있는 화면으로의 이동은 무시한다 — 서버가 WebSocket 연결 직후 보내는 stage.changed(현재 단계 동기화)를
-        받고 "그 단계의 화면"으로 가면 자기 자신이라 무한 새로고침이 됐다(8-6 · 9-1). */
+        받고 "그 단계의 화면"으로 가면 자기 자신이라 무한 새로고침이 됐다(8-6 · 9-1). 단, 그 사이에 다른 세션을
+        만들거나 들어갔으면(sessionId가 바뀌었으면) 화면 경로가 같아도 실제로는 다른 세션이라 이동해야 한다
+        — 안 그러면 새 세션을 만들어도 예전 세션 화면에 갇힌 것처럼 보인다. */
     go(href) {
-      try { if (new URL(href, location.href).href === location.href) return; } catch (e) { /* 이상한 href면 그냥 이동 */ }
+      try {
+        const samePage = new URL(href, location.href).href === location.href;
+        const sameSession = this.state.sessionId === bootSessionId;
+        if (samePage && sameSession) return;
+      } catch (e) { /* 이상한 href면 그냥 이동 */ }
       location.href = href;
     },
     screen(key) { return '../' + key + '/index.html'; },
@@ -106,6 +112,17 @@
         console.error(err);
         if (err && (err.code === 'UNAUTHORIZED' || err.code === 'REFRESH_INVALID')) { this.logoutLocal(); this.requireLogin(); return false; }
         if (err && (err.code === 'NOT_PARTICIPANT' || err.code === 'KICKED')) { this.toast(err.message); this.go(this.screen('02-join-code')); return false; }
+        // STAGE_CLOSED · STAGE_LOCKED — 이 화면이 알던 단계는 이미 지났다(다른 사람이 다 끝냈거나
+        // 진행자가 넘김). 화면이 stage.changed 이벤트를 놓쳤을 때(웹소켓 재연결 틈 등) 여기로 온다.
+        // 에러만 띄우면 이 화면에 계속 갇혀서 뭘 눌러도 계속 같은 에러만 나므로, 진짜 단계를 물어서
+        // 맞는 화면으로 옮겨준다 (08-6 "투표 마치기"가 이미 다음 단계로 넘어간 뒤 실패하던 문제).
+        if (err && (err.code === 'STAGE_CLOSED' || err.code === 'STAGE_LOCKED')) {
+          try {
+            const s = await api.call('session.get');
+            const want = this.stageScreen(s.stage, s.me.role, s.me.isLeader);
+            if (want) { this.toast('이미 다음 단계로 넘어갔어요. 화면을 옮길게요'); this.go(this.screen(want)); return false; }
+          } catch (e) { /* 조회도 실패하면 아래 일반 에러 처리로 넘어간다 */ }
+        }
         // VALIDATION은 message가 "입력값을 다시 확인해 주세요"처럼 뭉뚱그려 와서, 실제 이유는
         // details.fields(예: {password: "비밀번호는 8자 이상이어야 해요"})에 있다 — 그걸 보여준다.
         const fieldMsg = err && err.details && err.details.fields && Object.values(err.details.fields)[0];
@@ -114,6 +131,7 @@
       } finally { el && el.classList.remove('is-loading'); }
     },
   };
+  const bootSessionId = App.state.sessionId;   // 이 페이지가 로드될 때의 세션 — go()가 세션이 바뀌었는지 비교하는 기준
 
   function loadState() {
     try { return JSON.parse(localStorage.getItem('ie.state') || sessionStorage.getItem('ie.state')) || {}; } catch (e) { return {}; }

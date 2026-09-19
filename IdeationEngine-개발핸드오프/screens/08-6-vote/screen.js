@@ -168,7 +168,18 @@ async function toggleVote(cb) {
   set(on);
   // 표를 빠르게 두 번 누르면 vote.save가 동시에 두 번 나가 서버에서 겹쳤다(중복 키) — 저장은 한 번에 하나씩 순서대로 보낸다
   const ids = checked().map(c => c.closest('.ri').dataset.id);
-  saving = saving.then(() => api.call('vote.save', {}, { ids })).catch((err) => { set(!on); App.toast(err.message, 'error'); });
+  saving = saving.then(() => api.call('vote.save', {}, { ids })).catch(async (err) => {
+    set(!on);
+    // STAGE_CLOSED — 다른 사람이 다 마쳐서(또는 진행자가 넘겨서) 이미 다음 단계로 갔는데, 이 화면이
+    // stage.changed를 놓쳐 그대로 남아있던 경우다. 계속 여기서 표를 누르게 두면 매번 이 에러만
+    // 반복되니(사용자에게는 "2표인데 하나밖에 안 된다"로 보임), 진짜 단계로 옮겨준다.
+    if (err && err.code === 'STAGE_CLOSED') {
+      const s = await api.call('session.get').catch(() => null);
+      const want = s && App.stageScreen(s.stage, App.state.role, App.state.isLeader);
+      if (want) { App.toast('이미 다음 단계로 넘어갔어요. 화면을 옮길게요'); App.go(App.screen(want)); return; }
+    }
+    App.toast(err.message, 'error');
+  });
   await saving;
 }
 let saving = Promise.resolve();
