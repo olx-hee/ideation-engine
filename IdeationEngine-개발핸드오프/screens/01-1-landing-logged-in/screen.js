@@ -42,6 +42,8 @@ async function init() {
   if (active) {
     App.$('.center .slogan').textContent = `진행 중인 세션이 있어요 · ${active.topic}`;
     App.$('[data-action="joinOrRejoin"]').textContent = '↩ 세션으로 돌아가기';
+    const endBtn = App.$('[data-action="endActiveSession"]');
+    if (endBtn) endBtn.hidden = active.role !== 'host';   // 진행자만 방을 닫을 수 있음
   } else {
     App.$('.center .slogan').textContent = `${u.nickname}님, 오늘 회의를 시작해볼까요?`;
   }
@@ -56,6 +58,19 @@ App.action('joinOrRejoin', async () => {
   const r = await api.call('session.join', { sessionId: active.sessionId }, { code: active.code });
   App.save({ sessionId: active.sessionId, role: r.role, participantId: r.participantId });
   App.go(App.screen(App.stageScreen(r.session.stage, r.role) || '06-lobby-participant'));
+  return false;
+});
+
+App.action('endActiveSession', async () => {
+  if (!active) return false;
+  if (!(await App.confirm('세션을 종료할까요?', `"${active.topic}" 방이 완전히 닫혀요. 다른 참가자들에게도 종료됐다고 바로 알려줘요. 되돌릴 수 없어요.`, '종료하기'))) return false;
+  await api.call('session.end', { sessionId: active.sessionId }, {});
+  App.toast('세션을 종료했어요');
+  active = null;
+  App.save({ sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
+  App.$('.center .slogan').textContent = `${(App.state.user && App.state.user.nickname) || ''}님, 오늘 회의를 시작해볼까요?`;
+  App.$('[data-action="joinOrRejoin"]').textContent = '→ 코드로 입장';
+  App.$('[data-action="endActiveSession"]').hidden = true;
   return false;
 });
 

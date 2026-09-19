@@ -180,6 +180,12 @@ window.IE_ENDPOINTS = {
     "auth": "host",
     "title": "세션 시작"
   },
+  "session.end": {
+    "method": "POST",
+    "path": "/sessions/{sessionId}/end",
+    "auth": "host",
+    "title": "세션 종료"
+  },
   "session.advance": {
     "method": "POST",
     "path": "/sessions/{sessionId}/stage/next",

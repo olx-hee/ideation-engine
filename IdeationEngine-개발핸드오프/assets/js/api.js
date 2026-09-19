@@ -77,6 +77,14 @@
             App.setTimer(Math.max(0, Math.round((Date.parse(ev.data.endsAt) - now) / 1000)));
           }
           if (ev && ev.type === 'stage.changed' && ev.data) App.setStage(ev.data.stage);
+          // 세션 종료는 화면마다 따로 처리하지 않고 여기서 한 번에 — 진행자를 포함해 그 세션의
+          // 모든 화면(어느 단계에 있든)이 이 이벤트 하나로 안내받고 랜딩으로 나간다.
+          if (ev && ev.type === 'session.ended') {
+            App.toast('진행자가 세션을 종료했어요');
+            App.save({ sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
+            setTimeout(() => App.go(App.screen('01-1-landing-logged-in')), 800);
+            return;
+          }
         } catch (e) { /* 보정 실패는 화면 동작을 막지 않음 */ }
         return onEventRaw(ev);
       };
