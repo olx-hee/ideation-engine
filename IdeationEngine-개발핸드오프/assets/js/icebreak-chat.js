@@ -26,7 +26,9 @@
       $$('.side2 .tp').forEach((tp, i) => { tp.classList.toggle('done', i + 1 < reply.step || reply.done); tp.classList.toggle('cur', i + 1 === reply.step && !reply.done); });
     }
     if (reply.done && input) { input.disabled = true; input.placeholder = '인터뷰가 끝났어요'; }
-    if (reply.done && App.state.role === 'host') hostLink();
+    // 채팅 안 링크 하나만 띄우면 놓치기 쉬워서(스크롤 안 하거나, 여러 명이 같이 테스트하다 못 봄)
+    // "다 됐는데 페이지가 안 넘어간다"로 보였다 — 진행자는 몇 초 뒤 자동으로 진행자 화면으로 보낸다.
+    if (reply.done && App.state.role === 'host') { hostLink(); setTimeout(() => App.go(App.screen('07-6-icebreak-host')), 1500); }
     if (window.IE_CONFIG && IE_CONFIG.useMock && reply.step) {   // 시연(목업): 다음 질문 화면으로 자연스럽게 (실서버는 한 화면에서 이어짐)
       const map = { 2: '07-2-icebreak-q2-news', 3: '07-3-icebreak-q3-change', 4: '07-4-icebreak-q4-services', 5: '07-5-icebreak-q5-wrapup' };
       const want = reply.done ? '07-5-icebreak-q5-wrapup' : map[reply.step];
