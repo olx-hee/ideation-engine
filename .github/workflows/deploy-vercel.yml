@@ -1,0 +1,52 @@
+name: Deploy to Vercel (master push)
+
+# master에 push될 때마다 IdeationEngine-개발핸드오프/ 폴더를 Vercel 프로덕션에 자동 배포합니다.
+# Vercel의 "Connect Git" 기능 대신 이 방식을 쓰는 이유:
+#   저장소 소유자(olx-hee)가 아닌 협업자 계정으로는 Vercel의 GitHub 앱 연결(Connect Git)
+#   화면에 이 저장소가 보이지 않아서(개인 계정 소유 저장소는 소유자만 앱 권한을 줄 수 있음),
+#   대신 Vercel CLI + 저장소 시크릿(VERCEL_TOKEN 등) 조합으로 같은 효과를 냅니다.
+#
+# 필요한 저장소 시크릿 (Settings → Secrets and variables → Actions):
+#   VERCEL_TOKEN      Vercel 계정 Settings → Tokens 에서 생성
+#   VERCEL_ORG_ID     Vercel 팀 Settings → General 의 "Team ID"
+#   VERCEL_PROJECT_ID Vercel 프로젝트(ideationengine-front) Settings → General 의 "Project ID"
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "IdeationEngine-개발핸드오프/**"
+      - ".github/workflows/deploy-vercel.yml"
+  workflow_dispatch: {} # Actions 탭에서 수동 실행도 가능
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: IdeationEngine-개발핸드오프
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Vercel CLI 설치
+        run: npm install --global vercel@latest
+
+      - name: Vercel 프로젝트 설정 가져오기 (vercel pull)
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: 빌드 (정적 사이트라 별도 빌드 명령 없음)
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: 프로덕션 배포
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
