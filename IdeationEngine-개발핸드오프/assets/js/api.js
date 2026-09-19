@@ -41,7 +41,17 @@
     if (body instanceof FormData) payload = body;
     else if (body !== undefined) { headers['Content-Type'] = 'application/json'; payload = JSON.stringify(body); }
 
-    const res = await fetch(cfg.baseUrl + path + query, { method: ep.method, headers, body: payload, credentials: 'include' });
+    // 응답이 안 오면(느린 네트워크·서버가 죽었는데 연결만 붙어있는 경우 등) fetch는 영원히 기다린다 —
+    // 그 요청을 부른 화면의 "불러오는 중" 오버레이(.tdim 등)도 같이 영원히 떠 있게 되고, 그 아래
+    // 버튼은 화면에서 클릭할 수 없게 가려진다("버튼이 안 보인다"로 보고된 문제). 적당한 시간 뒤엔
+    // 포기하고 에러로 넘겨서, 화면이 항상 다시 눌러볼 수 있는 상태로 돌아오게 한다.
+    let res;
+    try {
+      res = await fetch(cfg.baseUrl + path + query, { method: ep.method, headers, body: payload, credentials: 'include', signal: AbortSignal.timeout(20000) });
+    } catch (e) {
+      if (e.name === 'TimeoutError' || e.name === 'AbortError') throw new ApiError('TIMEOUT', '서버 응답이 오래 걸려요. 다시 시도해 주세요', 0);
+      throw new ApiError('NETWORK', '서버에 연결할 수 없어요. 인터넷 연결을 확인해 주세요', 0);
+    }
     const data = res.status === 204 ? null : await res.json().catch(() => null);
     if (res.status === 401 && !NO_RETRY.includes(id) && !params._retried) {
       if (await refresh()) return call(id, Object.assign({}, params, { _retried: true }), body);
