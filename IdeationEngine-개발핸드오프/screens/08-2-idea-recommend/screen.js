@@ -5,9 +5,12 @@ recs.forEach((rec, i) => {
   const on = rec.querySelector('.seg span.on'); if (on) rec.dataset.rank = parseInt(on.textContent, 10);
 });
 if (!IE_CONFIG.useMock) recs.forEach(rec => { rec.classList.remove('on'); delete rec.dataset.rank; });   // 실서버 모드: 디자인 예시로 미리 골라둔 순위를 지우고 시작 (안 지우면 목업 추천이 실제 제출로 나갈 수 있음)
+/* 8-1에서 이미 적어 둔 아이디어 (순위 → 문장). idea.submit은 전체를 덮어쓰는 PUT이라, 추천만 보내면
+   직접 적은 아이디어가 조용히 지워진다 — 고르지 않은 순위는 원래 문장을 그대로 다시 보낸다. */
+let mineText = {};
 function paint() {
   const picks = [1, 2, 3].map(r => recs.find(x => +x.dataset.rank === r));
-  App.$$('.mine li').forEach((li, i) => { li.lastChild.textContent = picks[i] ? App.text(picks[i].querySelector('b')) : '비어 있어요'; });
+  App.$$('.mine li').forEach((li, i) => { li.lastChild.textContent = picks[i] ? App.text(picks[i].querySelector('b')) : (mineText[i + 1] || '비어 있어요'); });
   recs.forEach(rec => {
     rec.classList.toggle('on', !!rec.dataset.rank);
     rec.querySelectorAll('.seg span').forEach((s, i) => { const on = +rec.dataset.rank === i + 1; s.classList.toggle('on', on); s.textContent = on ? `${i + 1}순위` : i + 1; });
@@ -42,8 +45,15 @@ function renderRecs(items, append) {
   paint();
 }
 async function load() {
+  const m = await App.run(null, () => api.call('idea.mine'));
+  if (m) (m.ideas || []).forEach(it => { mineText[it.rank] = it.text; });
+  // 아직 제출 전이면 서버에 아무것도 없다 — 8-1에서 쓰다 만 문장(이 브라우저에 저장)을 쓴다
+  if (!Object.keys(mineText).length) (App.state.draftIdeas || []).forEach((t, i) => { if (t && t.trim()) mineText[i + 1] = t.trim(); });
+  paint();
   const r = await App.run(null, () => api.call('idea.recommend'));
-  if (!r) return;
+  // 추천을 못 받았으면(AI 실패·재료 없음) 디자인 예시 카드를 비운다 — 그대로 두면 목업 추천을 골라
+  // 진짜 아이디어로 제출하게 된다(가짜 recommendationId까지 같이 나감).
+  if (!r) { renderRecs([], false); return; }
   nextCursor = r.nextCursor;
   renderRecs(r.items || [], false);
 }
@@ -59,14 +69,27 @@ App.action('moreRecs', async () => {
   return false;
 });
 App.action('submitIdeas', async () => {
-  const ideas = [1, 2, 3].map(r => recs.find(x => +x.dataset.rank === r)).filter(Boolean)
-    .map((rec, i) => ({ rank: i + 1, text: App.text(rec.querySelector('b')), source: 'ai', recommendationId: rec.dataset.recId }));
-  if (!ideas.length) { App.toast('마음에 드는 추천을 1개 이상 골라주세요'); return false; }
-  await api.call('idea.submit', {}, { ideas });
+  const picked = [1, 2, 3].map(r => recs.find(x => +x.dataset.rank === r));
+  if (!picked.some(Boolean)) { App.toast('마음에 드는 추천을 1개 이상 골라주세요'); return false; }
+  // 고른 순위는 추천으로, 고르지 않은 순위는 8-1에서 적어 둔 문장으로 — 빈 순위는 빼고 1·2·3으로 다시 붙인다
+  const ideas = [1, 2, 3].map(r => {
+    const rec = picked[r - 1];
+    if (rec) return { text: App.text(rec.querySelector('b')), source: 'ai', recommendationId: rec.dataset.recId };
+    return mineText[r] ? { text: mineText[r], source: 'own' } : null;
+  }).filter(Boolean).map((it, i) => Object.assign({ rank: i + 1 }, it));
+  const r = await api.call('idea.submit', {}, { ideas });
+  App.progress(r.submittedCount, r.memberCount);   // 진행자 막대(T2)는 남의 제출 이벤트만 받으므로 내 제출은 여기서
+  App.toast('제출했어요. 모두 내면 순위표가 열려요');
 });
 paint();
 
 realtime.connect(App.sessionId(), (ev) => {
   if (ev.type === 'ideas.submitted') App.progress(ev.data.submittedCount, ev.data.memberCount);   // 진행자 막대(T2)
-  if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.board') App.go(App.screen('08-3-idea-board'));
+  /* 단계가 바뀌면 그 단계의 화면으로 — diverge.board만 보고 이동하면 진행자가 두 단계를 빠르게 넘겼을 때
+     추천 화면에 갇힌다. 같은 단계(diverge.write)는 무시한다 — 서버가 연결 직후 보내는 현재 단계 동기화나
+     진행자의 session.back 때 고르던 추천이 날아가지 않게. */
+  if (ev.type === 'stage.changed' && ev.data.stage && !document.body.dataset.stage.split(' ').includes(ev.data.stage.id)) {
+    const want = App.stageScreen(ev.data.stage, App.state.role);
+    if (want) App.go(App.screen(want));
+  }
 });

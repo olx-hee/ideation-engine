@@ -37,14 +37,24 @@ App.action('join', async () => {
   const back = `../02-join-code/index.html?code=${code}&auto=1`;
   if (!App.requireLogin(back)) return false;                       // 로그인 → 돌아와서 자동 입장
 
-  const room = await api.call('session.lookup', { query: { code } });
-  let r;
+  let room, r;
   try {
+    room = await api.call('session.lookup', { query: { code } });
     r = await api.call('session.join', { sessionId: room.sessionId }, { code });
   } catch (err) {
     if (err.code === 'PROFILE_REQUIRED') {                          // 프로필 → 돌아와서 자동 입장
       App.toast('입장하기 전에 프로필을 먼저 만들어 주세요');
       App.go(App.screen('03-profile-create') + '?returnTo=' + encodeURIComponent(back));
+      return false;
+    }
+    /* 못 들어가는 이유(이미 시작함 · 정원 초과 · 내보내짐)를 2.6초면 사라지는 토스트로만 알리면
+       코드를 잘못 넣은 줄 알고 계속 다시 누른다 — 닫을 때까지 남는 안내 창으로 보여준다.
+       lookup도 같은 이유로 실패하므로(늦게 온 사람은 거기서 먼저 걸린다) 두 호출을 한 try로 묶었다. */
+    if (err.code === 'SESSION_STARTED' || err.code === 'SESSION_FULL' || err.code === 'KICKED') {
+      App.dialog('이 방에는 들어갈 수 없어요',
+        `<p>${App.escape(err.message)}</p><div class="tdk"><span>방 코드</span><b>${App.escape(code)}</b></div>` +
+        '<p class="quiet">진행자가 세션을 시작한 뒤에는 새로 들어올 수 없어요. 진행자에게 확인해 주세요.</p>',
+        [{ label: '확인', cls: 'gray' }]);
       return false;
     }
     throw err;

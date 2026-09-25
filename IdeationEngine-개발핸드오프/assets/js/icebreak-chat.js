@@ -72,17 +72,31 @@
     d.className = 'b ai waiting'; d.textContent = '…';
     msgs.appendChild(d); scrollDown();
   }
+  /* AI가 느릴 때(꼬리질문 판단·재료 뽑기) 같은 답이 두 번 가지 않게:
+     · sending 중이면 보내기·넘어가기를 무시한다 (넘어가기는 두 번 눌리면 질문을 두 개 건너뛰었다)
+     · 실패하면 말풍선을 걷고 입력칸에 답을 돌려준다 — 다시 보내기 전에 답을 다시 타이핑할 필요가 없게
+     · 같은 답의 재시도는 clientMessageId를 그대로 쓴다. 매번 새 id를 만들면(타임아웃 뒤 재전송처럼
+       서버엔 이미 저장된 경우) 서버의 중복 방지가 걸리지 않아 답이 두 번 저장됐다. */
+  let sending = false, lastCmid = null, lastText = null;
   App.action('sendMessage', async () => {
-    if (!input || input.disabled) return false;
+    if (!input || input.disabled || sending) return false;
     const text = input.value.trim();
     if (!text) { App.toast('답을 입력해 주세요'); return false; }
-    bubble('user', null, text); input.value = '';
-    waiting(true);
-    try { render(await api.call('ice.send', {}, { text, clientMessageId: 'c_' + Date.now() })); }
-    finally { waiting(false); }
+    if (text !== lastText) { lastText = text; lastCmid = 'c_' + Date.now() + '_' + Math.random().toString(16).slice(2); }
+    const mine = bubble('user', null, text); input.value = '';
+    sending = true; waiting(true);
+    try { render(await api.call('ice.send', {}, { text, clientMessageId: lastCmid })); lastText = null; }
+    catch (e) { mine.remove(); if (!input.value.trim()) input.value = text; throw e; }
+    finally { sending = false; waiting(false); }
     return false;
   });
-  App.action('skip', async () => { render(await api.call('ice.skip', {}, {})); return false; });
+  App.action('skip', async () => {
+    if (sending) return false;
+    sending = true; waiting(true);
+    try { render(await api.call('ice.skip', {}, {})); }
+    finally { sending = false; waiting(false); }
+    return false;
+  });
 
   input && input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); $('[data-action="sendMessage"]')?.click(); }
@@ -109,7 +123,7 @@
   function patchProgressRow(nickname, step, done) {
     const box = progressContainer();
     if (!box) return;
-    const row = $$('.side2 .tr').find((r) => r.firstElementChild.textContent.replace(/\s*\(나\)$/, '') === nickname);
+    const row = $$('.side2 .tr').find((r) => (r.firstElementChild?.textContent || '').replace(/\s*\(나\)$/, '') === nickname);
     if (row) { row.lastElementChild.textContent = done ? '완료' : step + ' / 5'; return; }
     const created = document.createElement('div'); created.className = 'tr';
     const name = document.createElement('span'); name.textContent = nickname;
@@ -122,10 +136,19 @@
      renderProgress 직후에 다시 적용해서, 늦게 온 사람 줄이 비거나 최신 상태가 씹히지 않게 한다. */
   let restored = false;
   const pendingProgress = [];
+  /* 들어오거나 내보내진 사람은 icebreak.progress가 따로 오지 않고, participant.joined/kicked 이벤트엔
+     닉네임이 없어 줄을 만들거나 지울 수 없다 — 목록을 다시 받아 통째로 맞춘다. */
+  async function refreshProgress() {
+    if (!restored || IE_CONFIG.useMock) return;
+    const pr = await App.run(null, () => api.call('ice.progress'));
+    if (pr) renderProgress(pr.items || []);
+  }
   async function restore() {
+    // 예시 대화는 요청을 보내기 전에 지운다 — 응답이 늦거나 실패하면 HTML에 박힌 가짜 대화가
+    // 내 대화처럼 남아 있었다. 말풍선만 지운다 (7-2의 소식 카드는 대화창 안에 있어서 남겨야 함)
+    msgs.querySelectorAll('.b, .blab').forEach(x => x.remove());
     const st = await App.run(null, () => api.call('ice.state'));
     if (st) {
-      msgs.querySelectorAll('.b, .blab').forEach(x => x.remove());   // 말풍선만 지운다 (7-2의 소식 카드는 대화창 안에 있어서 남겨야 함)
       render({ messages: st.messages, step: st.step, done: st.done });
       (st.topics || []).forEach((t, i) => {   // tp.textContent = t 로 통째로 바꾸면 번호 배지(<i>)까지 지워져서, 배지는 남기고 글자만 바꾼다
         const tp = $$('.side2 .tp')[i]; if (!tp || !t) return;
@@ -133,6 +156,8 @@
         tp.textContent = ''; if (badge) tp.appendChild(badge);
         tp.appendChild(document.createTextNode(t));
       });
+    } else {
+      bubble('ai', null, '대화를 불러오지 못했어요. 새로고침하면 다시 불러와요.');
     }
     const pr = await App.run(null, () => api.call('ice.progress'));
     if (pr) renderProgress(pr.items || []);
@@ -146,8 +171,14 @@
       if (restored) patchProgressRow(ev.data.nickname, ev.data.step, ev.data.done);
       else pendingProgress.push(ev.data);
     }
+    if (ev.type === 'participant.joined' || ev.type === 'participant.kicked') refreshProgress();
     if (ev.type === 'icebreak.news.ready') { newsReady = true; maybeGoToNews(); }
-    if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.write') App.go(App.screen('08-1-idea-write'));
+    // 발산 시작 = 인터뷰 마감. 아직 질문 2를 보고 있던 사람도 여기서 그대로 다음 화면으로 넘어간다
+    // (답을 보내려 해도 409 STAGE_CLOSED라서, 화면에 남겨두면 에러 토스트만 반복됐다).
+    // 참가자는 8-1, 진행자는 7-7 — 진행자가 7-6을 안 열고 인터뷰 화면에 남아 있어도 스펙대로 보낸다.
+    if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.write') {
+      App.go(App.screen(App.state.role === 'host' ? '07-7-diverge-materials' : '08-1-idea-write'));
+    }
   });
   scrollDown();
 })();

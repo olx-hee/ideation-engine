@@ -6,19 +6,28 @@ function renderReview(r) {
   const d = App.$('.detail');
   d.querySelector('.dk').textContent = `팀원 ${r.alias}의 ${r.rank}순위`;
   d.querySelector('.dt').textContent = r.title;
-  const g = d.querySelector('.dhead .grade'); g.className = 'grade gbox ' + r.grade; g.lastChild.textContent = GRADE[r.grade];
+  const g = d.querySelector('.dhead .grade');
   const rows = d.querySelectorAll('.qa > div');
   const set = (i, label, text, link) => {
     rows[i].innerHTML = `<span class="ans">${App.escape(label)}</span>${App.escape(text)}` +
       (link ? ` <a class="linkish" href="${App.escape(link)}" target="_blank" rel="noopener">검색 결과 보기</a>` : '');
   };
-  set(0, r.exists.label, r.exists.summary, r.exists.searchUrl);
-  set(1, r.feasibility.level, r.feasibility.summary);
-  set(2, r.missingSkills.count + '개', r.missingSkills.summary);
-  set(3, r.need.label, r.need.summary);
-  set(4, r.timeline.label, r.timeline.summary);
-  const c = r.commentSummary;
-  rows[5].innerHTML = `아쉬운 점 ${c.concern} · ${c.concernPoints.map(App.escape).join(' · ')}<br>좋은 점 ${c.praise} · ${c.praisePoints.map(App.escape).join(' · ')}`;
+  // 검증이 실패(AI_UNAVAILABLE)했거나 아직 안 끝난 아이디어는 칸이 전부 null로 온다 —
+  // 그대로 r.exists.label을 읽으면 여기서 터져서 오른쪽에 HTML 예시 문장이 남아 있었다.
+  if (r.status !== 'done') {
+    g.className = 'grade gbox'; g.lastChild.textContent = r.status === 'failed' ? '검증하지 못했어요' : '검증하는 중이에요';
+    const msg = r.status === 'failed' ? 'AI 검증을 받지 못했어요 · 투표에는 그대로 올라가요' : '검증이 끝나면 채워져요';
+    for (let i = 0; i < 5; i++) if (rows[i]) rows[i].textContent = msg;
+  } else {
+    g.className = 'grade gbox ' + r.grade; g.lastChild.textContent = GRADE[r.grade] || '';
+    set(0, r.exists.label, r.exists.summary, r.exists.searchUrl);
+    set(1, r.feasibility.level, r.feasibility.summary);
+    set(2, r.missingSkills.count + '개', r.missingSkills.summary);
+    set(3, r.need.label, r.need.summary);
+    set(4, r.timeline.label, r.timeline.summary);
+  }
+  const c = r.commentSummary || { concern: 0, praise: 0, concernPoints: [], praisePoints: [] };
+  rows[5].innerHTML = `아쉬운 점 ${c.concern} · ${(c.concernPoints || []).map(App.escape).join(' · ')}<br>좋은 점 ${c.praise} · ${(c.praisePoints || []).map(App.escape).join(' · ')}`;
 }
 document.addEventListener('ie:select', async (e) => {
   App.$('.detail .dt').textContent = App.text(e.detail.querySelector('.t'));
@@ -70,15 +79,22 @@ function renderList(r) {
   App.$('.rail .ri')?.click();
 }
 let loadSeq = 0;   // 느린 네트워크에서 응답이 뒤섞여 와도(경쟁 조건) 가장 최근 요청만 반영
-async function load() {
+let pollTimer = null, listDone = false;
+/** quiet: 스스로 다시 물어보는 경우(실패해도 토스트를 띄우지 않는다) */
+async function load(quiet) {
   const seq = ++loadSeq;
-  const r = await App.run(null, () => api.call('review.list'));
-  if (!r || seq !== loadSeq) return;
+  const r = quiet ? await api.call('review.list').catch(() => null) : await App.run(null, () => api.call('review.list'));
+  if (seq !== loadSeq) return;
+  clearTimeout(pollTimer);
+  // 검증이 끝날 때까지 스스로 다시 물어본다 — reviews.ready는 한 번만 오는 이벤트라, 웹소켓이
+  // 재연결되는 틈이나 늦게 들어온 사람이 그걸 놓치면 "검증하는 중"에서 영원히 안 풀렸다.
+  if (!r || !r.ready) pollTimer = setTimeout(() => load(true), 4000);
+  if (!r) return;
   pending(r);
-  if (r.ready) renderList(r);
+  if (r.ready && !listDone) { listDone = true; renderList(r); }   // 목록은 한 번만(다시 그리면 고른 줄이 풀린다)
 }
 if (!IE_CONFIG.useMock) load();
 realtime.connect(App.sessionId(), (ev) => {
-  if (ev.type === 'reviews.ready' && !IE_CONFIG.useMock) load();
+  if (ev.type === 'reviews.ready' && !IE_CONFIG.useMock) load(true);
   if (ev.type === 'stage.changed' && ev.data.stage.id === 'diverge.vote') App.go(App.screen('08-6-vote'));
 });

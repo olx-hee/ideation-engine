@@ -13,7 +13,11 @@ if (!IE_CONFIG.useMock) App.$$('.rail .cb.on').forEach(cb => { cb.classList.remo
 
 const current = () => App.$('.rail .ri.on');
 const checked = () => App.$$('.rail .ri .cb.on');
-function paintDots() { const used = checked().length; App.$$('.dots3 i').forEach((d, i) => d.classList.toggle('e', i >= used)); }
+function paintDots() {
+  const used = checked().length;
+  // 동점 재투표는 maxVotes가 1이라 점이 2개면 "아직 한 표 남았다"로 잘못 보인다 — 한도만큼만 보여준다
+  App.$$('.dots3 i').forEach((d, i) => { d.hidden = i >= MAX_VOTES; d.classList.toggle('e', i >= used); });
+}
 function syncVoteButton() {
   const cb = current()?.querySelector('.cb');
   App.$$('[data-action="voteCurrent"]').forEach(b => { b.textContent = cb && cb.classList.contains('on') ? '✓ 투표했어요 · 취소' : '이 아이디어에 투표'; });
@@ -189,7 +193,9 @@ App.action('finishVote', async () => {
   if (!checked().length && !(await App.confirm('아직 투표하지 않았어요', '그래도 투표를 마칠까요? 마친 뒤에는 표를 바꿀 수 없어요.', '마치기'))) return false;
   const r = await api.call('vote.finish', {}, {});
   App.toast(`투표를 마쳤어요 · ${r.votedCount} / ${r.memberCount}명`);
-  App.go(App.screen('08-6w-vote-wait'));   // 결과 기다리는 화면으로
+  // 내가 마지막 사람이면 서버가 이미 결과 단계로 넘겼다 — 대기 화면으로 갔다가 거기서 다시
+  // 판단해 8-7로 나가느라 빈 대기 화면이 한 번 번쩍였다. 응답으로 알 수 있으니 바로 결과로 간다.
+  App.go(App.screen(r.votedCount >= r.memberCount ? '08-7-vote-result-host' : '08-6w-vote-wait'));
   return false;
 });
 document.addEventListener('ie:reaction', (e) => {
@@ -200,13 +206,22 @@ document.addEventListener('ie:reaction', (e) => {
 realtime.connect(App.sessionId(), (ev) => {
   if (ev.type === 'vote.progress') { App.progress(ev.data.votedCount, ev.data.memberCount); App.$$('.dfoot2 .quiet').forEach(q => { if (q.textContent.startsWith('투표한 사람')) q.textContent = `투표한 사람 ${ev.data.votedCount} / ${ev.data.memberCount} · 모두 투표하면 결과가 열려요`; }); }
   if (ev.type === 'vote.closed') App.go(App.screen('08-7-vote-result-host'));   // 모두 결과로 (참가자는 보기 전용)
-  if (ev.type === 'stage.changed') { const want = App.stageScreen(ev.data.stage, App.state.role, App.state.isLeader); if (want) App.go(App.screen(want)); }
+  if (ev.type === 'stage.changed') {
+    // 이미 8-6에 있는데 또 diverge.vote로 들어오는 건 동점 재투표다 — 후보 · 표 한도(1표) · 내 표가
+    // 전부 새 라운드 것으로 바뀌는데, App.go는 같은 주소면 아무 일도 하지 않아서(app.js) 투표를
+    // 안 마치고 남아 있던 사람만 옛 후보 목록을 그대로 보고 있었다(누르면 NOT_A_CANDIDATE).
+    if (ev.data.stage.id === 'diverge.vote') { location.reload(); return; }
+    const want = App.stageScreen(ev.data.stage, App.state.role, App.state.isLeader); if (want) App.go(App.screen(want));
+  }
 });
 paintDots(); syncVoteButton();
 
 /* 실서버 모드: 왼쪽 목록을 vote.state로 다시 그린다 (목업 모드는 HTML 예시 그대로) */
 function renderVote(r) {
   MAX_VOTES = r.maxVotes || MAX_VOTES;
+  // 재투표 라운드는 1표라 "한 사람당 2표예요"가 그대로 남으면 안 된다
+  const lead = App.$('.dvh p');
+  if (lead) lead.textContent = `한 사람당 ${MAX_VOTES}표예요. 누가 어디에 투표했는지는 끝까지 공개되지 않아요.`;
   const labels = App.$$('.rail .rgl');
   const tplVote = App.$('.rail .ri .cb')?.closest('.ri');
   const tplThread = App.$('.rail .ri .n')?.closest('.ri');

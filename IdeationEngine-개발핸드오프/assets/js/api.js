@@ -76,6 +76,18 @@
     return refreshing;
   }
 
+  /* 종료된 세션에서 빠져나오기 — session.ended 이벤트로도 오고, 그 이벤트를 놓친 채
+     소켓만 4404로 끊긴 경우(끊겨 있는 동안 진행자가 종료)로도 온다. 두 경로가 겹쳐도
+     한 번만 동작하게 막는다. */
+  let leaving = false;
+  function leaveEndedSession() {
+    if (leaving) return;
+    leaving = true;
+    App.toast('진행자가 세션을 종료했어요');
+    App.save({ sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
+    setTimeout(() => App.go(App.screen('01-1-landing-logged-in')), 800);
+  }
+
   /* 실시간: 세션 화면에서 realtime.connect(sessionId, ev => …) — ev = { type, data, at } */
   const realtime = {
     connect(sessionId, onEventRaw) {
@@ -86,15 +98,16 @@
             const now = ev.data.serverNow ? Date.parse(ev.data.serverNow) : Date.now();
             App.setTimer(Math.max(0, Math.round((Date.parse(ev.data.endsAt) - now) / 1000)));
           }
-          if (ev && ev.type === 'stage.changed' && ev.data) App.setStage(ev.data.stage);
+          if (ev && ev.type === 'stage.changed' && ev.data) {
+            App.setStage(ev.data.stage);
+            // 단계가 이 화면이 모르는 곳으로 넘어갔으면(끊긴 사이 두 단계가 지나갔거나 진행자가 빨리 넘김)
+            // 여기서 바로 맞는 화면으로 보낸다 — 화면별 처리에만 맡기면 그 화면이 기다리던 단계가
+            // 아닐 때 아무도 반응하지 않아 그대로 갇힌다. 이동했으면 화면 콜백은 부르지 않는다.
+            if (App.followStage(ev.data.stage)) return;
+          }
           // 세션 종료는 화면마다 따로 처리하지 않고 여기서 한 번에 — 진행자를 포함해 그 세션의
           // 모든 화면(어느 단계에 있든)이 이 이벤트 하나로 안내받고 랜딩으로 나간다.
-          if (ev && ev.type === 'session.ended') {
-            App.toast('진행자가 세션을 종료했어요');
-            App.save({ sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
-            setTimeout(() => App.go(App.screen('01-1-landing-logged-in')), 800);
-            return;
-          }
+          if (ev && ev.type === 'session.ended') { leaveEndedSession(); return; }
         } catch (e) { /* 보정 실패는 화면 동작을 막지 않음 */ }
         return onEventRaw(ev);
       };
@@ -113,6 +126,9 @@
             return;                                   // 로그인 자체가 풀렸으면 멈춤 (화면 쪽에서 로그인으로 보냄)
           }
           if (e.code === 4403) return;                // 이 세션 참가자가 아님 · 내보내짐 → 계속 재연결하지 않음
+          // 4404 = 진행자가 세션을 종료함(SessionStageService.end). 이걸 모르고 재연결만 계속하면
+          // 죽은 방에 대고 영원히 두드리고, 그 사이 session.ended 이벤트를 놓친 사람은 안내도 못 받는다.
+          if (e.code === 4404) { leaveEndedSession(); return; }
           setTimeout(open, Math.min(10000, 500 * 2 ** retry++));
         };
       };

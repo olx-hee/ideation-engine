@@ -90,6 +90,28 @@
         'team.assign': leader ? '09-4-leader-confirm' : '09-3-assign-draft', report: '09-5-report',
       })[stage && stage.id] || null;
     },
+    /**
+     * 서버가 알려준 단계가 지금 화면과 안 맞으면 그 단계의 화면으로 보낸다. 보냈으면 true.
+     *
+     * ⚠️ 여태 화면마다 "내가 기다리는 그 단계로 바뀌면 이동" 처리를 따로 넣었는데, 그러면 화면이
+     *    모르는 단계로 건너뛰었을 때(웹소켓이 잠깐 끊긴 사이 두 단계가 지나갔다거나, 진행자가
+     *    빠르게 넘겼다거나) 아무도 반응하지 않아 그 화면에 그대로 갇혔다 — 8-2 · 9-4 · 5 등에서
+     *    같은 버그가 반복해서 나온 이유다. 판단을 여기 한 곳에 모아서, 페이지를 열 때(syncStage)와
+     *    머무는 동안(stage.changed 이벤트)이 똑같은 규칙을 쓰게 한다.
+     */
+    followStage(stage, role, isLeader) {
+      const pageStage = document.body.dataset.stage;
+      if (cfg.useMock || !pageStage || !stage || !stage.id) return false;
+      let want = this.stageScreen(stage, role != null ? role : this.state.role, isLeader != null ? isLeader : this.state.isLeader);
+      // 진행자가 7-6에서 발산을 시작하면 8-1이 아니라 7-7(모인 재료 보기)로 간다 — 스펙 확정 사항.
+      if (stage.id === 'diverge.write' && document.body.dataset.screen === '07-6-icebreak-host') want = '07-7-diverge-materials';
+      if (!want) return false;
+      // team.assign은 팀장(9-4)과 팀원(9-3)이 같은 단계라 data-stage만으로는 못 가른다 — 화면 키까지 본다.
+      const sameStage = pageStage.split(' ').includes(stage.id);
+      if (sameStage && !(stage.id === 'team.assign' && want !== document.body.dataset.screen)) return false;
+      this.go(this.screen(want));
+      return true;
+    },
     sessionId() { return this.state.sessionId || 'ses_7K2X9'; },
     escape(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); },
     /** **굵게** 표시만 허용하는 안전한 텍스트 → HTML */
@@ -119,8 +141,12 @@
         if (err && (err.code === 'STAGE_CLOSED' || err.code === 'STAGE_LOCKED')) {
           try {
             const s = await api.call('session.get');
-            const want = this.stageScreen(s.stage, s.me.role, s.me.isLeader);
-            if (want) { this.toast('이미 다음 단계로 넘어갔어요. 화면을 옮길게요'); this.go(this.screen(want)); return false; }
+            // followStage에 맡긴다 — 이미 맞는 화면이면 안 옮기고, 진행자가 7-6에서 발산을 시작한
+            // 경우처럼 화면별 예외도 stage.changed 때와 똑같은 규칙으로 처리된다.
+            if (this.followStage(s.stage, s.me.role, s.me.isLeader)) {
+              this.toast('이미 다음 단계로 넘어갔어요. 화면을 옮길게요');
+              return false;
+            }
           } catch (e) { /* 조회도 실패하면 아래 일반 에러 처리로 넘어간다 */ }
         }
         // VALIDATION은 message가 "입력값을 다시 확인해 주세요"처럼 뭉뚱그려 와서, 실제 이유는
@@ -365,6 +391,9 @@
     try {
       if (stageId === 'diverge.write') { const b = await api.call('idea.board'); App.progress(b.submittedCount, b.memberCount); }
       else if (stageId === 'diverge.vote') { const v = await api.call('vote.state'); App.progress(v.votedCount, v.memberCount); }
+      // 댓글 단계도 지금 값을 받아둔다 — 모두 이미 다 쓴 뒤에 진행자가 들어오면 comments.progress가
+      // 더 오지 않아서, 이게 없으면 막대가 "– / –"로 남아 다 됐는지 알 수가 없다.
+      else if (stageId === 'diverge.comment') { const t = await api.call('comment.targets'); App.progress(t.doneCount, t.memberCount); }
     } catch (e) { /* 막대 숫자는 부가 정보 — 실패해도 진행을 막지 않는다 */ }
   }
   async function advance(force) {
@@ -402,13 +431,19 @@
     if (!App.requireLogin()) return;
     const s = await App.run(null, () => api.call('session.get'));
     if (!s) return;
+    // 이미 끝난 세션의 화면을 다시 여는 경우(뒤로가기 · 북마크 · 종료될 때 다른 탭에 있었음) —
+    // session.ended 이벤트는 그 시점에만 오므로 지금 받을 수 없다. 열 때 상태로 판단해 내보낸다.
+    if (String(s.status || '').toUpperCase() === 'ENDED') {
+      App.toast('이미 종료된 세션이에요');
+      App.save({ sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
+      setTimeout(() => App.go(App.screen('01-1-landing-logged-in')), 800);
+      return;
+    }
     App.save({ role: s.me.role, participantId: s.me.participantId, isLeader: !!s.me.isLeader });
     if (s.timer && s.timer.remainingSec != null) App.setTimer(s.timer.remainingSec);
     App.setStage(s.stage);
     hostBar(s.stage.id);
-    const want = App.stageScreen(s.stage, s.me.role, s.me.isLeader);
-    const sameStage = pageStage.split(' ').includes(s.stage.id);
-    if (want && (!sameStage || (s.stage.id === 'team.assign' && want !== document.body.dataset.screen))) App.go(App.screen(want));
+    App.followStage(s.stage, s.me.role, s.me.isLeader);   // 판단은 followStage 한 곳에 (stage.changed 이벤트와 같은 규칙)
   }
 
   /* ── 시연용 (목업 모드): Alt+→ / Alt+← 로 세션 흐름 순서대로 이동 ──

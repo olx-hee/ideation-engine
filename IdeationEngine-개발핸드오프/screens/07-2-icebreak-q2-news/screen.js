@@ -2,14 +2,25 @@
 const REACTION = { '처음 들어요': 'new', '들어봤어요': 'heard', '잘 알아요': 'know' };
 App.$$('.nc').forEach((c, i) => { c.dataset.cardId = c.dataset.cardId || 'news_' + (i + 1); });
 
+/* 실서버에서 ice.news 응답이 오기 전에는 화면에 HTML 예시 카드(news_1~3)만 있어서, 먼저 누른
+   반응·뜻풀이가 서버에 없는 cardId로 가 404 NOT_FOUND 토스트로 떴다 — 카드를 실제로 그린 뒤에만 보낸다. */
+let newsLoaded = !!(window.IE_CONFIG && IE_CONFIG.useMock);
+function waitingForCards() {
+  if (newsLoaded) return false;
+  App.toast('최근 소식을 불러오는 중이에요. 잠시만요');
+  return true;
+}
+
 document.addEventListener('ie:reaction', (e) => {
   const card = e.target.closest('.nc'); if (!card) return;
   App.$$('.nc').forEach(c => c.classList.toggle('on', c === card));
+  if (waitingForCards()) return;
   api.call('ice.react', { cardId: card.dataset.cardId }, { reaction: REACTION[e.detail] }).catch(err => App.toast(err.message, 'error'));
 });
 
 /* 실서버 모드: 카드 3장을 ice.news로 그린다 (반응·뜻풀이가 서버 카드 id로 가게) */
 function renderNews(r) {
+  newsLoaded = true;
   const cards = App.$$('.nc');
   if (!cards.length) return;
   const tpl = cards[0], wrap = tpl.parentElement;
@@ -44,10 +55,16 @@ function renderNews(r) {
 }
 if (!IE_CONFIG.useMock) {
   const asked = App.$('.asked'); if (asked) asked.textContent = '아직 없어요';   // HTML의 예시("온디바이스 AI")는 목업용 — 실제로 물어본 게 없으면 비워둔다
-  api.call('ice.news').then(renderNews).catch(err => App.toast(err.message, 'error'));
+  api.call('ice.news').then(renderNews).catch(err => {
+    App.toast(err.message, 'error');
+    // 못 불러왔을 때 예시 카드를 그대로 두면 실제 소식처럼 읽힌다 — 걷어내고 채팅으로 이어가게 한다
+    const wrap = App.$('.nc') && App.$('.nc').parentElement;
+    if (wrap) { App.$$('.nc').forEach(c => c.remove()); wrap.insertAdjacentHTML('beforeend', '<p class="quiet" style="padding:12px">최근 소식을 불러오지 못했어요. 새로고침하거나, 아는 변화가 있으면 채팅으로 답해 주세요.</p>'); }
+  });
 }
 
 App.action('explain', async (el) => {
+  if (waitingForCards()) return false;
   const card = el.closest('.nc');
   const term = card.dataset.term || App.text(card.querySelector('.nt')).replace(/^\[예시\]\s*/, '');
   App.chat.bubble('user', null, `"${term}" 이게 뭐예요?`);

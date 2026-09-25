@@ -58,11 +58,18 @@ App.action('submitAnswer', async () => {
 });
 
 async function load() {
-  data = await api.call('team.questions');
+  const d = await App.run(null, () => api.call('team.questions'));   // 실패하면 토스트 + 이미 지난 단계면 화면 이동
+  if (d === false) return;
+  data = d;
   if (IE_CONFIG.useMock) return;                       // 목업 모드: 화면의 디자인 예시 그대로
   if (!data.items.length) { App.go(App.screen('09-1-part-split')); return; }
   const i = data.items.findIndex(x => x.status !== 'done');
-  idx = i < 0 ? data.items.length - 1 : i;
+  // 이미 다 답한 사람이 9-2를 다시 열면(뒤로 가기 등) 마지막 파트를 "답하는 중"처럼 다시 보여줘서
+  // 같은 파트에 두 번 제출하게 됐다 — 제출 직후와 같이 9-1로 돌려보낸다.
+  if (i < 0) { App.toast('답을 모두 보냈어요 · 다른 후보를 기다려요'); App.go(App.screen('09-1-part-split')); return; }
+  idx = i;
+  // 추가 질문은 5분 제한인데 상단 타이머가 화면에 박아둔 값(08:10)이라 남은 시간이 안 보였다
+  if (data.remainingSec != null) App.setTimer(data.remainingSec);
   render();
 }
 load();

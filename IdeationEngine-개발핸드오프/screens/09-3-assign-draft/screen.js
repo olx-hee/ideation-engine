@@ -53,8 +53,9 @@ App.action('markMode', async (el) => {
   return false;
 });
 
-// 목업 모드에서는 화면의 디자인 예시 줄에 임시 partId를 붙여 표시 동작을 확인할 수 있게 함
-App.$$('.ptab .pr9, .ptab .sm9 > div').forEach((r, i) => { if (!r.dataset.partId) r.dataset.partId = 'prt_' + (i + 1); });
+// 목업 모드에서만 화면의 디자인 예시 줄에 임시 partId를 붙인다 — 실서버 모드에서 붙이면 아직
+// 불러오기 전에 누른 예시 줄의 가짜 partId('prt_1')가 서버로 날아간다.
+if (IE_CONFIG.useMock) App.$$('.ptab .pr9, .ptab .sm9 > div').forEach((r, i) => { if (!r.dataset.partId) r.dataset.partId = 'prt_' + (i + 1); });
 
 App.$('.ptab').addEventListener('click', async (e) => {
   if (!marking) return;
@@ -63,13 +64,19 @@ App.$('.ptab').addEventListener('click', async (e) => {
   const on = !row.querySelector('.pill9.mk');
   const done = await App.run(null, () => api.call('team.mark', { partId: row.dataset.partId }, { marked: on }));
   if (done === false) return;
-  row.querySelector('.pill9.mk')?.remove();
-  if (on) row.querySelector('.pn,span').insertAdjacentHTML('beforeend', '<span class="pill9 mk">표시함</span>');
   App.toast(on ? '팀장 화면에 표시됐어요' : '표시를 해제했어요');
+  // 기다리는 사이 다른 사람의 표시로 team.assignment.updated가 와서 render()가 줄을 다시 그리면,
+  // 여기서 DOM을 직접 고쳐도 이미 떨어져 나간 옛 줄에 붙어 내 표시가 사라져 보였다.
+  // 서버가 준 markedByMe로 다시 그린다.
+  if (IE_CONFIG.useMock) {
+    row.querySelector('.pill9.mk')?.remove();
+    if (on) row.querySelector('.pn,span').insertAdjacentHTML('beforeend', '<span class="pill9 mk">표시함</span>');
+  } else load();
 });
 
 async function load() {
-  const a = await api.call('team.assignment');
+  const a = await App.run(null, () => api.call('team.assignment'));
+  if (a === false) return;                      // 실패는 App.run이 토스트 · 지난 단계면 화면 이동
   if (cur && a.version < cur.version) return;   // 늦게 도착한 응답 — 이미 더 최신 배치를 보고 있음
   if (a.viewer && a.viewer.isLeader) { App.go(App.screen('09-4-leader-confirm')); return; }
   render(a);

@@ -21,7 +21,13 @@ function statusCell(p) {
   return '<span class="q9">AI 초안 그대로</span>';
 }
 function select(p) {
-  if (!p.assignee) return '<span class="q9"></span>';
+  // 담당 없는 파트도 누를 수 있어야 한다 — 후보가 다 빠졌거나(중간 이탈) 아무도 답하지 않은 파트가
+  // 빈 칸으로만 남아서, 팀장이 누를 데가 없어 끝까지 담당을 못 정하는 막힌 길이 됐다.
+  // 대안으로 대신하는 파트(excluded)는 원래 담당을 정하지 않으니 그대로 빈 칸으로 둔다.
+  if (!p.assignee) {
+    return p.method === 'excluded' ? '<span class="q9"></span>'
+      : `<span class="sel9" data-part-id="${esc(p.partId)}"><span class="q9">담당 고르기</span></span>`;
+  }
   return `<span class="sel9${p.changed ? ' chg' : ''}" data-part-id="${esc(p.partId)}">${Team.av(p.assignee)}${esc(p.assignee.nickname)}</span>`;
 }
 
@@ -31,7 +37,13 @@ function render(a) {
 
   const tab = App.$('.ptab');
   tab.querySelectorAll('.pg9,.pr9,.sm9').forEach(n => n.remove());
-  const markTag = (p) => (p.marks || []).length ? `<span class="pill9 k mk">${esc(p.marks[0].nickname)} 님이 표시</span>` : '';
+  // 여러 명이 같은 파트를 표시할 수 있는데 첫 사람만 보여줘서 나머지가 묻혔다 — 인원을 함께 적는다
+  const markTag = (p) => {
+    const m = p.marks || [];
+    if (!m.length) return '';
+    const who = m.length > 1 ? `${esc(m[0].nickname)} 님 외 ${m.length - 1}명이` : `${esc(m[0].nickname)} 님이`;
+    return `<span class="pill9 k mk">${who} 표시</span>`;
+  };
   const row = (p) => `<div class="pr9${p.method === 'excluded' ? ' out' : ''}${p.changed ? ' chg' : ''}" data-part-id="${esc(p.partId)}">` +
     `<span class="pn">${esc(p.name)}${markTag(p)}</span>${select(p)}<span class="cand">${statusCell(p)}</span></div>`;
   [['core', '결과를 좌우하는 파트'], ['normal', '보통 파트']].forEach(([tier, label]) => {
@@ -115,13 +127,25 @@ App.action('revertAssign', async () => {
 });
 App.action('confirmAssign', async () => {
   if (!(await App.confirm('이대로 확정할까요?', '확정하면 모두에게 보고서가 열리고, 이 배치 초안 화면으로는 되돌아올 수 없어요. 확정한 뒤에도 담당은 보고서에서 다시 고칠 수 있어요.', '확정하기'))) return false;
-  await api.call('team.confirm', {}, { version: (cur && cur.version) || 1 });
+  try {
+    await api.call('team.confirm', {}, { version: (cur && cur.version) || 1 });
+  } catch (err) {
+    // 그 사이 배치가 바뀐 경우(다른 탭 등) — 최신을 다시 불러와 cur.version을 맞춰준다.
+    // 안 그러면 다시 눌러도 같은 옛 version을 보내서 계속 튕겼다.
+    if (err && err.code === 'VERSION_MISMATCH') {
+      await load();
+      App.toast('배치가 그 사이 바뀌었어요. 확인하고 다시 확정해 주세요', 'error');
+      return false;
+    }
+    throw err;
+  }
   App.go(App.screen('09-5-report'));
   return false;
 });
 
 async function load() {
-  const a = await api.call('team.assignment');
+  const a = await App.run(null, () => api.call('team.assignment'));
+  if (a === false) return;                      // 실패는 App.run이 토스트 · 지난 단계면 화면 이동
   if (cur && a.version < cur.version) return;   // 늦게 도착한 응답 — 이미 더 최신 배치를 보고 있음
   if (a.viewer && !a.viewer.isLeader) { App.go(App.screen('09-3-assign-draft')); return; }
   render(a);

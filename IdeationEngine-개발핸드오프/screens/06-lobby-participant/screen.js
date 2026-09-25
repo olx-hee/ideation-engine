@@ -30,6 +30,23 @@ if (!IE_CONFIG.useMock) {
 }
 realtime.connect(App.sessionId(), async (ev) => {
   if (ev.type === 'session.started') App.go(App.screen('07-1-icebreak-q1-discomfort'));
-  if (ev.type === 'participant.kicked' && ev.data.participantId === App.state.participantId) { App.toast('진행자가 방에서 내보냈어요'); App.go(App.screen('01-landing')); }
-  if (ev.type === 'participant.joined' || ev.type === 'participant.left') refreshCount();
+  /* 서버는 웹소켓이 붙을 때마다 지금 단계를 stage.changed로 한 번 보내준다. 진행자가 "시작"을
+     누른 순간 이 사람의 연결이 끊겨 있었으면(재연결 대기 중) session.started를 영영 놓치고,
+     새로고침 전까지 대기실에 갇힌다(syncStage는 페이지가 열릴 때 한 번만 확인한다) —
+     대기실이 아닌 단계가 오면 그 단계 화면으로 따라간다. */
+  if (ev.type === 'stage.changed' && ev.data.stage && ev.data.stage.id !== 'lobby') {
+    App.go(App.screen(App.stageScreen(ev.data.stage, App.state.role) || '07-1-icebreak-q1-discomfort'));
+  }
+  // 아직 대기실이면, 끊겼던 사이에 놓친 입장·나감을 그때 따라잡는다(인원수가 틀어진 채로 남지 않게).
+  if (ev.type === 'stage.changed' && ev.data.stage && ev.data.stage.id === 'lobby' && !IE_CONFIG.useMock) refreshCount();
+  if (ev.type === 'participant.kicked' && ev.data.participantId === App.state.participantId) {
+    App.toast('진행자가 방에서 내보냈어요');
+    /* 이 브라우저에 남은 세션 정보를 지운다 — 안 지우면 다른 화면이 죽은 sessionId로 계속
+       조회해서 KICKED 에러만 만난다(session.ended 공통 처리와 같은 정리). */
+    App.save({ sessionId: null, role: null, participantId: null, code: null, inviteUrl: null, isLeader: false });
+    App.go(App.screen('01-1-landing-logged-in'));
+    return;
+  }
+  // 내보내진 사람도 인원수에서 빠진다 — joined/left만 보면 남은 사람들의 "3 / 4"가 그대로 남는다.
+  if (ev.type === 'participant.joined' || ev.type === 'participant.left' || ev.type === 'participant.kicked') refreshCount();
 });

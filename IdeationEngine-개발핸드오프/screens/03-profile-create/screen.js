@@ -25,6 +25,10 @@ App.action('saveProfile', async () => {
   // returnTo를 이어가지 않는다 — "세션 만들기"를 누르고 로그인하러 왔던 사람도, 계정 막 만든
   // 사람도, 프로필을 막 끝낸 다음엔 항상 "만들기·참가하기 둘 다 고를 수 있는" 랜딩으로 보낸다
   // (여기서 원래 의도로 바로 넘겨버리면 왜 갑자기 세션 만들기 화면인지 헷갈려 함).
-  App.go(App.screen('01-1-landing-logged-in'));
+  // 예외: 방 코드를 넣다가 "프로필을 먼저 만들어 주세요"로 여기까지 끌려온 사람(2 → 3)은 원래
+  // 넣던 방으로 되돌려준다. 랜딩으로 보내면 방금 들은 6자리 코드를 다시 받아 적어야 해서 흐름이
+  // 끊기고(초대 링크 탭을 닫았으면 들어갈 방법이 없음), 그 사이 진행자가 시작해버리기도 한다.
+  const back = App.returnTo(null);
+  App.go(back && back.indexOf('../02-join-code/') === 0 ? back : App.screen('01-1-landing-logged-in'));
   return false;
 });

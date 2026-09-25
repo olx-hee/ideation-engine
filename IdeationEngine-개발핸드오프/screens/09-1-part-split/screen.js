@@ -61,11 +61,13 @@ function pending(ready) {
 let loadSeq = 0;
 async function load() {
   const seq = ++loadSeq;
-  const s = await api.call('session.get');
-  if (seq !== loadSeq) return;               // 그 사이 새 load()가 시작됨 — 늦게 온 이 응답은 버림
+  // App.run으로 감싼다 — 안 감싸면 조회가 실패했을 때 토스트도 없이 "파트를 나누는 중" 안내만 계속
+  // 떠 있어서 멈춘 화면처럼 보인다(이미 단계가 지나간 경우의 화면 이동도 App.run이 해준다).
+  const s = await App.run(null, () => api.call('session.get'));
+  if (s === false || seq !== loadSeq) return;  // 그 사이 새 load()가 시작됨 — 늦게 온 이 응답은 버림
   stage = s.stage.id;
-  const d = await api.call('team.parts');
-  if (seq !== loadSeq) return;
+  const d = await App.run(null, () => api.call('team.parts'));
+  if (d === false || seq !== loadSeq) return;
   pending(d.ready);
   if (!d.ready) return;
   render(d);
@@ -86,4 +88,6 @@ realtime.connect(App.sessionId(), (ev) => {
     else { const want = App.stageScreen(ev.data.stage, App.state.role, App.state.isLeader); if (want) App.go(App.screen(want)); }
   }
 });
-if (!IE_CONFIG.useMock) load();
+// 첫 응답이 오기 전까지는 안내를 먼저 덮는다 — 안 덮으면 화면에 박아둔 디자인 예시(가짜 주제·가짜
+// 후보 이름)가 몇 초간 실제 결과처럼 보인다.
+if (!IE_CONFIG.useMock) { pending(false); load(); }

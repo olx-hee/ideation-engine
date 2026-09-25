@@ -37,22 +37,23 @@ function addRow(it) {
 }
 function renderRoster(r) {
   (r.items || []).forEach(addRow);
-  const empty = App.$('.prow.empty');
-  if (empty) empty.hidden = App.$$('.prow:not(.empty)').length >= r.maxMembers;
-  count(r.maxMembers);   // 배지뿐 아니라 "세션 시작하기" 버튼의 활성/비활성도 실제 인원수로 다시 맞춘다
+  count(r.maxMembers);   // 배지 · "세션 시작하기" 활성 · "기다리는 중" 줄을 모두 실제 인원수로 다시 맞춘다
 }
 /* 실서버 모드: 방 코드·초대 링크·참여자 줄을 서버 값으로 (목업 모드는 HTML 예시 그대로).
    위의 App.state.code는 화면이 뜨자마자 깜빡임 없이 보여주는 임시 값일 뿐 — 다른 세션을
    만들거나 복귀한 뒤라 브라우저에 예전 세션 코드가 남아 있을 수 있어서, 항상 서버 값으로
    다시 덮어써야 한다(캐시가 있다고 요청을 건너뛰면 진행자가 낡은 초대 코드를 공유하게 됨). */
+async function loadRoster() {
+  const r = await App.run(null, () => api.call('session.participants'));
+  if (r) renderRoster(r);
+}
 async function load() {
   const s = await App.run(null, () => api.call('session.get'));
   if (!s) return;
   codeEl.textContent = s.code;
   linkInput.value = (s.inviteUrl || '').replace(/^https?:\/\//, '');
   App.save({ code: s.code, inviteUrl: s.inviteUrl });
-  const r = await App.run(null, () => api.call('session.participants'));
-  if (r) renderRoster(r);
+  await loadRoster();
 }
 if (!IE_CONFIG.useMock) load();
 
@@ -64,11 +65,18 @@ const list = App.$('.prow').parentElement;
 const badge = App.$('.badge.ok');
 function count(max) {
   const n = App.$$('.prow:not(.empty)').length;
-  max = max || badge.textContent.split('/')[1].trim();
+  max = +(max || badge.textContent.split('/')[1].trim());
   badge.textContent = `${n} / ${max}`;
   const start = App.$('[data-action="startSession"]');
   if (start) { start.classList.toggle('disabled', n < 2); start.title = n < 2 ? '팀원이 1명 이상 들어와야 시작할 수 있어요' : ''; }   // 혼자면 시작 못 함
+  // 방이 꽉 차면 "기다리는 중…" 줄을 감춘다 — 처음 그릴 때만 맞추면 도중에 들어온 사람 때문에
+  // 정원이 찬 뒤에도 빈 줄이 남아 있어서, 진행자가 아직 자리가 있는 줄로 착각한다.
+  const empty = App.$('.prow.empty');
+  if (empty) empty.hidden = n >= max;
 }
+// 실서버 모드에서는 디자인 예시 줄(3명)을 먼저 지운다 — 서버 응답이 오기 전까지 "3 / 4"로
+// 보이고 "세션 시작하기"도 눌리는 상태라, 혼자 있는 진행자가 눌러서 에러만 보게 됐다.
+if (!IE_CONFIG.useMock) ensureCleared();
 count();
 
 list.addEventListener('click', async (e) => {
@@ -85,7 +93,21 @@ realtime.connect(App.sessionId(), (ev) => {
   // 탭은 data-go로 바로 넘어가지만, 다른 창에서 이 대기실을 보고 있던 진행자(같은 사람의
   // 다른 탭 등)는 이 이벤트가 없으면 새로고침 전까지 대기실에 그대로 남는다.
   if (ev.type === 'session.started') App.go(App.screen('07-1-icebreak-q1-discomfort'));
+  // 서버는 웹소켓이 붙을 때마다 지금 단계를 stage.changed로 한 번 보내준다. session.started가
+  // 나가는 순간 이 탭의 연결이 끊겨 있었으면(재연결 대기 중) 그 이벤트를 영영 놓치고, 새로고침
+  // 전까지 대기실에 갇힌다 — 대기실이 아닌 단계가 오면 그 단계 화면으로 따라간다.
+  if (ev.type === 'stage.changed' && ev.data.stage && ev.data.stage.id !== 'lobby') {
+    App.go(App.screen(App.stageScreen(ev.data.stage, 'host') || '07-1-icebreak-q1-discomfort'));
+  }
+  // 아직 대기실이면, 끊겼던 사이에 놓친 입장·나감을 그때 따라잡는다(안 하면 그동안 들어온
+  // 사람 줄이 없어서 인원수와 "시작하기" 활성 조건이 계속 틀어져 있다).
+  if (ev.type === 'stage.changed' && ev.data.stage && ev.data.stage.id === 'lobby' && !IE_CONFIG.useMock) loadRoster();
   if (ev.type === 'participant.joined') { addRow({ participantId: ev.data.participantId, nickname: ev.data.nickname, role: ev.data.role, online: true, isMe: false }); count(); }
   if (ev.type === 'participant.online') App.$(`.prow[data-participant-id="${ev.data.participantId}"] .dot`)?.style.removeProperty('background');
   if (ev.type === 'participant.left') App.$(`.prow[data-participant-id="${ev.data.participantId}"] .dot`)?.style.setProperty('background', 'var(--line)');
+  // 내보내기를 다른 탭에서 눌렀을 때도 이 탭의 줄·인원수가 맞아야 한다(진행자가 두 탭을 열어둔 경우).
+  if (ev.type === 'participant.kicked') {
+    const row = App.$(`.prow[data-participant-id="${ev.data.participantId}"]`);
+    if (row) { row.remove(); count(); }
+  }
 });

@@ -42,18 +42,23 @@ const GRADE = { go: '바로 해볼 만해요', fix: '보완하면 좋아요', re
 
 function page1(r) {
   const w = r.why, f = r.feasibility, p = r.parts;
+  // 서버가 비워 보낼 수 있는 곳들 — 아이디어 주인이 세션에서 빠졌거나(owner: null) AI 검증이
+  // 실패해 건너뛴 세션(review: null). 예전엔 여기서 그리기 자체가 터져서 보고서 대신 화면에
+  // 박아둔 디자인 예시가 그대로 남았다(가짜 보고서로 보임).
+  const owner = r.topic.owner || {};
+  const review = w.review || {};
   const part = (x) => `<div class="pp-part${x.assignee ? '' : ' out'}"><span>${esc(x.name)}</span><span class="pp-who">${av(x.assignee)}${esc(x.assignee || '담당 없음')}</span></div>`;
   const top = Math.max(...r.votes.ranks.map(x => x.votes), 1);
   const vote = (x) => `<div class="pp-vote${x.rank === 1 ? ' top' : ''}"><i>${x.rank}</i><span>${esc(x.title)}` +
     `<small>${esc(x.owner || (x.tieCount ? `동점 ${x.tieCount}개` : ''))}</small></span>` +
     `<span class="pp-bar"><s style="width:${Math.round(x.votes * 100 / top)}%"></s></span><b>${x.votes}표</b></div>`;
   return `<div class="pp-t">${esc(r.topic.title)}</div><div class="pp-sub">${esc(r.topic.summary)}</div>` +
-    `<div class="pp-meta"><span>아이디어<b>${esc(r.topic.owner.nickname)} 님의 ${r.topic.owner.rank}순위</b></span>` +
+    `<div class="pp-meta"><span>아이디어<b>${owner.nickname ? `${esc(owner.nickname)} 님의 ${owner.rank}순위` : '팀 아이디어'}</b></span>` +
     `<span>팀원<b>${r.meta.memberCount}명</b></span><span>회의 시간<b>약 ${r.meta.durationMin}분</b></span>` +
     `<span>세션<b>${esc(r.meta.sessionTopic)}</b></span></div>` +
     `<div class="pp-sec"><div class="pp-h"><i>01</i>왜 이 주제인가요</div>` +
     kv('투표', `${w.votes.total}표 중 <b>${w.votes.top}표로 1위</b> · 2위와 ${w.votes.gapToSecond}표 차이`) +
-    kv('AI 검증', `<span class="pp-tag">${esc(GRADE[w.review.grade])}</span>${esc(w.review.summary)}`) +
+    kv('AI 검증', review.grade ? `<span class="pp-tag">${esc(GRADE[review.grade])}</span>${esc(review.summary)}` : '건너뛴 세션이에요') +
     kv('받은 좋은 점', `${w.praise.count}개 · ${esc(w.praise.points.join(' · '))}`) +
     kv('숨은 공통점', esc(w.thread)) + '</div>' +
     `<div class="pp-sec"><div class="pp-h"><i>02</i>현실성</div>` +
@@ -107,7 +112,8 @@ function pending(ready) {
 }
 
 async function load() {
-  const r = await api.call('report.get');
+  const r = await App.run(null, () => api.call('report.get'));   // 실패해도 토스트 하나 없이 안내만 떠 있던 문제
+  if (r === false) return;
   pending(r.ready);
   if (!r.ready) return;
   if (report && r.version < report.version) return;   // 늦게 도착한 응답 — 이미 더 최신 보고서를 보고 있음
@@ -118,4 +124,6 @@ const fromHistory = new URLSearchParams(location.search).get('sessionId');
 if (fromHistory) App.save({ sessionId: fromHistory });
 
 realtime.connect(App.sessionId(), (ev) => { if (ev.type === 'report.ready') load(); });
-if (!IE_CONFIG.useMock) load();
+// 첫 응답 전에는 안내를 먼저 덮는다 — 안 덮으면 화면에 박아둔 A4 디자인 예시(가짜 주제·가짜 담당)가
+// 잠깐 실제 보고서처럼 보이고, 그 상태로 PDF로 저장될 수도 있다.
+if (!IE_CONFIG.useMock) { pending(false); load(); }

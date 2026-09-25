@@ -37,5 +37,8 @@ App.action('createSession', async () => {
   };
   if (!body.topic) { App.toast('이번 회의에서 정할 것을 적어주세요'); topic.focus(); return false; }
   const s = await api.call('session.create', {}, body);
-  App.save({ sessionId: s.sessionId, code: s.code, inviteUrl: s.inviteUrl, role: 'host' });
+  // 새 방이니 participantId·isLeader도 이 방 값으로 덮어쓴다 — 예전 세션 값이 남아 있으면 다른
+  // 방의 참가자 id로 내 이벤트를 판별하거나(내보내짐 안내를 놓침) 팀장 화면으로 잘못 간다.
+  App.save({ sessionId: s.sessionId, code: s.code, inviteUrl: s.inviteUrl, role: 'host',
+    participantId: s.me.participantId, isLeader: false });
 });
