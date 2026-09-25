@@ -393,7 +393,8 @@
       else if (stageId === 'diverge.vote') { const v = await api.call('vote.state'); App.progress(v.votedCount, v.memberCount); }
       // 댓글 단계도 지금 값을 받아둔다 — 모두 이미 다 쓴 뒤에 진행자가 들어오면 comments.progress가
       // 더 오지 않아서, 이게 없으면 막대가 "– / –"로 남아 다 됐는지 알 수가 없다.
-      else if (stageId === 'diverge.comment') { const t = await api.call('comment.targets'); App.progress(t.doneCount, t.memberCount); }
+      // (doneCount는 백엔드가 이 값을 내려주기 시작한 뒤부터 온다 — 아직 옛 서버면 이벤트를 기다린다)
+      else if (stageId === 'diverge.comment') { const t = await api.call('comment.targets'); if (t.memberCount) App.progress(t.doneCount, t.memberCount); }
     } catch (e) { /* 막대 숫자는 부가 정보 — 실패해도 진행을 막지 않는다 */ }
   }
   async function advance(force) {
